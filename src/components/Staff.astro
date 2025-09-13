@@ -1,0 +1,25 @@
+---
+import StaffCard from "../components/StaffCard.astro";
+import Separator from "./Separator.astro";
+---
+
+<div>
+    <Separator title="Nuestros profesionales" />
+    <div class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <StaffCard 
+            nombre="Mario Ortiz" 
+            cargo="Médico Veterinario" 
+            imagen="/vet1.jpg" 
+        />
+        <StaffCard 
+            nombre="Laura Pérez" 
+            cargo="Médico Veterinario" 
+            imagen="/vet2.jpg" 
+        />
+        <StaffCard 
+            nombre="Carlos Méndez" 
+            cargo="Médico Veterinario" 
+            imagen="/vet3.jpg" 
+        />
+    </div>
+</div>

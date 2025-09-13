@@ -1,14 +1,13 @@
-# Astro Starter Kit: Basics
+# Astro
 
-```sh
-pnpm create astro@latest -- --template basics
-```
+## Docs
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- [Astro SSR](https://docs.astro.build/en/guides/on-demand-rendering/)
+- [Astro Server Islands](https://docs.astro.build/en/guides/server-islands/)
+- [Astro i18n](https://docs.astro.build/en/guides/internationalization/)
+- [Cloudflare's Astro guide](https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/)
 
-## 🚀 Project Structure
-
-Inside your Astro project, you'll see the following folders and files:
+## Project Structure
 
 ```text
 /
@@ -18,19 +17,14 @@ Inside your Astro project, you'll see the following folders and files:
 │   ├── assets
 │   │   └── astro.svg
 │   ├── components
-│   │   └── Welcome.astro
+│   │   └── ?.astro
 │   ├── layouts
 │   │   └── Layout.astro
 │   └── pages
 │       └── index.astro
 └── package.json
 ```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
+## Commands
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
@@ -41,6 +35,3 @@ All commands are run from the root of the project, from a terminal:
 | `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `pnpm astro -- --help` | Get help using the Astro CLI                     |
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
