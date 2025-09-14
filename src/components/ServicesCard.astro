@@ -1,0 +1,21 @@
+---
+interface Service {
+  icon: string
+  title: string
+  price: string
+}
+
+const { services } = Astro.props as { services: Service[] }
+---
+
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 max-w-6xl mx-auto py-8">
+  {services.map((service) => (
+    <div class="flex flex-col border border-primary rounded-lg p-3 transition hover:bg-primary hover:text-white group">
+      <div class="text-4xl mb-3">
+        <i class={service.icon}></i>
+      </div>
+      <h3 class="font-semibold text-lg">{service.title}</h3>
+      <p class="text-gray-600 text-sm group-hover:text-white">{service.price}</p>
+    </div>
+  ))}
+</div>

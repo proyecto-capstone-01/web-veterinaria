@@ -10,13 +10,20 @@ export default defineConfig({
     
     theme: {
         extend: {
-            colors: {
-                primary: "#00838F",
-                secondary: "#FBBF24",
-                accent: "#4CAF50",
-                neutral: "#F3F4F6",
-                dark: "#1F2937"
-            }
+            keyframes: {
+                slideDown: {
+                from: { height: '0' },
+                to: { height: 'var(--radix-accordion-content-height)' },
+                },
+                slideUp: {
+                from: { height: 'var(--radix-accordion-content-height)' },
+                to: { height: '0' },
+                },
+            },
+            animation: {
+                slideDown: 'slideDown 1000ms ease-out',
+                slideUp: 'slideUp 1000ms ease-out',
+            },
         }
     },
     plugins: [

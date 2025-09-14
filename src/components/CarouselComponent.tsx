@@ -35,20 +35,20 @@ export default function CarouselComponent({ staff }: { staff: Staff[] }) {
         }}
         className="w-full max-w-6xl mx-auto pt-6"
         >
-        <CarouselContent>
-            {staff.map((persona, index) => (
-            <CarouselItem
-                key={index}
-                className="basis-full md:basis-1/3"
-            >
-                <StaffCard
-                nombre={persona.nombre}
-                cargo={persona.cargo}
-                imagen={persona.imagen}
-                />
-            </CarouselItem>
-            ))}
-        </CarouselContent>
+            <CarouselContent>
+                {staff.map((persona, index) => (
+                <CarouselItem
+                    key={index}
+                    className="basis-full sm:basis-1/3 md:basis-1/2 lg:basis-1/3"
+                >
+                    <StaffCard
+                    nombre={persona.nombre}
+                    cargo={persona.cargo}
+                    imagen={persona.imagen}
+                    />
+                </CarouselItem>
+                ))}
+            </CarouselContent>
         </Carousel>
     )
 }

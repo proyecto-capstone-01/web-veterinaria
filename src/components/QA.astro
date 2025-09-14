@@ -16,12 +16,12 @@ const questions = [
     {
         question: "¿Necesito una cita previa?",
         answer:
-            "Recomendamos agendar una cita para asegurar la disponibilidad, pero también atendemos emergencias sin cita.",
+            "Para consultas regulares, recomendamos agendar una cita previa para asegurar la disponibilidad. Sin embargo, atendemos emergencias sin cita.",
     },
     {
         question: "¿Qué tipos de animales atienden?",
         answer:
-            "Atendemos perros, gatos y animales exóticos como aves, reptiles y pequeños mamíferos.",
+            "Unicamente realizamos servicios para perros y gatos.",
     },
     {
         question: "¿Ofrecen servicios de vacunación?",
@@ -29,9 +29,9 @@ const questions = [
             "Sí, ofrecemos un programa completo de vacunación para todas las edades y tipos de mascotas.",
     },
     {
-        question: "¿Tienen planes de salud para mascotas?",
+        question: "¿Qué metodos de pago aceptan?",
         answer:
-            "Sí, ofrecemos planes de salud personalizados que incluyen chequeos regulares, vacunas y descuentos en tratamientos.",
+            "Aceptamos efectivo, tarjetas de crédito y débito, y transferencias bancarias. Todas los servicios deben ser cancelados al momento de la atención.",
     },
 ];
 ---
@@ -42,8 +42,9 @@ const questions = [
         description="Encuentra las preguntas y respuestas más comunes aquí."
     />
     <div class="max-w-4xl mx-auto px-3 py-6 space-y-4">
-        {questions.map((item, index) => (
-            <AccordionComponent name={item.question} description={item.answer} client:load />
-        ))}
+        <AccordionComponent 
+        items={questions.map(q => ({ name: q.question, description: q.answer }))} 
+        client:load 
+        />
     </div>
 </div>
