@@ -1,8 +1,9 @@
 ---
-const { text, url = "#", variant = "primary" } = Astro.props as {
+const { text, url = "#", variant = "primary", target } = Astro.props as {
     text: string;
     url?: string;
     variant?: "primary" | "secondary";
+    target?: string;
 };
 
 const baseStyles = "inline-block px-5 py-3 text-md rounded-lg transition duration-200 ease-in-out text-center";
@@ -13,6 +14,6 @@ const variants = {
 };
 ---
 
-<a href={url} class={`${baseStyles} ${variants[variant]}`}>
+<a href={url} target={target} class={`${baseStyles} ${variants[variant]}`}>
     {text}
 </a>
