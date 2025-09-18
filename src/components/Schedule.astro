@@ -1,0 +1,161 @@
+---
+const servicios = [
+  { id: "consulta", nombre: "Consulta veterinaria", precio: 10000 },
+  { id: "bano", nombre: "Baño y peluquería", precio: 15000 },
+  { id: "rx", nombre: "Radiografías", precio: 30000 },
+  { id: "sangre", nombre: "Exámenes de sangre", precio: 20000 },
+  { id: "vacunas", nombre: "Vacunas anuales", precio: 15000 },
+  { id: "unas", nombre: "Corte de uñas", precio: 5000 },
+  { id: "desparasitacion", nombre: "Desparasitacion", precio: 8000 },
+  { id: "cirugia", nombre: "Cirugía menor", precio: 60000 },
+  { id: "odontologia", nombre: "Limpieza dental", precio: 25000 },
+  { id: "hospitalizacion", nombre: "Hospitalización", precio: 35000 },
+  { id: "nutricion", nombre: "Asesoría nutricional", precio: 12000 },
+  { id: "entrenamiento", nombre: "Entrenamiento básico", precio: 18000 },
+  { id: "microchip", nombre: "Implantación de microchip", precio: 22000 },
+];
+
+const horarios = [
+  {
+    fecha: "Jueves • 04/09/2025",
+    slots: ["09:00", "11:00", "13:00", "15:00"],
+  },
+  {
+    fecha: "Viernes • 05/09/2025",
+    slots: ["08:30", "10:00", "12:00", "14:00"],
+  },
+  {
+    fecha: "Sábado • 07/09/2025",
+    slots: ["09:00", "11:00", "13:00", "15:00", "17:00", "19:00", "21:00", "23:00", "23:30", "23:59"],
+  },
+];
+
+function autoResize(textarea) {
+  textarea.style.height = 'auto';
+  textarea.style.height = (textarea.scrollHeight) + 'px';
+}
+---
+
+<section>
+  <h2 class="text-xl font-semibold mb-2">Tú mascota</h2>
+  <p class="text-md mb-2">Selecciona el tipo de mascota que tienes:</p>
+  <div class="flex gap-3 mb-3">
+    <label class="flex-1">
+      <input type="radio" name="mascota" value="perro" required class="hidden peer" />
+      <div class="border-2 rounded-md px-4 text-center cursor-pointer peer-checked:bg-primary-dark peer-checked:text-white border-primary py-3 peer-checked:font-semibold">
+        Perro
+      </div>
+    </label>
+    <label class="flex-1">
+      <input type="radio" name="mascota" value="gato" required class="hidden peer" />
+      <div class="border-2 rounded-md px-4 text-center cursor-pointer peer-checked:bg-primary-dark peer-checked:text-white border-primary py-3 peer-checked:font-semibold">
+        Gato
+      </div>
+    </label>
+  </div>
+  <input 
+    type="text" 
+    placeholder="Ingresa el nombre de tu mascota aquí" 
+    required
+    class="w-full border-1 border-primary rounded-md px-3 py-3 focus:ring-2 focus:ring-primary invalid:border-red-500 peer"
+  />
+  <p class="text-red-500 text-sm mt-1 hidden peer-[&:not(:placeholder-shown):invalid]:block">Este campo es obligatorio</p>
+</section>
+
+<!-- Servicios dinámicos -->
+<section>
+  <h2 class="text-xl font-semibold my-2">Servicio</h2>
+  <p class="text-md mb-2">Selecciona los servicios que deseas para tu mascota:</p>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    {servicios.map((servicio) => (
+      <label class="block">
+        <input 
+          type="checkbox" 
+          name="servicios" 
+          value={servicio.id} 
+          class="hidden peer" 
+        />
+        <div class="flex flex-row md:flex-col justify-between border-2 border-primary rounded-lg px-4 py-2 
+                    cursor-pointer transition transform 
+                    hover:scale-[1.01] hover:shadow-md 
+                    peer-checked:bg-primary-dark peer-checked:text-white peer-checked:border-primary-dark">
+          
+          <!-- Nombre del servicio -->
+          <span class="font-medium text-base">{servicio.nombre}</span>
+          
+          <!-- Precio -->
+          <span class="text-md mt-0 md:mt-1">
+            ${servicio.precio.toLocaleString("es-CL")}
+          </span>
+        </div>
+      </label>
+    ))}
+  </div>
+  <textarea 
+    placeholder="¿Tienes comentarios adicionales? Escríbelos aquí. Ya sean síntomas, cuidados específicos u otros." 
+    class="w-full border-primary border-1 rounded-md px-3 py-3 mt-3 focus:ring-2 focus:ring-primary-dark resize-none overflow-hidden"
+    oninput="autoResize(this)"
+  ></textarea>
+</section>
+
+<!-- Horarios dinámicos -->
+<section>
+  <h2 class="text-xl font-semibold my-2">Elige un horario para la consulta</h2>
+  <p class="text-md mb-2">Selecciona el horario que mejor te acomode:</p>
+<div class="space-y-4">
+  {horarios.map((dia) => (
+    <div class="border-2 border-primary p-3 rounded-md">
+      <p class="font-medium">{dia.fecha}</p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2">
+        {dia.slots.map((hora) => (
+          <label>
+            <input type="radio" name="horario" value={hora} required class="hidden peer" />
+            <div class="border-2 rounded-md px-3 py-2 cursor-pointer peer-checked:bg-primary-dark peer-checked:text-white peer-checked:font-semibold border-primary text-center">
+              {hora}
+            </div>
+          </label>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+</section>
+
+<div class="w-full h-1 bg-primary my-8"></div>
+<!-- Datos -->
+<section>
+  <h2 class="text-xl font-semibold my-2">Tus datos</h2>
+  <p class="text-md mb-2">Por favor, completa el formulario con tus datos personales para confirmar la cita:</p>
+  <form id="citaForm" class="space-y-3">
+    <input type="text" required placeholder="RUT (ej: 12.345.678-9)" 
+      pattern="^\d{1,2}\.\d{3}\.\d{3}-[0-9Kk]$"
+      class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 invalid:border-red-500 peer"/>
+    <p class="text-red-500 text-sm hidden peer-[&:not(:placeholder-shown):invalid]:block">RUT inválido</p>
+
+    <div class="flex gap-2">
+      <input type="text" required placeholder="Nombre" 
+        class="w-1/2 border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 invalid:border-red-500 peer"/>
+      <input type="text" required placeholder="Apellido" 
+        class="w-1/2 border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 invalid:border-red-500 peer"/>
+    </div>
+
+    <div class="flex w-full border rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-primary">
+      <span class="bg-primary text-white px-3 py-2 flex items-center">+56 9</span>
+      <input 
+        type="tel" 
+        required 
+        placeholder="Teléfono"
+        pattern="^\d{4}\s\d{4}$"
+        class="flex-1 px-3 py-2 outline-none"
+      />
+    </div>
+    <p class="text-red-500 text-sm hidden peer-[&:not(:placeholder-shown):invalid]:block">Formato de teléfono inválido</p>
+
+    <input type="email" required placeholder="Email"
+      class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 invalid:border-red-500 peer"/>
+    <p class="text-red-500 text-sm hidden peer-[&:not(:placeholder-shown):invalid]:block">Email inválido</p>
+
+    <button type="submit" class="w-full bg-primary text-white rounded-md hover:bg-primary-dark py-3 font-bold">Confirmar cita</button>
+  </form>
+</section>
