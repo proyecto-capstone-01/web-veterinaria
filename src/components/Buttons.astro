@@ -1,0 +1,19 @@
+---
+const { text, url = "#", variant = "primary", target } = Astro.props as {
+    text: string;
+    url?: string;
+    variant?: "primary" | "secondary";
+    target?: string;
+};
+
+const baseStyles = "inline-block px-5 py-3 text-md rounded-lg transition duration-200 ease-in-out text-center";
+
+const variants = {
+    primary: "bg-primary text-white hover:bg-primary-dark",
+    secondary: "bg-white border-2 border-primary text-black hover:bg-secondary-dark hover:text-white",
+};
+---
+
+<a href={url} target={target} class={`${baseStyles} ${variants[variant]}`}>
+    {text}
+</a>

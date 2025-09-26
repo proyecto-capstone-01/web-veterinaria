@@ -1,0 +1,50 @@
+---
+import Separator from "./Separator.astro";
+import AccordionComponent from "./AccordionComponent";
+
+const questions = [
+    {
+        question: "¿Cuáles son los horarios de atención?",
+        answer:
+            "Nuestro horario de atención es de lunes a viernes de 9:00 a 18:00 y sábados de 10:00 a 14:00.",
+    },
+    {
+        question: "¿Ofrecen servicios de emergencia?",
+        answer:
+            "Sí, contamos con un servicio de emergencia 24/7 para casos urgentes.",
+    },
+    {
+        question: "¿Necesito una cita previa?",
+        answer:
+            "Para consultas regulares, recomendamos agendar una cita previa para asegurar la disponibilidad. Sin embargo, atendemos emergencias sin cita.",
+    },
+    {
+        question: "¿Qué tipos de animales atienden?",
+        answer:
+            "Unicamente realizamos servicios para perros y gatos.",
+    },
+    {
+        question: "¿Ofrecen servicios de vacunación?",
+        answer:
+            "Sí, ofrecemos un programa completo de vacunación para todas las edades y tipos de mascotas.",
+    },
+    {
+        question: "¿Qué metodos de pago aceptan?",
+        answer:
+            "Aceptamos efectivo, tarjetas de crédito y débito, y transferencias bancarias. Todas los servicios deben ser cancelados al momento de la atención.",
+    },
+];
+---
+
+<div>
+    <Separator
+        title="¿Tienes dudas?"
+        description="Encuentra las preguntas y respuestas más comunes aquí."
+    />
+    <div class="max-w-4xl mx-auto px-3 py-6 space-y-4">
+        <AccordionComponent 
+        items={questions.map(q => ({ name: q.question, description: q.answer }))} 
+        client:load 
+        />
+    </div>
+</div>
