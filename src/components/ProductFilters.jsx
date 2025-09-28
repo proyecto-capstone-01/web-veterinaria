@@ -7,6 +7,7 @@ import {
     SelectContent,
     SelectItem,
 } from "@/components/ui/select";
+import { InfoIcon } from "lucide-react"; // ejemplo de icono de información
 
 export default function ProductFilters({
     search,
@@ -20,41 +21,64 @@ export default function ProductFilters({
     const categories = ["all", ...new Set(products.map((p) => p.category))];
 
     return (
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-4">
-            <div className="w-full lg:flex-1">
+        <div className="space-y-4 rounded-lg bg-white">
+            <div>
+                <label className="block text-sm font-medium mb-1 flex items-center gap-1">
+                    Buscar producto
+                    <InfoIcon className="w-4 h-4 text-gray-400" title="Escribe palabras clave para encontrar productos rápidamente" />
+                </label>
                 <Input
                     type="text"
-                    placeholder="Buscar producto..."
+                    placeholder="Ej: Correas, alimentos, juguetes..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="w-full"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                    Puedes buscar por nombre o descripción del producto
+                </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row lg:flex-row gap-4 w-full lg:w-auto">
-                <Select value={category} onValueChange={setCategory} className="w-full sm:w-1/2 lg:w-auto">
-                    <SelectTrigger className="lg:w-[200px] sm:w-full">
-                        <SelectValue placeholder="Seleccionar categoría" />
+            <div>
+                <label className="block text-sm font-medium mb-1 flex items-center gap-1">
+                    Categoría
+                    <InfoIcon className="w-4 h-4 text-gray-400" title="Filtra productos según su categoría" />
+                </label>
+                <Select value={category} onValueChange={setCategory}>
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Selecciona una categoría" />
                     </SelectTrigger>
                     <SelectContent>
                         {categories.map((cat) => (
-                            <SelectItem key={cat} value={cat}>
-                                {cat.toUpperCase()}
-                            </SelectItem>
+                        <SelectItem key={cat} value={cat}>
+                            {cat === "all" ? "Todas las categorías" : cat.toUpperCase()}
+                        </SelectItem>
                         ))}
                     </SelectContent>
                 </Select>
+                <p className="text-xs text-gray-500 mt-1">
+                    Elige una categoría para ver solo los productos relacionados
+                </p>
+            </div>
 
-                <Select value={sort} onValueChange={setSort} className="w-full sm:w-1/2 lg:w-auto">
-                    <SelectTrigger className="lg:w-[200px] sm:w-full">
-                        <SelectValue placeholder="Ordenar por" />
+            <div>
+                <label className="block text-sm font-medium mb-1 flex items-center gap-1">
+                    Ordenar por
+                    <InfoIcon className="w-4 h-4 text-gray-400" title="Ordena los productos por precio" />
+                </label>
+                <Select value={sort} onValueChange={setSort}>
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Selecciona un orden" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="none">Ordenar por</SelectItem>
+                        <SelectItem value="none">Por defecto</SelectItem>
                         <SelectItem value="asc">Precio: Menor a Mayor</SelectItem>
                         <SelectItem value="desc">Precio: Mayor a Menor</SelectItem>
                     </SelectContent>
                 </Select>
+                <p className="text-xs text-gray-500 mt-1">
+                    Ordena los productos según tu preferencia de precio
+                </p>
             </div>
         </div>
     );

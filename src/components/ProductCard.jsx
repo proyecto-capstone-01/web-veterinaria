@@ -7,7 +7,7 @@ export default function ProductCard({ product }) {
             className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden block"
         >
             <img
-                src={product.image}
+                src={product.images[0]}
                 alt={product.title}
                 className="w-full h-48 object-contain bg-gray-100"
             />
