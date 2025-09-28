@@ -10,7 +10,7 @@ const { services } = Astro.props as { services: Service[] }
 
 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 max-w-6xl mx-auto py-8">
   {services.map((service) => (
-    <div class="flex flex-col border border-primary rounded-lg p-3 transition hover:bg-primary hover:text-white group">
+    <div class="flex flex-col border border-primary rounded-lg p-3 transition hover:bg-primary hover:text-white group cursor-pointer">
       <div class="text-4xl mb-3">
         <i class={service.icon}></i>
       </div>
