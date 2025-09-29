@@ -36,7 +36,7 @@ const images = product.images;
 ---
 
 <Layout Title={product.title}>
-    <div class="max-w-6xl mx-auto py-8">
+    <div class="lg:min-w-6xl mx-auto">
 
         <!-- Breadcrumbs -->
         <div class="mb-6">
@@ -51,7 +51,7 @@ const images = product.images;
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbPage>{product.title}</BreadcrumbPage>
+                        <BreadcrumbPage className='text-primary font-semibold'>{product.title}</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
@@ -96,7 +96,7 @@ const images = product.images;
                         ${product.price}
                     </div>
 
-                    <div class={`mb-6 px-4 py-2 rounded-lg text-sm font-medium 
+                    <div class={`mb-6 px-4 py-2 rounded-lg text-sm font-medium w-fit
                                 ${product.stock > 10 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
                         {product.stock > 0 ? `En stock: ${product.stock} unidades` : "Agotado"}
                     </div>

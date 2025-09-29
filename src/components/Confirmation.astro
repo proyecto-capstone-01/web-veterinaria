@@ -1,0 +1,50 @@
+---
+const reserva = {
+    fecha: "05 de septiembre, 2025",
+    hora: "12:00 horas",
+    direccion: "Esmeralda, 97 San Bernardo",
+    servicios: [
+        { nombre: "Consulta veterinaria", precio: 10000 },
+        { nombre: "Baño y peluquería", precio: 15000 },
+    ],
+    };
+    const total = reserva.servicios.reduce((acc, s) => acc + s.precio, 0);
+    const primaryColor = "#6366F1"; // Color base
+---
+
+<div class="max-w-3xl mx-auto">
+    <h2 class="text-xl font-bold mb-2 text-center">¡Confirmaremos tu reserva!</h2>
+    <p class="text-gray-600 text-center mb-6 text-lg">
+        Confirmaremos tu reserva en unos momentos. Cuando confirmemos tu reserva te enviaremos un correo con la información de la reserva.
+    </p>
+
+    <h2 class="font-semibold mb-2 text-lg">Resumen de tu reserva</h2>
+    <div class="border border-primary rounded-lg p-4 mb-4">
+        <h3 class="font-semibold mb-2">Información de la reserva</h3>
+        <p class="text-gray-700"><strong>Fecha:</strong> {reserva.fecha}</p>
+        <p class="text-gray-700"><strong>Hora:</strong> {reserva.hora}</p>
+        <p class="text-gray-700"><strong>Dirección:</strong> {reserva.direccion}</p>
+    </div>
+
+    <div class="rounded-lg p-4 border border-primary">
+        <h3 class="font-semibold mb-4 text-lg">Servicios</h3>
+        <div class="flex justify-between mb-1">
+        <span class="font-bold">Copito</span>
+        <span class="font-bold text-gray-700">${total.toLocaleString()}</span>
+        </div>
+        {reserva.servicios.map(servicio => (
+        <div class="flex justify-between text-gray-600 text-sm">
+            <span>{servicio.nombre}</span>
+            <span>${servicio.precio.toLocaleString()}</span>
+        </div>
+        ))}
+        <hr class={`my-3 border-t-2`} style={`border-color: ${primaryColor}`} />
+        <div class="flex justify-between font-semibold text-lg">
+            <span>Total</span>
+            <span>${total.toLocaleString()}</span>
+        </div>
+        <p class="text-gray-500 text-sm mt-1">
+            Este monto deberás pagarlo al momento de realizar la cita.
+        </p>
+    </div>
+</div>

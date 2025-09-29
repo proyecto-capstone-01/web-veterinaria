@@ -23,7 +23,7 @@ export default function ProductFilters({
     return (
         <div className="space-y-4 rounded-lg bg-white">
             <div>
-                <label className="block text-sm font-medium mb-1 flex items-center gap-1">
+                <label className="text-sm font-medium mb-1 flex items-center gap-1">
                     Buscar producto
                     <InfoIcon className="w-4 h-4 text-gray-400" title="Escribe palabras clave para encontrar productos rápidamente" />
                 </label>
@@ -40,7 +40,7 @@ export default function ProductFilters({
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-1 flex items-center gap-1">
+                <label className="text-sm font-medium mb-1 flex items-center gap-1">
                     Categoría
                     <InfoIcon className="w-4 h-4 text-gray-400" title="Filtra productos según su categoría" />
                 </label>
@@ -62,7 +62,7 @@ export default function ProductFilters({
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-1 flex items-center gap-1">
+                <label className="text-sm font-medium mb-1 flex items-center gap-1">
                     Ordenar por
                     <InfoIcon className="w-4 h-4 text-gray-400" title="Ordena los productos por precio" />
                 </label>
