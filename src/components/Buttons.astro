@@ -14,6 +14,6 @@ const variants = {
 };
 ---
 
-<a href={url} target={target} class={`${baseStyles} ${variants[variant]}`}>
+<a href={url} target={target} class={`${baseStyles} ${variants[variant]}`} data-astro-prefetch>
     {text}
 </a>
