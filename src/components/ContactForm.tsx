@@ -76,6 +76,7 @@ export default function ContactForm() {
           <Checkbox
             id="terms"
             checked={acceptedTerms}
+            className="shrink-0 text-white"
             onCheckedChange={(checked) => setAcceptedTerms(!!checked)}
           />
           <Label htmlFor="terms" className="ml-2">
