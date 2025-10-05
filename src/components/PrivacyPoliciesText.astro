@@ -1,0 +1,62 @@
+---
+import Separator from "./Separator.astro"
+import FAQ from "./FAQ.astro"
+---
+
+<div class="max-w-4xl mx-auto space-y-6">
+    <Separator title="Política de Privacidad" description='Descripción de la política de privacidad.' />
+    <section>
+        <ol class="list-decimal list-inside space-y-4 text-gray-700 text-base leading-relaxed marker:text-primary">
+            <li class="text-lg">
+                <strong class="text-xl">Responsable del tratamiento de datos</strong><br />
+                Veterinaria Pucará, con domicilio en Esmeralda 97, San Bernardo, es responsable de la recolección y tratamiento de los datos personales ingresados en este Sitio.
+            </li>
+            <li class="text-lg">
+                <strong class="text-xl">Datos recopilados</strong><br />
+                El Sitio podrá solicitar los siguientes datos personales:
+                <ul class="list-disc list-inside ml-6 space-y-1 marker:text-blue-500">
+                    <li>Nombre y apellido.</li>
+                    <li>Teléfono y correo electrónico.</li>
+                    <li>Datos de la mascota (nombre, especie, edad, historial clínico relevante).</li>
+                    <li>Información de pago (si corresponde).</li>
+                </ul>
+            </li>
+            <li class="text-lg">
+                <strong class="text-xl">Finalidad del tratamiento</strong><br />
+                Los datos serán utilizados para:
+                <ul class="list-disc list-inside ml-6 space-y-1 marker:text-blue-500">
+                    <li>Gestionar reservas de atención veterinaria.</li>
+                    <li>Confirmar y recordar citas.</li>
+                    <li>Mantener contacto con los clientes.</li>
+                    <li>Enviar información relevante sobre servicios y promociones (solo con consentimiento previo).</li>
+                </ul>
+            </li>
+            <li class="text-lg">
+                <strong class="text-xl">Conservación de datos</strong><br />
+                Los datos se conservarán únicamente durante el tiempo necesario para cumplir con la finalidad para la cual fueron recolectados, salvo obligación legal en contrario.
+            </li>
+            <li class="text-lg">
+                <strong class="text-xl">Derechos de los usuarios</strong><br />
+                Los usuarios podrán ejercer en cualquier momento sus derechos de acceso, rectificación, cancelación y oposición (ARCO), de acuerdo con la Ley 19.628, contactándose a 
+                <a href="mailto:veterinariapucara@gmail.com" class="text-primary underline">veterinariapucara@gmail.com</a>.
+            </li>
+            <li class="text-lg">
+                <strong class="text-xl">Seguridad</strong><br />
+                El Sitio implementa medidas de seguridad técnicas y organizativas adecuadas para proteger los datos personales contra accesos no autorizados, pérdidas o modificaciones indebidas.
+            </li>
+            <li class="text-lg">
+                <strong class="text-xl">Cesión de datos</strong><br />
+                Los datos no serán compartidos con terceros, salvo en los siguientes casos:
+                <ul class="list-disc list-inside ml-6 space-y-1 marker:text-blue-500">
+                    <li>Cumplimiento de obligaciones legales.</li>
+                    <li>Proveedores de servicios tecnológicos que colaboren en la gestión del Sitio (ejemplo: hosting, agenda online).</li>
+                </ul>
+            </li>
+            <li class="text-lg">
+                <strong class="text-xl">Modificaciones</strong><br />
+                Esta Política de Privacidad podrá ser actualizada en cualquier momento, publicándose la nueva versión en el Sitio.
+            </li>
+        </ol>
+    </section>
+    <FAQ />
+</div>

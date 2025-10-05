@@ -1,0 +1,73 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import TableOfContents from "../../components/TableOfContent.astro";
+import postsData from "../../content/blog/post.json";
+
+export async function getStaticPaths() {
+    const posts = Array.isArray(postsData) ? postsData : [postsData];
+    return posts.map((post) => ({
+        params: { slug: post.slug },
+        props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+
+function extractHeadings(nodes) {
+    const headings = [];
+    for (const node of nodes) {
+        if (node.type === "heading") {
+        const text = node.children.map((c) => c.text).join("");
+        const slug = text
+            .toLowerCase()
+            .replace(/[^\w]+/g, "-")
+            .replace(/(^-|-$)/g, "");
+        headings.push({ depth: node.level || 2, text, slug });
+        }
+        if (node.children) {
+        headings.push(...extractHeadings(node.children));
+        }
+    }
+    return headings;
+    }
+
+    const headings = post.content ? extractHeadings(post.content.root.children) : [];
+---
+
+<Layout title={post.title}>
+    <main class="app-container pt-36 flex flex-col lg:flex-row gap-10">
+        <div class="flex-1">
+            {post.heroImage?.url && (
+                <img src={post.heroImage.url} alt={post.title} class="rounded-lg mb-6" />
+            )}
+
+            <h1 class="text-4xl font-bold mb-2">{post.title}</h1>
+            <p class="text-sm text-gray-500 mb-8">
+                Publicado el {new Date(post.publishedAt).toLocaleDateString("es-CL")}
+            </p>
+
+            <article class="prose prose-lg dark:prose-invert">
+                {post.content?.root?.children.map((node) => {
+                    if (node.type === "heading") {
+                        const text = node.children.map((c) => c.text).join("");
+                        const slug = text
+                        .toLowerCase()
+                        .replace(/[^\w]+/g, "-")
+                        .replace(/(^-|-$)/g, "");
+                        const Tag = node.tag || `h${node.level || 2}`;
+                        return <Tag id={slug}>{text}</Tag>;
+                    }
+                    if (node.type === "paragraph") {
+                        return <p>{node.children.map((c) => c.text).join("")}</p>;
+                    }
+                return null;
+                })}
+            </article>
+        </div>
+        {headings.length > 0 && (
+        <aside class="hidden lg:block w-64 self-start">
+            <TableOfContents headings={headings} />
+        </aside>
+        )}
+    </main>
+</Layout>
