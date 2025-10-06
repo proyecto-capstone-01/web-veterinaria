@@ -4,7 +4,7 @@ export default function ProductCard({ product }) {
     return (
         <a
             href={`/products/${product.id}`}
-            className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden block"
+            className="bg-white rounded-xl shadow hover:shadow-lg hover:scale-[1.01] transition overflow-hidden block"
         >
             <img
                 src={product.images[0]}

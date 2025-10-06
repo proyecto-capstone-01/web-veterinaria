@@ -109,7 +109,7 @@ const headings = extractHeadings(contentNodes);
               .replace(/(^-|-$)/g, "");
             const Tag = node.tag || `h${node.level || 2}`;
             return (
-              <Tag id={slug} class="scroll-mt-32 font-bold pb-4">
+              <Tag id={slug} class="scroll-mt-32 font-bold pb-4 text-xl">
                 {text}
               </Tag>
             );
