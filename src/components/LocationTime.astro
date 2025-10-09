@@ -5,16 +5,17 @@ import Time from "./Time.astro"
 ---
 
 <Separator title="Ubicación y Horarios" />
-<div class="max-w-screen-lg mx-auto lg:min-w-5xl">
+<div class="max-w-screen-lg mx-auto xl:min-w-5xl lg:min-w-4xl md:min-w-3xl">
     <div class="flex flex-col md:flex-row gap-3 py-6 rounded-lg">
         <!-- Mapa -->
         <div class="md:w-2/3 w-full h-64 md:h-auto rounded-xl overflow-hidden">
             <iframe
-                class="w-full h-full border-1 border-primary"
+                class="w-full h-full border-2 border-primary"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3327.788307740868!2d-70.6305236847962!3d-33.57758598074267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c4f1f479e7c7%3A0x882cb060f583f0b!2sEsmeralda%2097%2C%20San%20Bernardo%2C%20Regi%C3%B3n%20Metropolitana%2C%20Chile!5e0!3m2!1ses!2scl!4v1694610000000!5m2!1ses!2scl"
                 allowfullscreen=""
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
+                title="Ubicación en Google Maps"
             ></iframe>
         </div>
         <!-- Información -->

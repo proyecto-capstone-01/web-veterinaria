@@ -2,8 +2,8 @@
 @plugin "tailwindcss-animate";
 
 @theme {
-    --color-primary: #6366F1;
-    --color-secondary: #818CF8;
+    --color-primary: #6060F0;
+    --color-secondary: #5A5AE0;
     --color-tertiary: #E0E7FF;
 
     --color-primary-dark: #4F46E5;
