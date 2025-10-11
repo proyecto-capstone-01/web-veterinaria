@@ -68,9 +68,18 @@ const currentPath = Astro.url.pathname;
     const menu = document.getElementById("navbar-cta");
 
     if (menuToggle && menu) {
-        menuToggle.addEventListener("click", () => {
-        menu.classList.toggle("hidden");
-        menuToggle.classList.toggle("open");
+            menuToggle.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+            menuToggle.classList.toggle("open");
         });
     }
+
+    const links = document.querySelectorAll("nav a[href]");
+    const currentPath = window.location.pathname;
+
+    links.forEach(link => {
+        if (link.getAttribute("href") === currentPath) {
+            link.classList.add("text-primary", "font-bold");
+        }
+    });
 </script>
