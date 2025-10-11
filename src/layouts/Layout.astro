@@ -16,7 +16,7 @@ import FloatingWhatsApp from "../components/FloatingWhatsApp.astro";
 		<title>Clinica Veterinaria Pucará</title>
 	</head>
 	<body class="flex flex-col min-h-screen">
-		<Navbar />
+		<Navbar client:load />
 		<main class="max-w-screen-xl flex-1 items-center justify-between mx-auto p-4">
 			<slot />
 			<FloatingWhatsApp />

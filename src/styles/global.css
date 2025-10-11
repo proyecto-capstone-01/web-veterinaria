@@ -2,57 +2,37 @@
 @plugin "tailwindcss-animate";
 
 @theme {
-    --color-primary: #6060F0;
-    --color-secondary: #5A5AE0;
-    --color-tertiary: #E0E7FF;
+  --color-primary: #6060F0;
+  --color-secondary: #5A5AE0;
+  --color-tertiary: #E0E7FF;
 
-    --color-primary-dark: #4F46E5;
-    --color-secondary-dark: #6366F1;
-    --color-tertiary-dark: #C7D2FE;
+  --color-primary-dark: #4F46E5;
+  --color-secondary-dark: #6366F1;
+  --color-tertiary-dark: #C7D2FE;
 }
 
+/* Scrollbar styles */
+
 ::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
+  width: 14px;
+  height: 14px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #1e293b;
+  background: #1e293b;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #6366f1;
-    border-radius: 6px;
-    border: 3px solid #1e293b;
+  background-color: #6366f1;
+  border-radius: 6px;
+  border: 3px solid #1e293b;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #4f46e5;
-}
-
-.bar {
-  @apply absolute w-6 h-[2px] bg-gray-800 rounded transition-all duration-300;
-}
-.bar.top {
-  transform: translateY(-6px);
-}
-.bar.middle {
-  transform: translateY(0);
-}
-.bar.bottom {
-  transform: translateY(6px);
-}
-#menu-toggle.open .bar.top {
-  transform: rotate(45deg);
-}
-#menu-toggle.open .bar.middle {
-  opacity: 0;
-}
-#menu-toggle.open .bar.bottom {
-  transform: rotate(-45deg);
+  background-color: #4f46e5;
 }
 
 ::selection {
-  background-color: #4F46E5;
+  background-color: var(--color-primary);
   color: white;
 }
