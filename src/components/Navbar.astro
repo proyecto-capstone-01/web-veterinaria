@@ -76,3 +76,16 @@ const currentPath = Astro.url.pathname;
         });
     }
 </script>
+
+<script>
+    const links = document.querySelectorAll("nav a[href]");
+    const currentPath = window.location.pathname;
+
+    links.forEach(link => {
+        if (link.getAttribute("href") === currentPath) {
+        link.classList.add("text-primary", "font-bold");
+        // Si quieres quitar la clase activa previa:
+        link.classList.remove("text-gray-900");
+        }
+    });
+</script>
