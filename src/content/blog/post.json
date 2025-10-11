@@ -1,6 +1,6 @@
 [
-    { "slug": "sergio", "title": "Buenas noches sergio neira", "publishedAt": "2025-09-25T03:55:08.728Z", "meta": { "description": "Junta miedo bro te vas a cagar encima dfdgdsgfsdfggfsdsgfdgsfdgfsdgfsdgsdf" }, "heroImage": { "url": "/api/media/file/monkey-drink.png" } },
-    { "slug": "nuevo-post", "title": "Post de ejemplo", "publishedAt": "2025-10-01T20:00:00.000Z", "meta": { "description": "Otro artículo interesante gsfddddddddddddddddd" }, "heroImage": { "url": "/img/blog2.jpg" } },
+    { "slug": "sergio", "title": "Buenas noches sergio neira", "publishedAt": "2025-10-25T03:55:08.728Z", "meta": { "description": "Junta miedo bro te vas a cagar encima dfdgdsgfsdfggfsdsgfdgsfdgfsdgfsdgsdf" }, "heroImage": { "url": "/public/portrait-dog.webp" } },
+    { "slug": "nuevo-post", "title": "Post de ejemplo", "publishedAt": "2025-10-01T20:00:00.000Z", "meta": { "description": "Otro artículo interesante gsfddddddddddddddddd" }, "heroImage": { "url": "/public/cat.webp" } },
     { "slug": "primer-post", "title": "Mi primer post", "publishedAt": "2024-10-01T20:00:00.000Z", "meta": { "description": "Este es el contenido de mi primer post en el blog. gsdfffffffffffff" }, "heroImage": { "url": "/img/blog1.jpg" } },
     { "slug": "segundo-post", "title": "Mi segundo post", "publishedAt": "2024-11-01T20:00:00.000Z", "meta": { "description": "Este es el contenido de mi segundo post en el blog." }, "heroImage": { "url": "/img/blog2.jpg" } },
     { "slug": "tercer-post", "title": "Mi tercer post", "publishedAt": "2024-12-01T20:00:00.000Z", "meta": { "description": "Este es el contenido de mi tercer post en el blog." }, "heroImage": { "url": "/img/blog3.jpg" } }

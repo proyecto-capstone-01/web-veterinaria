@@ -83,11 +83,12 @@ const headings = extractHeadings(contentNodes);
         <img
           src={detailPost.heroImage.url}
           alt={detailPost.title || "Imagen del post"}
+          transition:name="blog-image"
           class="rounded-xl mb-8 shadow-md w-full object-cover"
         />
       )}
 
-      <h1 class="text-4xl font-extrabold mb-4 text-gray-900 leading-tight">
+      <h1 class="text-4xl font-extrabold mb-4 text-gray-900 leading-tight" transition:name="blog-title">
         {detailPost.title || "Artículo"}
       </h1>
 
