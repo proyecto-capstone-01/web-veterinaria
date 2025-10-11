@@ -12,12 +12,15 @@ import Separator from "./Separator.astro";
         <div class="py-4 mx-auto max-w-screen-xl sm:py-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
                 <!-- Imagen grande a la izquierda -->
-                <div class="md:col-span-1 relative rounded-xl overflow-hidden bg-primary-dark">
+                <div class="md:col-span-1 relative rounded-xl overflow-hidden border border-primary flex items-center justify-center h-full">
                     <img 
                         src="/catdog.webp" 
                         alt="Perros y Gatos" 
-                        class="h-full w-full object-cover"
+                        class="h-full flex"
                     >
+
+                    <!-- Degradado encima de la imagen -->
+                    <div class="absolute inset-0 z-10 bg-gradient-to-t to-transparent rounded-xl"></div>
                 </div>
                 <!-- Sección derecha -->
                 <div class="md:col-span-2 flex flex-col gap-4">
