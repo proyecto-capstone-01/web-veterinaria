@@ -1,0 +1,39 @@
+---
+const { post } = Astro.props;
+
+const title = post.title;
+const description = post.meta?.description || "Sin descripción.";
+const image = post.heroImage?.url || "/placeholder.png";
+const link = `/blog/${post.slug}`;
+---
+
+<a href={link} class="block group overflow-hidden transition-transform duration-300 hover:-translate-y-1">
+
+    <div class="w-full h-56 overflow-hidden">
+        <img
+        src={image}
+        alt={title}
+        class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
+        />
+    </div>
+
+    <div class="p-5 flex flex-col justify-between h-48">
+        <div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2 line-clamp-1">
+            {title}
+        </h3>
+        <p class="text-gray-600 text-md line-clamp-2">
+            {description}
+        </p>
+        </div>
+
+        <div class="flex items-center justify-between mt-4">
+        <p class="text-gray-400 text-sm">
+            {new Date(post.publishedAt).toLocaleDateString("es-CL")}
+        </p>
+        <span class="text-primary-dark group-hover:translate-x-1 transition-transform duration-200 text-sm font-medium flex items-center gap-1">
+            Leer artículo →
+        </span>
+        </div>
+    </div>
+</a>

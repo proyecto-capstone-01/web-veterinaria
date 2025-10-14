@@ -1,0 +1,111 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import RelatedProducts from '../../components/RelatedProducts.jsx';
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "../../components/ui/breadcrumb"
+
+export async function getStaticPaths() {
+    const res = await fetch("https://dummyjson.com/products?limit=100");
+    const data = await res.json();
+    const products = data.products;
+
+    return products.map((product) => ({
+        params: { id: String(product.id) },
+        props: { product },
+    }));
+}
+
+interface Product {
+    id: number;
+    title: string;
+    description: string;
+    price: number;
+    category: string;
+    stock: number;
+    images: string[];
+}
+
+const { product } = Astro.props as { product: Product };
+const images = product.images;
+---
+
+<Layout Title={product.title}>
+    <div class="lg:min-w-6xl mx-auto">
+
+        <!-- Breadcrumbs -->
+        <div class="mb-6">
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/products">Productos</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage className='text-primary font-semibold'>{product.title}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+        </div>
+
+        <!-- Detalle del producto -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <!-- Galería de imágenes -->
+            <div class="flex gap-4">
+                <div class="flex flex-col gap-3 w-20">
+                    {images.map((img, i) => (
+                        <button
+                            class="border rounded-lg overflow-hidden hover:ring-2 hover:ring-indigo-500 transition"
+                            onclick={`document.getElementById('mainImage').src='${img}'`}
+                        >
+                            <img src={img} alt={product.title + ' thumbnail'} class="w-full h-20 object-contain bg-gray-100" />
+                        </button>
+                    ))}
+                </div>
+
+                <div class="flex-1">
+                    <img
+                        id="mainImage"
+                        src={images[0]}
+                        alt={product.title}
+                        class="w-full h-[400px] object-contain bg-gray-100 rounded-lg shadow"
+                        transition:name="product-image"
+                    />
+                </div>
+            </div>
+
+            <!-- Info del producto -->
+            <div class="flex flex-col justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold mt-4 mb-4">{product.title}</h1>
+                    <p class="text-gray-700 leading-relaxed mb-6">{product.description}</p>
+
+                    <span class="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm mb-4">
+                        {product.category}
+                    </span>
+
+                    <div class="text-4xl font-extrabold text-indigo-600 mb-4">
+                        ${product.price}
+                    </div>
+
+                    <div class={`mb-6 px-4 py-2 rounded-lg text-sm font-medium w-fit
+                                ${product.stock > 10 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                        {product.stock > 0 ? `En stock: ${product.stock} unidades` : "Agotado"}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        <RelatedProducts currentProductId={product.id} category={product.category} client:load />
+    </div>
+</Layout>

@@ -1,7 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+import ProductList from "../components/ProductList.jsx";
 ---
 
 <Layout Title="Store">
-    <h1 class="text-primary text-4xl font-bold">En desarrollo</h1>
+    <ProductList client:load />
 </Layout>

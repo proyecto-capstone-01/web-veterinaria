@@ -1,0 +1,44 @@
+---
+import postsData from "../content/blog/post.json";
+
+const posts = Array.isArray(postsData) ? postsData : [postsData];
+const postsWithTimestamps = posts.map(post => {
+  const time = Date.parse(post.publishedAt);
+  return { ...post, timestamp: isNaN(time) ? 0 : time };
+});
+const sortedPosts = postsWithTimestamps.sort((a, b) => b.timestamp - a.timestamp);
+const latestPost = sortedPosts[0];
+---
+
+{latestPost && (
+  <section class="relative w-full max-w-screen-xl mx-auto rounded-3xl overflow-hidden shadow-lg my-10">
+    <img 
+      src={latestPost.heroImage?.url} 
+      alt={latestPost.title} 
+      class="w-full h-[480px] object-cover brightness-75 hover:brightness-90 transition-all duration-500"
+    />
+
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+
+    <div class="absolute bottom-0 p-8 text-white space-y-4 max-w-2xl">
+      <span class="inline-block bg-primary px-4 py-1 rounded-full text-sm font-semibold">
+        Lo más reciente
+      </span>
+
+      <h2 class="text-4xl lg:text-5xl font-bold leading-tight drop-shadow-md">
+        {latestPost.title}
+      </h2>
+
+      <p class="text-gray-200 line-clamp-3 text-lg">
+        {latestPost.meta?.description || "Lee nuestro artículo más reciente."}
+      </p>
+
+      <a
+        href={`/blog/${latestPost.slug}`}
+        class="inline-flex items-center gap-2 bg-primary px-6 py-3 rounded-xl font-medium hover:bg-primary-dark transition-colors"
+      >
+        Leer artículo →
+      </a>
+    </div>
+  </section>
+)}

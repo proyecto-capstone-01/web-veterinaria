@@ -1,10 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import LocationTime from '../components/LocationTime.astro';
+import ContactForm from '../components/ContactForm';
 ---
 
 <Layout Title="Contact">
-    <div>
-        <LocationTime />
-    </div>
+    <ContactForm client:load />
+    <LocationTime />
 </Layout>

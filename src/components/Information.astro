@@ -12,39 +12,42 @@ import Separator from "./Separator.astro";
         <div class="py-4 mx-auto max-w-screen-xl sm:py-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
                 <!-- Imagen grande a la izquierda -->
-                <div class="md:col-span-1 relative rounded-xl overflow-hidden bg-primary-dark">
+                <div class="md:col-span-1 relative rounded-xl overflow-hidden border border-primary flex items-center justify-center h-full transition duration-500 hover:bg-primary-dark">
                     <img 
                         src="/catdog.webp" 
                         alt="Perros y Gatos" 
-                        class="h-full w-full object-cover"
+                        class="h-full flex md:object-cover object-contain"
                     >
+
+                    <!-- Degradado encima de la imagen -->
+                    <div class="absolute inset-0 z-10 bg-gradient-to-t to-transparent rounded-xl"></div>
                 </div>
                 <!-- Sección derecha -->
                 <div class="md:col-span-2 flex flex-col gap-4">
                     <!-- Rectángulo largo arriba -->
-                    <div class="flex flex-col rounded-xl border border-primary-dark p-3">
-                        <h3 class="text-2xl font-semibold mb-2 text-center">Confianza y Seguridad</h3>
-                        <p class="text-lg text-gray-700">Brindamos un servicio responsable, ético y cercano, asegurando el bienestar y la protección de tu mascota.</p>
+                    <div class="flex flex-col rounded-xl border border-primary-dark p-3 hover:bg-primary hover:text-white transition-colors duration-600 group">
+                        <h3 class="text-2xl font-semibold mb-2 text-center group-hover:text-white">Confianza y Seguridad</h3>
+                        <p class="lg:text-lg sm:text-md text-gray-700 group-hover:text-white">Brindamos un servicio responsable, ético y cercano, asegurando el bienestar y la protección de tu mascota.</p>
                     </div>
                     <!-- Parte inferior -->
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                         
                         <!-- Columna izquierda (dos cubos) -->
                         <div class="col-span-1 sm:col-span-2 flex flex-col gap-4">
-                            <div class="flex flex-col rounded-xl border border-primary-dark p-3 h-full">
-                                <h3 class="text-2xl font-semibold mb-2 text-center">Profesionales</h3>
-                                <p class="text-lg text-gray-700">Contamos con un equipo de veterinarios altamente capacitados y apasionados por el bienestar animal.</p>
+                            <div class="flex flex-col rounded-xl border border-primary-dark p-3 h-full hover:bg-primary hover:text-white transition-colors duration-600 group">
+                                <h3 class="text-2xl font-semibold mb-2 text-center group-hover:text-white">Profesionales</h3>
+                                <p class="lg:text-lg sm:text-md text-gray-700 group-hover:text-white">Contamos con un equipo de veterinarios altamente capacitados y apasionados por el bienestar animal.</p>
                             </div>
-                            <div class="flex flex-col rounded-xl border border-primary-dark p-3 h-full">
-                                <h3 class="text-2xl font-semibold mb-2 text-center">Transparencia</h3>
-                                <p class="text-lg text-gray-700">Mantenemos una comunicación abierta y honesta con nuestros clientes, asegurando que estén informados en todo momento.</p>
+                            <div class="flex flex-col rounded-xl border border-primary-dark p-3 h-full hover:bg-primary hover:text-white transition-colors duration-600 group">
+                                <h3 class="text-2xl font-semibold mb-2 text-center group-hover:text-white">Transparencia</h3>
+                                <p class="lg:text-lg sm:text-md text-gray-700 group-hover:text-white">Mantenemos una comunicación abierta y honesta con nuestros clientes, asegurando que estén informados en todo momento.</p>
                             </div>
                         </div>
                         <!-- Columna derecha (rectángulo largo) -->
                         <div class="col-span-1 sm:col-span-2">
-                            <div class="flex flex-col rounded-xl border border-primary-dark h-full w-full justify-between">
-                                <h3 class="text-2xl font-semibold mb-2z text-center pt-3 px-3">Atención personalizada</h3>
-                                <p class="text-lg text-gray-700 px-3 pt-3">Cada mascota es única, por lo que ofrecemos un enfoque individualizado para satisfacer sus necesidades específicas y garantizar su bienestar integral.</p>
+                            <div class="flex flex-col rounded-xl border border-primary-dark h-full w-full justify-between hover:bg-primary hover:text-white transition-colors duration-600 group">
+                                <h3 class="text-2xl font-semibold mb-2 text-center pt-3 px-3 group-hover:text-white">Atención personalizada</h3>
+                                <p class="lg:text-lg sm:text-md text-gray-700 px-3 pt-3 group-hover:text-white">Cada mascota es única, por lo que ofrecemos un enfoque individualizado para satisfacer sus necesidades específicas y garantizar su bienestar integral.</p>
                                 <img 
                                     src="/cat.webp" 
                                     alt="Veterinario atendiendo a un perro" 

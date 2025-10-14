@@ -1,0 +1,142 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import TableOfContents from "../../components/TableOfContent.astro";
+import postsData from "../../content/blog/post.json";
+
+export async function getStaticPaths() {
+  return postsData.map((post) => ({
+    params: { slug: post.slug },
+    props: { post, slug: post.slug },
+  }));
+}
+
+const { slug } = Astro.props;
+
+import postsJson from '../../content/blog/blog.json';
+
+const postsArray = Array.isArray(postsJson) ? postsJson : [postsJson];
+const detailPost = postsArray.find((post) => post.slug === slug) || {};
+
+// nodos de contenido seguros
+const contentNodes = detailPost?.content?.root?.children || [];
+
+/** @param {any[]} nodes */
+function extractHeadings(nodes) {
+  /** @type {{ depth: number, text: string, slug: string }[]} */
+  const headings = [];
+  for (const node of nodes) {
+    if (node.type === "heading") {
+      const text = (node.children || []).map((c) => c.text).join("");
+      const slug = text
+        .toLowerCase()
+        .replace(/[^\w]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+      headings.push({ depth: node.level || 2, text, slug });
+    }
+    if (node.children) {
+      headings.push(...extractHeadings(node.children));
+    }
+  }
+  return headings;
+}
+
+const headings = extractHeadings(contentNodes);
+---
+
+<Layout title={detailPost.title || "Artículo"}>
+  <main class="app-container flex flex-col lg:flex-row gap-10">
+    <div class="flex-1 max-w-3xl mx-auto">
+
+      <nav class="lg:hidden mb-6" aria-label="Breadcrumb">
+        <ol class="flex items-center gap-2 text-sm text-gray-600">
+          <li>
+            <a href="/" class="inline-flex items-center hover:underline">
+              Inicio
+            </a>
+          </li>
+
+          <li class="text-gray-400" aria-hidden>
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </li>
+
+          <li>
+            <a href="/blog" class="inline-flex items-center hover:underline">Blog</a>
+          </li>
+
+          <li class="text-gray-400" aria-hidden>
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </li>
+
+          <li class="truncate max-w-[160px]">
+            <span aria-current="page" class="text-primary font-semibold truncate">
+              {detailPost.title || "Sin título"}
+            </span>
+          </li>
+        </ol>
+      </nav>
+
+      {detailPost.heroImage?.url && (
+        <img
+          src={detailPost.heroImage.url}
+          alt={detailPost.title || "Imagen del post"}
+          transition:name="blog-image"
+          class="rounded-xl mb-8 shadow-md w-full object-cover"
+        />
+      )}
+
+      <h1 class="text-4xl font-extrabold mb-4 text-gray-900 leading-tight" transition:name="blog-title">
+        {detailPost.title || "Artículo"}
+      </h1>
+
+      <p class="text-sm text-gray-500 mb-10 border-b border-gray-200 pb-4">
+        {detailPost.publishedAt
+          ? `Publicado el ${new Date(detailPost.publishedAt).toLocaleDateString("es-CL")}`
+          : "Fecha no disponible"}
+      </p>
+
+      <article
+        class="prose prose-lg prose-headings:font-semibold prose-headings:text-gray-900 prose-h2:mt-12 prose-h2:mb-4 prose-h3:mt-8 prose-h3:mb-3 prose-p:leading-relaxed prose-p:mb-6 prose-img:rounded-lg prose-img:shadow-sm prose-strong:text-primary-dark"
+      >
+        {contentNodes.map((node, index) => {
+          if (node.type === "heading") {
+            const text = (node.children || []).map((c) => c.text).join("");
+            const slug = text
+              .toLowerCase()
+              .replace(/[^\w]+/g, "-")
+              .replace(/(^-|-$)/g, "");
+            const Tag = node.tag || `h${node.level || 2}`;
+            return (
+              <Tag id={slug} class="scroll-mt-32 font-bold pb-4 text-xl">
+                {text}
+              </Tag>
+            );
+          }
+
+          if (node.type === "paragraph") {
+            return (
+              <p class="text-gray-700 leading-relaxed mb-6">
+                {(node.children || []).map((c) => c.text).join("")}
+              </p>
+            );
+          }
+
+          if (node.type === "image" && node.url) {
+            return <img src={node.url} alt={node.alt || ""} class="rounded-lg mb-6" />;
+          }
+
+          return null;
+        })}
+      </article>
+    </div>
+
+    {headings.length > 0 && (
+      <aside class="hidden lg:block w-64 self-start sticky top-36">
+        <TableOfContents headings={headings} />
+      </aside>
+    )}
+  </main>
+</Layout>

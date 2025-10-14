@@ -1,0 +1,17 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import BlogCard from "../../components/BlogCard.astro";
+import BlogHero from "../../components/BlogHero.astro";
+
+import postsData from "../../content/blog/post.json";
+const posts = Array.isArray(postsData) ? postsData : [postsData];
+---
+
+<Layout title="Blog">
+    <BlogHero />
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 app-container py-16">
+        {posts.map(post => (
+            <BlogCard post={post} />
+        ))}
+    </div>
+</Layout>

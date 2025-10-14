@@ -1,0 +1,57 @@
+---
+interface Props {
+    headings: { depth: number; text: string; slug: string }[]
+}
+
+const { headings } = Astro.props
+
+interface TOCHeading {
+    depth: number
+    text: string
+    slug: string
+    children: TOCHeading[]
+}
+
+const toc: TOCHeading[] = []
+let lastH2: TOCHeading | null = null
+
+for (const heading of headings) {
+    if (heading.depth === 2) {
+        lastH2 = { ...heading, children: [] }
+        toc.push(lastH2)
+    } else if (heading.depth === 3 && lastH2) {
+        lastH2.children.push({ ...heading, children: [] })
+    }
+}
+---
+
+{toc.length > 0 ? (
+    <nav class="py-8 rounded sticky top-36">
+        <h2 class="text-xl font-bold mb-3">En este contenido</h2>
+        <ul class="space-y-3">
+        {toc.map((h2) => (
+            <li>
+            <a class="hover:underline underline-offset-4" href={`#${h2.slug}`}>
+                {h2.text}
+            </a>
+            {h2.children.length > 0 && (
+                <ul class="ml-4 mt-2 space-y-2 border-l border-gray-300 dark:border-gray-700 pl-4">
+                {h2.children.map((h3) => (
+                    <li>
+                    <a
+                        class="hover:underline underline-offset-4 text-sm opacity-80"
+                        href={`#${h3.slug}`}
+                    >
+                        {h3.text}
+                    </a>
+                    </li>
+                ))}
+                </ul>
+            )}
+            </li>
+        ))}
+        </ul>
+    </nav>
+    ) : (
+    <div />
+)}
