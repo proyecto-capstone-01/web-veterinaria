@@ -6,7 +6,7 @@ type Props = {
 
 export default function StaffCard({ nombre, cargo, imagen }: Props) {
   return (
-    <div className="relative rounded-tl-[100px] rounded-br-[100px] overflow-hidden shadow-lg bg-primary-dark">
+    <div className="select-none relative rounded-tl-[100px] rounded-br-[100px] overflow-hidden shadow-lg bg-primary-dark">
       <img
         src={imagen}
         alt={nombre}
