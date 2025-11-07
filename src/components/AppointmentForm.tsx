@@ -83,7 +83,7 @@ const SERVICES: ServiceItem[] = [
 
 const HOURS: DaySlots[] = [
     {
-        fecha: "Jueves • 04/09/2025", slots: [
+        fecha: "Viernes • 07/11/2025", slots: [
             {time: "09:00", disponible: true},
             {time: "11:00", disponible: true},
             {time: "13:00", disponible: false},
@@ -91,7 +91,7 @@ const HOURS: DaySlots[] = [
         ]
     },
     {
-        fecha: "Viernes • 05/09/2025", slots: [
+        fecha: "Sábado • 08/11/2025", slots: [
             {time: "08:30", disponible: true},
             {time: "10:00", disponible: false},
             {time: "12:00", disponible: true},
@@ -99,7 +99,7 @@ const HOURS: DaySlots[] = [
         ]
     },
     {
-        fecha: "Sábado • 07/09/2025", slots: [
+        fecha: "Domingo • 09/11/2025", slots: [
             {time: "09:00", disponible: true},
             {time: "11:00", disponible: true},
             {time: "13:00", disponible: true},
@@ -315,7 +315,7 @@ export default function AppointmentForm() {
     };
 
     return (
-        <form onSubmit={onSubmit} className="space-y-8">
+        <form onSubmit={onSubmit} className="space-y-8 p-6 sm:p-8 lg:p-10">
             {/* Mascota */}
             <section>
                 <h2 className="text-xl font-semibold mb-2">Tu mascota</h2>
@@ -591,22 +591,10 @@ export default function AppointmentForm() {
                         y condiciones y políticas de privacidad</a></p>
                 </div>
 
-                <Button type="submit" disabled={submitting} className="w-full mt-4">
+                <Button type="submit" disabled={submitting} className="w-full mt-4 text-white">
                     {submitting ? "Confirmando..." : "Confirmar cita"}
                 </Button>
             </section>
-
-            <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>{dialog.title}</DialogTitle>
-                        <DialogDescription>{dialog.message}</DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <Button onClick={() => setOpen(false)}>Cerrar</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
         </form>
     );
 }

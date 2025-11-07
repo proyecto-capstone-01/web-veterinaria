@@ -10,15 +10,15 @@ import {
     BreadcrumbSeparator,
 } from "../../components/ui/breadcrumb"
 
+// ✅ Usamos import.meta.env.BASE_URL para acceder correctamente al archivo público
 export async function getStaticPaths() {
-    const res = await fetch("https://dummyjson.com/products?limit=100");
-    const data = await res.json();
-    const products = data.products;
+  const data = await import("../../../../website/public/products.json");
+  const products = data.default.products;
 
-    return products.map((product) => ({
-        params: { id: String(product.id) },
-        props: { product },
-    }));
+  return products.map((product) => ({
+    params: { id: String(product.id) },
+    props: { product },
+  }));
 }
 
 interface Product {
@@ -51,7 +51,7 @@ const images = product.images;
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbPage className='text-primary font-semibold'>{product.title}</BreadcrumbPage>
+                        <BreadcrumbPage class="text-primary font-semibold">{product.title}</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
@@ -105,7 +105,7 @@ const images = product.images;
             </div>
         </div>
 
-        <!-- Related Products -->
+        <!-- Productos relacionados -->
         <RelatedProducts currentProductId={product.id} category={product.category} client:load />
     </div>
 </Layout>
