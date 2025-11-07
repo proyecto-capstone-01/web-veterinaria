@@ -1,0 +1,138 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Alimento Premium para Perros Adultos",
+      "description": "Croquetas nutritivas con proteínas de pollo y arroz integral. Ideal para perros adultos de todas las razas.",
+      "price": 25990,
+      "category": "alimentos",
+      "brand": "DogPro",
+      "thumbnail": "https://www.amigales.cl/media/catalog/product/cache/629713204090c0e7213f3f646f843e1a/v/i/vitalcan_premium_cordero_1.jpg",
+      "images": [
+        "https://www.amigales.cl/media/catalog/product/cache/629713204090c0e7213f3f646f843e1a/v/i/vitalcan_premium_cordero_1.jpg"
+      ],
+      "stock": 25
+    },
+    {
+      "id": 2,
+      "title": "Alimento Gatos Esterilizados",
+      "description": "Fórmula especial con bajo contenido de grasa y alto en fibras naturales.",
+      "price": 19990,
+      "category": "alimentos",
+      "brand": "CatBalance",
+      "thumbnail": "https://purina.cl/sites/default/files/styles/webp/public/2022-08/Gato_Sterilize_Frente_Pro_Plan.png.webp?itok=2x2wy_Pc",
+      "images": ["https://purina.cl/sites/default/files/styles/webp/public/2022-08/Gato_Sterilize_Frente_Pro_Plan.png.webp?itok=2x2wy_Pc"],
+      "stock": 30
+    },
+    {
+      "id": 3,
+      "title": "Collar Reflectante para Perros",
+      "description": "Collar ajustable con material reflectante para paseos seguros de noche.",
+      "price": 8990,
+      "category": "accesorios",
+      "brand": "PetSafe",
+      "thumbnail": "https://www.vinipets.cl/cdn/shop/files/1305dde3-0709-46a7-b47b-444be2b1dadb.jpg?v=1731129820&width=1946",
+      "images": ["https://www.vinipets.cl/cdn/shop/files/1305dde3-0709-46a7-b47b-444be2b1dadb.jpg?v=1731129820&width=1946"],
+      "stock": 15
+    },
+    {
+      "id": 4,
+      "title": "Juguete Mordedor de Goma",
+      "description": "Mordedor resistente ideal para mantener los dientes limpios y fuertes.",
+      "price": 5990,
+      "category": "juguetes",
+      "brand": "K9Play",
+      "thumbnail": "https://motherna.cl/cdn/shop/files/mordedor-de-goma-suavinex-746038.jpg?v=1724164692",
+      "images": ["https://motherna.cl/cdn/shop/files/mordedor-de-goma-suavinex-746038.jpg?v=1724164692"],
+      "stock": 40
+    },
+    {
+      "id": 5,
+      "title": "Cama Acolchada para Mascotas",
+      "description": "Cama suave y acolchada con funda desmontable y lavable. Tamaño mediano.",
+      "price": 24990,
+      "category": "accesorios",
+      "brand": "PetDreams",
+      "thumbnail": "https://www.cic.cl/dw/image/v2/BDXB_PRD/on/demandware.static/-/Sites-masterCatalog_CIC/es_CL/dwcf8274ac/original/images/products/cama-acolchada-mascota-talla-s-05.jpg?sw=1500&sh=1500&sm=fit",
+      "images": ["https://www.cic.cl/dw/image/v2/BDXB_PRD/on/demandware.static/-/Sites-masterCatalog_CIC/es_CL/dwcf8274ac/original/images/products/cama-acolchada-mascota-talla-s-05.jpg?sw=1500&sh=1500&sm=fit"],
+      "stock": 12
+    },
+    {
+      "id": 6,
+      "title": "Shampoo Hipoalergénico para Perros",
+      "description": "Limpieza suave sin sulfatos. Ideal para pieles sensibles o con alergias.",
+      "price": 7990,
+      "category": "higiene",
+      "brand": "VetClean",
+      "thumbnail": "/images/products/shampoo.jpg",
+      "images": ["/images/products/shampoo.jpg"],
+      "stock": 20
+    },
+    {
+      "id": 7,
+      "title": "Pipeta Antipulgas y Garrapatas (3 unidades)",
+      "description": "Protege a tu mascota hasta por 3 meses. Aprobado por veterinarios.",
+      "price": 16990,
+      "category": "medicamentos",
+      "brand": "FleaStop",
+      "thumbnail": "/images/products/pipeta.jpg",
+      "images": ["/images/products/pipeta.jpg"],
+      "stock": 18
+    },
+    {
+      "id": 8,
+      "title": "Correa Extensible de 5 Metros",
+      "description": "Permite mayor libertad durante los paseos sin perder el control del perro.",
+      "price": 12990,
+      "category": "alimentos",
+      "brand": "WalkPro",
+      "thumbnail": "/images/products/correa.jpg",
+      "images": ["/images/products/correa.jpg"],
+      "stock": 22
+    },
+    {
+      "id": 9,
+      "title": "Snacks Naturales de Pollo Deshidratado",
+      "description": "Premios saludables sin colorantes ni conservantes artificiales.",
+      "price": 4990,
+      "category": "alimentos",
+      "brand": "GoodPet",
+      "thumbnail": "/images/products/snacks.jpg",
+      "images": ["/images/products/snacks.jpg"],
+      "stock": 45
+    },
+    {
+      "id": 10,
+      "title": "Cepillo Desenredante para Mascotas",
+      "description": "Cerdas suaves de acero inoxidable. Ideal para eliminar el pelo suelto.",
+      "price": 6990,
+      "category": "higiene",
+      "brand": "GroomEase",
+      "thumbnail": "/images/products/cepillo.jpg",
+      "images": ["/images/products/cepillo.jpg"],
+      "stock": 26
+    },
+    {
+      "id": 11,
+      "title": "Comedero Antideslizante de Acero Inoxidable",
+      "description": "Base de goma antideslizante y material resistente al óxido.",
+      "price": 7990,
+      "category": "accesorios",
+      "brand": "PetFeast",
+      "thumbnail": "/images/products/comedero.jpg",
+      "images": ["/images/products/comedero.jpg"],
+      "stock": 33
+    },
+    {
+      "id": 12,
+      "title": "Suplemento Articular para Perros Senior",
+      "description": "Con glucosamina y condroitina. Mejora la movilidad y salud articular.",
+      "price": 15990,
+      "category": "medicamentos",
+      "brand": "VetLife",
+      "thumbnail": "/images/products/suplemento.jpg",
+      "images": ["/images/products/suplemento.jpg"],
+      "stock": 10
+    }
+  ]
+}
