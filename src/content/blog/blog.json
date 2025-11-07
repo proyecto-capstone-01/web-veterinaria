@@ -1,920 +1,1075 @@
-{
-
+[
+  {
     "id": 1,
-    "title": "Buenas noches sergio neira",
-
-"heroImage": {
-
-    "id": 2,
-    "alt": null,
-    "caption": null,
-    "updatedAt": "2025-09-25T03:53:45.644Z",
-    "createdAt": "2025-09-25T03:53:45.644Z",
-    "url": "/public/portrait-dog.webp",
-    "thumbnailURL": "/api/media/file/monkey-drink-300x322.png",
-    "filename": "monkey-drink.png",
-    "mimeType": "image/png",
-    "filesize": 256122,
-    "width": 376,
-    "height": 404,
-    "focalX": 50,
-    "focalY": 50,
-
-"sizes": {
-
-"thumbnail": {
-
-    "url": "/api/media/file/monkey-drink-300x322.png",
-    "width": 300,
-    "height": 322,
-    "mimeType": "image/png",
-    "filesize": 253769,
-    "filename": "monkey-drink-300x322.png"
-
-},
-"square": {
-
-    "url": null,
-    "width": null,
-    "height": null,
-    "mimeType": null,
-    "filesize": null,
-    "filename": null
-
-},
-"small": {
-
-    "url": null,
-    "width": null,
-    "height": null,
-    "mimeType": null,
-    "filesize": null,
-    "filename": null
-
-},
-"medium": {
-
-    "url": null,
-    "width": null,
-    "height": null,
-    "mimeType": null,
-    "filesize": null,
-    "filename": null
-
-},
-"large": {
-
-    "url": null,
-    "width": null,
-    "height": null,
-    "mimeType": null,
-    "filesize": null,
-    "filename": null
-
-},
-"xlarge": {
-
-    "url": null,
-    "width": null,
-    "height": null,
-    "mimeType": null,
-    "filesize": null,
-    "filename": null
-
-},
-
+    "title": "Tecnología para mascotas: los mejores gadgets para cuidar y entretener a tu compañero",
+    "heroImage": {
+      "id": 2,
+      "alt": null,
+      "caption": null,
+      "updatedAt": "2025-09-25T03:53:45.644Z",
+      "createdAt": "2025-09-25T03:53:45.644Z",
+      "url": "/pet-tech.png",
+      "thumbnailURL": "/pet-tech.png",
+      "filename": "monkey-drink.png",
+      "mimeType": "image/png",
+      "filesize": 256122,
+      "width": 376,
+      "height": 404,
+      "focalX": 50,
+      "focalY": 50,
+      "sizes": {
+        "thumbnail": {
+          "url": "/pet-tech.png",
+          "width": 300,
+          "height": 322,
+          "mimeType": "image/png",
+          "filesize": 253769,
+          "filename": "monkey-drink-300x322.png"
+        },
+        "square": {
+          "url": null,
+          "width": null,
+          "height": null,
+          "mimeType": null,
+          "filesize": null,
+          "filename": null
+        },
+        "small": {
+          "url": null,
+          "width": null,
+          "height": null,
+          "mimeType": null,
+          "filesize": null,
+          "filename": null
+        },
+        "medium": {
+          "url": null,
+          "width": null,
+          "height": null,
+          "mimeType": null,
+          "filesize": null,
+          "filename": null
+        },
+        "large": {
+          "url": null,
+          "width": null,
+          "height": null,
+          "mimeType": null,
+          "filesize": null,
+          "filename": null
+        },
+        "xlarge": {
+          "url": null,
+          "width": null,
+          "height": null,
+          "mimeType": null,
+          "filesize": null,
+          "filename": null
+        },
         "og": {
-            "url": null,
-            "width": null,
-            "height": null,
-            "mimeType": null,
-            "filesize": null,
-            "filename": null
+          "url": null,
+          "width": null,
+          "height": null,
+          "mimeType": null,
+          "filesize": null,
+          "filename": null
         }
-    }
-
-},
-"content": {
-
-"root": {
-
-"children": [
-
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": "It feels different in tech right now. We’re coming off a long era where optimism carried the industry. Something has curdled. AI hype, return-to-office mandates, and continued layoffs have shifted the mood. Managers are quicker to fire, existential dread has replaced the confidence that a tight job market for developers provided for decades. The vibes are for sure off.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 1,
-            "mode": "normal",
-            "style": "",
-            "text": "What’s Changed?",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "heading",
-    "version": 1,
-    "tag": "h3"
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": "(What follows are generalizations. If your company is escaping some or all of these, I applaud you. I’m sure there are exceptions.)",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-{
-
-    "detail": 0,
-    "format": 1,
-    "mode": "normal",
-    "style": "",
-    "text": "AI has injected some destabilization",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-    "detail": 0,
-    "format": 2,
-    "mode": "normal",
-    "style": "",
-    "text": ".",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-    "detail": 0,
-    "format": 0,
-    "mode": "normal",
-    "style": "",
-    "text": " “I don’t need junior devs when I can just pay $20/month for Cursor” has an effect on everyone even if this turns out to be silly down the road. I see lots of people worried that the aim of all of this is to ultimately have a robot do their entire job. Whether or not this is possible doesn’t mean people aren’t going to try. And it’s the trying that raises people’s anxiety. On top of that, we’ve also got “",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-"children": [
-
-    {
-        "detail": 0,
-        "format": 0,
-        "mode": "normal",
-        "style": "",
-        "text": "AI Workslop",
-        "type": "text",
-        "version": 1
-    }
-
-],
-"direction": null,
-"format": "",
-"indent": 0,
-"type": "link",
-"version": 3,
-
-    "fields": {
-        "linkType": "custom",
-        "newTab": false,
-        "url": "https://www.404media.co/ai-workslop-is-killing-productivity-and-making-workers-miserable/?ref=chaoticgood.management"
+      }
     },
-    "id": "68d4bd15dbb251fad960a516"
-
-},
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": "” to contend with as well, which is making work harder for the diligent among us.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-{
-
-    "detail": 0,
-    "format": 1,
-    "mode": "normal",
-    "style": "",
-    "text": "Return to Office feels like trust has been broken.",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-    "detail": 0,
-    "format": 0,
-    "mode": "normal",
-    "style": "",
-    "text": " Teams that continued to work well (or in some cases, better) after everyone in the industry went remote are now being told to come back to desks in offices. I’ve even heard tales of this happening ",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-    "detail": 0,
-    "format": 2,
-    "mode": "normal",
-    "style": "",
-    "text": "despite there not being enough office space for everyone",
-    "type": "text",
-    "version": 1
-
-},
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": ", which seems very silly. Also, for the first time in my nearly 30-year career, I’ve even heard of people being told they need to be “at their desks at 9am” and “expected to stay until 5pm at a minimum.” Even before COVID-19 and the mass move to remote work, most companies were flexible on start and stop times. I almost never heard of set hours for software developers until recently. Rules like that scream “we don’t trust you unless we can see you,” even if that’s not really the reason for the mandates. (IMO there are benefits to working in the same location as your colleagues but ham-fisted, poorly thought out mandates are not the way to achieve them.)",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-{
-
-    "detail": 0,
-    "format": 1,
-    "mode": "normal",
-    "style": "",
-    "text": "Layoffs changed the market",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-    "detail": 0,
-    "format": 2,
-    "mode": "normal",
-    "style": "",
-    "text": ".",
-    "type": "text",
-    "version": 1
-
-},
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": " For probably 20 years, job security wasn’t really a concern in the industry. Layoffs happened here and there and companies folded, but the demand was always strong and most people capable of writing code or managing people who write code could lose their job, spend the severance on a nice vacation, and return with the confidence that they’d be able to land a new gig in a couple of weeks, likely at higher pay. With the acknowledgement that this was a privilege not enjoyed by most of the working world, it is no longer true. The size and scope of layoffs over the last couple of years have injected more anxiety into the tech workforce.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-{
-
-    "detail": 0,
-    "format": 1,
-    "mode": "normal",
-    "style": "",
-    "text": "C-Suite Energy has changed",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-    "detail": 0,
-    "format": 2,
-    "mode": "normal",
-    "style": "",
-    "text": ".",
-    "type": "text",
-    "version": 1
-
-},
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": " Across the board, execs seem more efficiency-focused, financialized, and less mission-driven. The days of “take care of the employees and the employees will take care of the business” feel like they’re in the rear-view mirror, and a new “do your job, or else!” mentality has taken its place.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": "You can’t change the macro forces that are driving these trends, but you can control how you show up for your team.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 1,
-            "mode": "normal",
-            "style": "",
-            "text": "Wearing the ‘Company Hat’ vs. Chaotic-Good Leadership",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "heading",
-    "version": 1,
-    "tag": "h2"
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": "My standard advice to anyone with a management role and anyone at the Staff+ level of individual contributor is that “wearing the company hat” should be the default. You’re not always going to agree with the decisions that come down from the top. Even when you don’t agree with decisions the company leadership is making, part of your job is representing and facilitating those decisions with full alignment. When acting “in public” (all-hands, department meetings, the #general channel), this is mandatory, as contradicting the bosses in a broad forum can kill the credibility you have the leadership across the wider team. It’s also a good way to get yourself fired.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 1,
-            "mode": "normal",
-            "style": "",
-            "text": "Let them know you’re still on their side",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "heading",
-    "version": 1,
-    "tag": "h3"
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": "But you know what also kills trust? Telling your team it’s sunny out when everyone can plainly see that it’s raining. Your team is made up of smart adults who can, at the very least, count the number of employees and the number of desks and calculate that “everyone in the office on Wednesday” isn’t going to work out well if the people outnumber the chairs. Telling them something else is going to make you look like an idiot toady in their eyes.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": "The right thing to do in this situation is to acknowledge that you see the situation the same way they do, but do it privately, within your immediate team only or in 1-1s. “Yeah, this new policy sucks, I get it. It’s going to affect me in negative ways too.” It’s really important that you validate the emotions that all of these aspects are bringing up in people.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 1,
-            "mode": "normal",
-            "style": "",
-            "text": "Don’t pretend you can fix it",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "heading",
-    "version": 1,
-    "tag": "h3"
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": "You can promise to advocate for saner policies when the opportunity arises if your sphere of influence makes that possible, but don’t promise to make the problem go away if you can’t. Broken promises and poor do/say ratio performance will also kill your team’s faith in you, especially when it’s about things they really care about. And again, this is not a time for grandstanding. In public, you have to support the policies, but when you’re in private with your manager and your peers, that’s the time you can safely push for change.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 1,
-            "mode": "normal",
-            "style": "",
-            "text": "Find small workarounds to make things livable",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "heading",
-    "version": 1,
-    "tag": "h3"
-
-},
-{
-
-"children": [
-
-{
-
-    "detail": 0,
-    "format": 0,
-    "mode": "normal",
-    "style": "",
-    "text": "If you can provide some flexibility on seemingly inflexible policies, do it. If your management role includes enforcing the company’s rules, you can use some discretion about how strictly you want to enforce them. Personally, I would never want to “rat out” a good performer who can’t get to their desk by 9am sharp because they have to drop off their kids or punish someone who bugged out early once to catch their favourite performer in concert one town over. Small acts demonstrating that ",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-    "detail": 0,
-    "format": 2,
-    "mode": "normal",
-    "style": "",
-    "text": "you",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-    "detail": 0,
-    "format": 0,
-    "mode": "normal",
-    "style": "",
-    "text": " trust ",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-    "detail": 0,
-    "format": 2,
-    "mode": "normal",
-    "style": "",
-    "text": "your",
-    "type": "text",
-    "version": 1
-
-},
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": " team, even if the C-Suite doesn’t seem to trust the broader team the way they used to, can go a long way toward maintaining good morale within your group.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": "When things feel shaky in the broader org, people will look more to their direct leader for a sense of stability. The best thing you can do for them is provide it. Quiet honesty builds credibility and fosters loyalty.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 1,
-            "mode": "normal",
-            "style": "",
-            "text": "This too shall pass",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "heading",
-    "version": 1,
-    "tag": "h2"
-
-},
-{
-
-"children": [
-
-{
-
-    "detail": 0,
-    "format": 0,
-    "mode": "normal",
-    "style": "",
-    "text": "The industry is going through a period where a lot is changing all at once. We’ve had a few of them before. Things ",
-    "type": "text",
-    "version": 1
-
-},
-{
-
-    "detail": 0,
-    "format": 2,
-    "mode": "normal",
-    "style": "",
-    "text": "will",
-    "type": "text",
-    "version": 1
-
-},
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": " eventually settle down into a new normal. I’m not great at predictions, so I’ll refrain from detailing what I think things will look like, but I don’t think it’ll be entirely unfamiliar to those who were here before this latest inflection point. This is especially true if leaders who care and treat their staff like adults can stay grounded and stay true to their principles, even when that means performing small, quiet acts of rebellion.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-{
-
-"children": [
-
-        {
-            "detail": 0,
-            "format": 0,
-            "mode": "normal",
-            "style": "",
-            "text": "You can’t fix the macro trends, but you can try to keep your corner of the tech world a place where people are glad to work.",
-            "type": "text",
-            "version": 1
-        }
-    ],
-    "direction": null,
-    "format": "",
-    "indent": 0,
-    "type": "paragraph",
-    "version": 1,
-    "textFormat": 0,
-    "textStyle": ""
-
-},
-
-            {
-                "children": [],
+    "content": {
+      "root": {
+        "children": [
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "It feels different in tech right now. We’re coming off a long era where optimism carried the industry. Something has curdled. AI hype, return-to-office mandates, and continued layoffs have shifted the mood. Managers are quicker to fire, existential dread has replaced the confidence that a tight job market for developers provided for decades. The vibes are for sure off.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "What’s Changed?",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "heading",
+            "version": 1,
+            "tag": "h3"
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "(What follows are generalizations. If your company is escaping some or all of these, I applaud you. I’m sure there are exceptions.)",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "AI has injected some destabilization",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 2,
+                "mode": "normal",
+                "style": "",
+                "text": ".",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": " “I don’t need junior devs when I can just pay $20/month for Cursor” has an effect on everyone even if this turns out to be silly down the road. I see lots of people worried that the aim of all of this is to ultimately have a robot do their entire job. Whether or not this is possible doesn’t mean people aren’t going to try. And it’s the trying that raises people’s anxiety. On top of that, we’ve also got “",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "children": [
+                  {
+                    "detail": 0,
+                    "format": 0,
+                    "mode": "normal",
+                    "style": "",
+                    "text": "AI Workslop",
+                    "type": "text",
+                    "version": 1
+                  }
+                ],
                 "direction": null,
                 "format": "",
                 "indent": 0,
-                "type": "paragraph",
-                "version": 1,
-                "textFormat": 0,
-                "textStyle": ""
-            }
+                "type": "link",
+                "version": 3,
+                "fields": {
+                  "linkType": "custom",
+                  "newTab": false,
+                  "url": "https://www.404media.co/ai-workslop-is-killing-productivity-and-making-workers-miserable/?ref=chaoticgood.management"
+                },
+                "id": "68d4bd15dbb251fad960a516"
+              },
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "” to contend with as well, which is making work harder for the diligent among us.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "Return to Office feels like trust has been broken.",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": " Teams that continued to work well (or in some cases, better) after everyone in the industry went remote are now being told to come back to desks in offices. I’ve even heard tales of this happening ",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 2,
+                "mode": "normal",
+                "style": "",
+                "text": "despite there not being enough office space for everyone",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": ", which seems very silly. Also, for the first time in my nearly 30-year career, I’ve even heard of people being told they need to be “at their desks at 9am” and “expected to stay until 5pm at a minimum.” Even before COVID-19 and the mass move to remote work, most companies were flexible on start and stop times. I almost never heard of set hours for software developers until recently. Rules like that scream “we don’t trust you unless we can see you,” even if that’s not really the reason for the mandates. (IMO there are benefits to working in the same location as your colleagues but ham-fisted, poorly thought out mandates are not the way to achieve them.)",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "Layoffs changed the market",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 2,
+                "mode": "normal",
+                "style": "",
+                "text": ".",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": " For probably 20 years, job security wasn’t really a concern in the industry. Layoffs happened here and there and companies folded, but the demand was always strong and most people capable of writing code or managing people who write code could lose their job, spend the severance on a nice vacation, and return with the confidence that they’d be able to land a new gig in a couple of weeks, likely at higher pay. With the acknowledgement that this was a privilege not enjoyed by most of the working world, it is no longer true. The size and scope of layoffs over the last couple of years have injected more anxiety into the tech workforce.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "C-Suite Energy has changed",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 2,
+                "mode": "normal",
+                "style": "",
+                "text": ".",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": " Across the board, execs seem more efficiency-focused, financialized, and less mission-driven. The days of “take care of the employees and the employees will take care of the business” feel like they’re in the rear-view mirror, and a new “do your job, or else!” mentality has taken its place.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "You can’t change the macro forces that are driving these trends, but you can control how you show up for your team.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "Wearing the ‘Company Hat’ vs. Chaotic-Good Leadership",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "heading",
+            "version": 1,
+            "tag": "h2"
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "My standard advice to anyone with a management role and anyone at the Staff+ level of individual contributor is that “wearing the company hat” should be the default. You’re not always going to agree with the decisions that come down from the top. Even when you don’t agree with decisions the company leadership is making, part of your job is representing and facilitating those decisions with full alignment. When acting “in public” (all-hands, department meetings, the #general channel), this is mandatory, as contradicting the bosses in a broad forum can kill the credibility you have the leadership across the wider team. It’s also a good way to get yourself fired.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "Let them know you’re still on their side",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "heading",
+            "version": 1,
+            "tag": "h3"
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "But you know what also kills trust? Telling your team it’s sunny out when everyone can plainly see that it’s raining. Your team is made up of smart adults who can, at the very least, count the number of employees and the number of desks and calculate that “everyone in the office on Wednesday” isn’t going to work out well if the people outnumber the chairs. Telling them something else is going to make you look like an idiot toady in their eyes.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "The right thing to do in this situation is to acknowledge that you see the situation the same way they do, but do it privately, within your immediate team only or in 1-1s. “Yeah, this new policy sucks, I get it. It’s going to affect me in negative ways too.” It’s really important that you validate the emotions that all of these aspects are bringing up in people.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "Don’t pretend you can fix it",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "heading",
+            "version": 1,
+            "tag": "h3"
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "You can promise to advocate for saner policies when the opportunity arises if your sphere of influence makes that possible, but don’t promise to make the problem go away if you can’t. Broken promises and poor do/say ratio performance will also kill your team’s faith in you, especially when it’s about things they really care about. And again, this is not a time for grandstanding. In public, you have to support the policies, but when you’re in private with your manager and your peers, that’s the time you can safely push for change.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "Find small workarounds to make things livable",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "heading",
+            "version": 1,
+            "tag": "h3"
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "If you can provide some flexibility on seemingly inflexible policies, do it. If your management role includes enforcing the company’s rules, you can use some discretion about how strictly you want to enforce them. Personally, I would never want to “rat out” a good performer who can’t get to their desk by 9am sharp because they have to drop off their kids or punish someone who bugged out early once to catch their favourite performer in concert one town over. Small acts demonstrating that ",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 2,
+                "mode": "normal",
+                "style": "",
+                "text": "you",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": " trust ",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 2,
+                "mode": "normal",
+                "style": "",
+                "text": "your",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": " team, even if the C-Suite doesn’t seem to trust the broader team the way they used to, can go a long way toward maintaining good morale within your group.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "When things feel shaky in the broader org, people will look more to their direct leader for a sense of stability. The best thing you can do for them is provide it. Quiet honesty builds credibility and fosters loyalty.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "This too shall pass",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "heading",
+            "version": 1,
+            "tag": "h2"
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "The industry is going through a period where a lot is changing all at once. We’ve had a few of them before. Things ",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 2,
+                "mode": "normal",
+                "style": "",
+                "text": "will",
+                "type": "text",
+                "version": 1
+              },
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": " eventually settle down into a new normal. I’m not great at predictions, so I’ll refrain from detailing what I think things will look like, but I don’t think it’ll be entirely unfamiliar to those who were here before this latest inflection point. This is especially true if leaders who care and treat their staff like adults can stay grounded and stay true to their principles, even when that means performing small, quiet acts of rebellion.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "You can’t fix the macro trends, but you can try to keep your corner of the tech world a place where people are glad to work.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          },
+          {
+            "children": [],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1,
+            "textFormat": 0,
+            "textStyle": ""
+          }
         ],
         "direction": null,
         "format": "",
         "indent": 0,
         "type": "root",
         "version": 1
-    }
-
-},
-"relatedPosts": [],
-
-"categories": [],
-
-"meta": {
-
-    "title": "Buenas noches sergio neira | Payload Website Template",
-
-"image": {
-
-    "id": 1,
-    "alt": null,
-    "caption": null,
-    "updatedAt": "2025-09-25T03:53:17.536Z",
-    "createdAt": "2025-09-25T03:53:17.536Z",
-    "url": "/api/media/file/monkey-chill.gif",
-    "thumbnailURL": "/api/media/file/monkey-chill-300x300.gif",
-    "filename": "monkey-chill.gif",
-    "mimeType": "image/gif",
-    "filesize": 8670022,
-    "width": 300,
-    "height": 300,
-    "focalX": 50,
-    "focalY": 50,
-
-"sizes": {
-
-"thumbnail": {
-
-    "url": "/api/media/file/monkey-chill-300x300.gif",
-    "width": 300,
-    "height": 300,
-    "mimeType": "image/gif",
-    "filesize": 8670022,
-    "filename": "monkey-chill-300x300.gif"
-
-},
-"square": {
-
-    "url": null,
-    "width": null,
-    "height": null,
-    "mimeType": null,
-    "filesize": null,
-    "filename": null
-
-},
-"small": {
-
-    "url": null,
-    "width": null,
-    "height": null,
-    "mimeType": null,
-    "filesize": null,
-    "filename": null
-
-},
-"medium": {
-
-    "url": null,
-    "width": null,
-    "height": null,
-    "mimeType": null,
-    "filesize": null,
-    "filename": null
-
-},
-"large": {
-
-    "url": null,
-    "width": null,
-    "height": null,
-    "mimeType": null,
-    "filesize": null,
-    "filename": null
-
-},
-"xlarge": {
-
-    "url": null,
-    "width": null,
-    "height": null,
-    "mimeType": null,
-    "filesize": null,
-    "filename": null
-
-},
-
-                "og": {
-                    "url": null,
-                    "width": null,
-                    "height": null,
-                    "mimeType": null,
-                    "filesize": null,
-                    "filename": null
-                }
-            }
-        },
-        "description": "Junta miedo bro te vas a cagar encima"
+      }
+    },
+    "relatedPosts": [],
+    "categories": [],
+    "meta": {
+      "title": "",
+      "image": {
+        "id": 1,
+        "alt": null,
+        "caption": null,
+        "updatedAt": "2025-09-25T03:53:17.536Z",
+        "createdAt": "2025-09-25T03:53:17.536Z",
+        "url": "/api/media/file/monkey-chill.gif",
+        "thumbnailURL": "/portrait-dog.webp",
+        "filename": "monkey-chill.gif",
+        "mimeType": "image/gif",
+        "filesize": 8670022,
+        "width": 300,
+        "height": 300,
+        "focalX": 50,
+        "focalY": 50,
+        "sizes": {
+          "thumbnail": {
+            "url": "/api/media/file/monkey-chill-300x300.gif",
+            "width": 300,
+            "height": 300,
+            "mimeType": "image/gif",
+            "filesize": 8670022,
+            "filename": "monkey-chill-300x300.gif"
+          },
+          "square": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          },
+          "small": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          },
+          "medium": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          },
+          "large": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          },
+          "xlarge": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          },
+          "og": {
+            "url": null,
+            "width": null,
+            "height": null,
+            "mimeType": null,
+            "filesize": null,
+            "filename": null
+          }
+        }
+      },
+      "description": "La adopción de gadgets tecnológicos para mascotas refleja una tendencia en alza, impulsada por la búsqueda de soluciones que promuevan la salud, seguridad y bienestar de los animales de compañía."
     },
     "publishedAt": "2025-09-25T03:55:08.728Z",
     "authors": [],
     "populatedAuthors": [],
-    "slug": "sergio",
+    "slug": "mascotas-tecnologia-bienestar",
     "slugLock": false,
     "updatedAt": "2025-09-25T03:55:08.731Z",
     "createdAt": "2025-09-25T03:52:04.513Z",
     "_status": "published"
-
-}
+  },
+  {
+    "id": 2,
+    "title": "Guía para nuevos dueños de cachorros",
+    "heroImage": {
+      "id": 3,
+      "alt": "Un cachorro feliz mordiendo un juguete",
+      "caption": null,
+      "updatedAt": "2025-11-06T14:29:00.123Z",
+      "createdAt": "2025-11-06T14:29:00.123Z",
+      "url": "/puppy-guide.jpg",
+      "thumbnailURL": "/puppy-guide.jpg",
+      "filename": "puppy-guide.png",
+      "mimeType": "image/png",
+      "filesize": 312000,
+      "width": 800,
+      "height": 533,
+      "focalX": 50,
+      "focalY": 50,
+      "sizes": {
+        "thumbnail": {
+          "url": "/puppy-guide.jpg",
+          "width": 300,
+          "height": 200,
+          "mimeType": "image/png",
+          "filesize": 95000,
+          "filename": "puppy-guide-300x200.png"
+        }
+      }
+    },
+    "content": {
+      "root": {
+        "children": [
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "¡Felicidades por tu nuevo cachorro! Traer un nuevo perro a casa es emocionante, pero también una gran responsabilidad. Esta guía te ayudará a navegar las primeras semanas.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "1. Prepara tu hogar",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "heading",
+            "version": 1,
+            "tag": "h3"
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "Antes de que llegue, asegura tu casa. Guarda cables eléctricos, productos de limpieza y cualquier objeto pequeño que pueda tragar. Prepara una zona cómoda para su cama, sus platos de comida y agua, y algunos juguetes.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "2. Alimentación y horarios",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "heading",
+            "version": 1,
+            "tag": "h3"
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "Los cachorros necesitan una dieta formulada específicamente para su crecimiento. Consulta a tu veterinario sobre la mejor marca y cantidad. Establece horarios fijos para comer (usualmente 3 veces al día) y para ir al baño (inmediatamente después de despertar, después de comer y antes de dormir).",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1
+          }
+        ],
+        "direction": null,
+        "format": "",
+        "indent": 0,
+        "type": "root",
+        "version": 1
+      }
+    },
+    "relatedPosts": [],
+    "categories": [],
+    "meta": {
+      "title": "Guía para nuevos dueños de cachorros | Blog de Mascotas",
+      "image": {
+        "id": 3,
+        "alt": "Un cachorro feliz mordiendo un juguete",
+        "url": "/public/images/puppy-guide.webp"
+      },
+      "description": "Todo lo que necesitas saber para recibir a tu nuevo cachorro en casa. Consejos de alimentación, entrenamiento y salud."
+    },
+    "publishedAt": "2025-11-06T14:30:00.000Z",
+    "authors": [],
+    "populatedAuthors": [],
+    "slug": "guia-nuevos-duenos-cachorros",
+    "slugLock": false,
+    "updatedAt": "2025-11-06T14:30:00.000Z",
+    "createdAt": "2025-11-06T14:28:00.000Z",
+    "_status": "published"
+  },
+  {
+    "id": 3,
+    "title": "Los 5 mejores juguetes para gatos de interior",
+    "heroImage": {
+      "id": 4,
+      "alt": "Un gato de interior jugando con una varita de plumas",
+      "caption": null,
+      "updatedAt": "2025-11-05T11:14:00.456Z",
+      "createdAt": "2025-11-05T11:14:00.456Z",
+      "url": "/cat-playing.jpg",
+      "thumbnailURL": "/cat-playing.jpg",
+      "filename": "cat-playing.png",
+      "mimeType": "image/png",
+      "filesize": 289000,
+      "width": 700,
+      "height": 515,
+      "focalX": 50,
+      "focalY": 50,
+      "sizes": {
+        "thumbnail": {
+          "url": "/cat-playing.jpg",
+          "width": 300,
+          "height": 220,
+          "mimeType": "image/png",
+          "filesize": 81000,
+          "filename": "cat-playing-300x220.png"
+        }
+      }
+    },
+    "content": {
+      "root": {
+        "children": [
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "Los gatos de interior necesitan estimulación mental y física para evitar el aburrimiento y problemas de comportamiento. Los juguetes correctos marcan la diferencia y ayudan a satisfacer su instinto de caza.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "1. Varitas con plumas",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "heading",
+            "version": 1,
+            "tag": "h3"
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "Simulan la caza de aves y permiten el juego interactivo contigo. Es excelente para el vínculo y para que el gato realice ejercicio intenso. Guarda la varita después de usarla por seguridad.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 1,
+                "mode": "normal",
+                "style": "",
+                "text": "2. Puntero láser",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "heading",
+            "version": 1,
+            "tag": "h3"
+          },
+          {
+            "children": [
+              {
+                "detail": 0,
+                "format": 0,
+                "mode": "normal",
+                "style": "",
+                "text": "Los gatos aman perseguir el punto rojo. Es una forma fácil de hacer que corran. ¡Importante! Nunca apuntes a sus ojos y siempre termina la sesión de juego dejando que 'atrape' un juguete físico o un premio, para evitar la frustración.",
+                "type": "text",
+                "version": 1
+              }
+            ],
+            "direction": null,
+            "format": "",
+            "indent": 0,
+            "type": "paragraph",
+            "version": 1
+          }
+        ],
+        "direction": null,
+        "format": "",
+        "indent": 0,
+        "type": "root",
+        "version": 1
+      }
+    },
+    "relatedPosts": [],
+    "categories": [],
+    "meta": {
+      "title": "Los 5 mejores juguetes para gatos de interior | Blog de Mascotas",
+      "image": {
+        "id": 4,
+        "alt": "Un gato de interior jugando con una varita de plumas",
+        "url": "/public/images/cat-playing.webp"
+      },
+      "description": "Mantén a tu gato entretenido y saludable con estos juguetes esenciales para gatos que no salen de casa."
+    },
+    "publishedAt": "2025-11-05T11:15:00.000Z",
+    "authors": [],
+    "populatedAuthors": [],
+    "slug": "mejores-juguetes-gatos-interior",
+    "slugLock": false,
+    "updatedAt": "2025-11-05T11:15:00.000Z",
+    "createdAt": "2025-11-05T11:13:00.000Z",
+    "_status": "published"
+  }
+]

@@ -1,7 +1,35 @@
 [
-    { "slug": "sergio", "title": "Buenas noches sergio neira", "publishedAt": "2025-10-25T03:55:08.728Z", "meta": { "description": "Junta miedo bro te vas a cagar encima dfdgdsgfsdfggfsdsgfdgsfdgfsdgfsdgsdf" }, "heroImage": { "url": "/public/portrait-dog.webp" } },
-    { "slug": "nuevo-post", "title": "Post de ejemplo", "publishedAt": "2025-10-01T20:00:00.000Z", "meta": { "description": "Otro artículo interesante gsfddddddddddddddddd" }, "heroImage": { "url": "/public/cat.webp" } },
-    { "slug": "primer-post", "title": "Mi primer post", "publishedAt": "2024-10-01T20:00:00.000Z", "meta": { "description": "Este es el contenido de mi primer post en el blog. gsdfffffffffffff" }, "heroImage": { "url": "/img/blog1.jpg" } },
-    { "slug": "segundo-post", "title": "Mi segundo post", "publishedAt": "2024-11-01T20:00:00.000Z", "meta": { "description": "Este es el contenido de mi segundo post en el blog." }, "heroImage": { "url": "/img/blog2.jpg" } },
-    { "slug": "tercer-post", "title": "Mi tercer post", "publishedAt": "2024-12-01T20:00:00.000Z", "meta": { "description": "Este es el contenido de mi tercer post en el blog." }, "heroImage": { "url": "/img/blog3.jpg" } }
+  {
+    "slug": "mascotas-tecnologia-bienestar",
+    "title": "Tecnología para mascotas: los mejores gadgets para cuidar y entretener a tu compañero",
+    "publishedAt": "2025-10-25T03:55:08.728Z",
+    "meta": {
+      "description": "La adopción de gadgets tecnológicos para mascotas refleja una tendencia en alza, impulsada por la búsqueda de soluciones que promuevan la salud, seguridad y bienestar de los animales de compañía."
+    },
+    "heroImage": {
+      "url": "/pet-tech.png"
+    }
+  },
+  {
+    "slug": "guia-nuevos-duenos-cachorros",
+    "title": "Guía para nuevos dueños de cachorros",
+    "publishedAt": "2025-11-06T14:30:00.000Z",
+    "meta": {
+      "description": "Todo lo que necesitas saber para recibir a tu nuevo cachorro en casa. Consejos de alimentación, entrenamiento y salud."
+    },
+    "heroImage": {
+      "url": "/puppy-guide.jpg"
+    }
+  },
+  {
+    "slug": "mejores-juguetes-gatos-interior",
+    "title": "Los 5 mejores juguetes para gatos de interior",
+    "publishedAt": "2025-11-05T11:15:00.000Z",
+    "meta": {
+      "description": "Mantén a tu gato entretenido y saludable con estos juguetes esenciales para gatos que no salen de casa."
+    },
+    "heroImage": {
+      "url": "/cat-playing.jpg"
+    }
+  }
 ]
