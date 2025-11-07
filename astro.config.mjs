@@ -6,13 +6,14 @@ import { webcore } from 'webcoreui/integration';
 import node from '@astrojs/node';
 import react from '@astrojs/react';
 
-const isProd = process.env.NODE_ENV === 'production';
+const isNode = process.env.LOCAL_ENV === 'NODE';
 
 // https://astro.build/config
 export default defineConfig({
-  adapter: isProd ? cloudflare() : node({ mode: 'standalone' }),
+  adapter: isNode ? cloudflare() : node({ mode: 'standalone' }),
   prefetch: true,
   vite: {
+      // @ts-ignore
     plugins: [tailwindcss()],
       css: {
       preprocessorOptions: {
@@ -23,7 +24,7 @@ export default defineConfig({
     },
     resolve: {
       // Use react-dom/server.edge instead of react-dom/server.browser for React 19.
-      alias: isProd ? {
+      alias: isNode ? {
         "react-dom/server": "react-dom/server.edge",
       } : undefined,
     },

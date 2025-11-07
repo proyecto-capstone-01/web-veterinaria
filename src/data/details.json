@@ -1,0 +1,20 @@
+{
+  "branding": "Clínica veterinaria Pucará",
+  "whatsAppNumber": "+56999999999",
+  "phoneNumbers": [
+    "9999999999"
+  ],
+  "emailAddress": "contacto@veterinariapucara.cl",
+  "address": "Esmeralda, 97, San Bernardo, Región Metropolitana, Chile",
+  "googleMapsLink": "https://goo.gl/maps/examplelink",
+  "socialMedia": [
+    {
+      "name": "Facebook",
+      "url": "https://www.facebook.com/veterinariapucara"
+    },
+    {
+      "name": "Instagram",
+      "url": "https://www.instagram.com/veterinariapucara"
+    }
+  ]
+}

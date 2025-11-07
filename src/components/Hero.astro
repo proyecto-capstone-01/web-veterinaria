@@ -1,14 +1,29 @@
 ---
 import Button from './Buttons.astro';
+import { Image } from 'astro:assets';
 ---
 <section class="relative bg-primary-dark text-white rounded-2xl shadow-lg overflow-hidden min-h-[70vh] h-full">
     
     <!-- Imagen de fondo para móvil y tablet -->
-    <img src="/portrait-dog.webp" alt="Perro" class="absolute inset-0 w-full h-full object-cover lg:hidden z-0"/>
+    <Image
+            src="/portrait-dog.webp"
+            alt="Perro"
+            class="absolute inset-0 w-full h-full object-cover lg:hidden z-0"
+            width={800}
+            height={600}
+            loading='eager'
+    />
     
     <!-- Imagen lateral para desktop (independiente) -->
     <div class="hidden lg:block absolute top-0 right-0 h-full z-0">
-        <img src="/portrait-dog.webp" alt="Perro" class="h-full object-fill"/>
+        <Image
+                src="/portrait-dog.webp"
+                alt="Perro"
+                width={800}
+                height={800}
+                loading='eager'
+                class="h-full object-cover"
+        />
     </div>
 
     <!-- Degradado encima de la imagen -->
@@ -37,7 +52,14 @@ import Button from './Buttons.astro';
                 <Button text="Agendar visita" url="/toSchedule" variant="primary" class="w-auto"/>
                 <a href="https://wa.me/" target="_blank" 
                     class="w-full sm:w-auto px-5 py-3 bg-white text-black font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition">
-                    <img src="/WhatsApp.svg" class="h-6" alt="" />
+                    <Image
+                            src="/WhatsApp.svg"
+                            class="h-6"
+                            alt="Logo"
+                            width={24}
+                            height={24}
+                            loading='eager'
+                    />
                     WhatsApp
                 </a>
             </div>

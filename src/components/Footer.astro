@@ -1,3 +1,7 @@
+---
+import details from '../data/details.json' assert { type: 'json' };
+---
+
 <div class="w-full max-w-scren-xl overflow-hidden">
     <svg viewBox="0 0 1440 100" fill="#4F46E5" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 50C240 100 480 0 720 50C960 100 1200 0 1440 50V100H0V50Z" fill="#4F46E5"/>
@@ -10,11 +14,22 @@
             <div class="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>
                     <h2 class="mb-4 font-bold uppercase">¿Necesitas ayuda?</h2>
-                    <p class="mb-1"><span class="font-semibold">WhatsApp: </span>+56 9 1234 5678</p>
-                    <p class="mb-3"><span class="font-semibold">Correo: </span>pucaraveterinaria@gmail.com</p>
+                    <p class="mb-1">
+                        <span class="font-semibold">WhatsApp: </span>
+                        <a href={"https://wa.me/"+details.whatsAppNumber.replace(/\D/g, '')} class="hover:underline" target="_blank" rel="noopener noreferrer">
+                            {details.whatsAppNumber}
+						</a>
+                    </p>
+                    <p class="mb-3">
+                        <span class="font-semibold">Correo: </span>
+                        <a href={"mailto:"+details.emailAddress} class="hover:underline">
+                            {details.emailAddress}
+						</a>
+                    </p>
                     <h3 class="font-semibold uppercase mb-1">Dirección</h3>
-                    <p>Esmeralda, 97 San Bernardo</p>
-                    <p>Región Metropolitana, Chile</p>
+                    <p class="text-wrap mb-1">
+                        {details.address}
+                    </p>
                 </div>
                 <div>
                     <h2 class="mb-4 font-bold uppercase">Contenido</h2>
@@ -28,10 +43,9 @@
                 <div>
                     <h2 class="mb-4 font-bold uppercase">Redes sociales</h2>
                     <ul class="space-y-2">
-                        <li><a href="#" class="hover:font-bold">Instagram</a></li>
-                        <li><a href="#" class="hover:font-bold">TikTok</a></li>
-                        <li><a href="#" class="hover:font-bold">WhatsApp</a></li>
-                        <li><a href="#" class="hover:font-bold">Facebook</a></li>
+                        {details.socialMedia.map((social) => (
+                            <li><a href={social.url} class="hover:font-bold" target="_blank" rel="noopener noreferrer">{social.name}</a></li>
+                        ))}
                     </ul>
                 </div>
                 <div>
@@ -46,7 +60,7 @@
         <hr class="my-6 border-white/50 sm:mx-auto lg:my-8" />
         <div class="flex items-center justify-center">
             <span class="text-center">
-                Clínica veterinaria Pucará | Todos los derechos reservados © <span class="font-bold">{new Date().getFullYear()}</span>
+                {details.branding} | Todos los derechos reservados © <span class="font-bold">{new Date().getFullYear()}</span>
             </span>
         </div>
     </div>
