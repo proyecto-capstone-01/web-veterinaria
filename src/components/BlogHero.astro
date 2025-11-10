@@ -1,19 +1,14 @@
 ---
-import postsData from "../content/blog/post.json";
+import { getBlogPosts, getImageUrl } from '../lib/payloadClient'
 
-const posts = Array.isArray(postsData) ? postsData : [postsData];
-const postsWithTimestamps = posts.map(post => {
-  const time = Date.parse(post.publishedAt);
-  return { ...post, timestamp: isNaN(time) ? 0 : time };
-});
-const sortedPosts = postsWithTimestamps.sort((a, b) => b.timestamp - a.timestamp);
-const latestPost = sortedPosts[0];
+const { posts } = await getBlogPosts(1)
+const latestPost = posts[0]
 ---
 
 {latestPost && (
   <section class="relative w-full max-w-screen-xl mx-auto rounded-3xl overflow-hidden shadow-lg my-10">
     <img 
-      src={latestPost.heroImage?.url} 
+      src={getImageUrl(latestPost.heroImage?.url || '')} 
       alt={latestPost.title} 
       class="w-full h-[480px] object-cover brightness-75 hover:brightness-90 transition-all duration-500"
     />
@@ -30,7 +25,7 @@ const latestPost = sortedPosts[0];
       </h2>
 
       <p class="text-gray-200 line-clamp-3 text-lg">
-        {latestPost.meta?.description || "Lee nuestro artículo más reciente."}
+        {latestPost.meta?.description || latestPost.excerpt || "Lee nuestro artículo más reciente."}
       </p>
 
       <a

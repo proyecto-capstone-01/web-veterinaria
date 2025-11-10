@@ -1,14 +1,15 @@
 ---
-const { post } = Astro.props;
+import { getImageUrl } from '../lib/payloadClient'
 
-const title = post.title;
-const description = post.meta?.description || "Sin descripción.";
-const image = post.heroImage?.url || "/placeholder.png";
-const link = `/blog/${post.slug}`;
+const { post } = Astro.props
+
+const title = post.title
+const description = post.meta?.description || post.excerpt || "Sin descripción."
+const image = getImageUrl(post.heroImage?.url || '') || "/placeholder.png"
+const link = `/blog/${post.slug}`
 ---
 
 <a href={link} class="block group overflow-hidden transition-transform duration-300 hover:-translate-y-1">
-
     <div class="w-full h-56 overflow-hidden">
         <img
         src={image}

@@ -1,10 +1,10 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import BlogCard from "../../components/BlogCard.astro";
-import BlogHero from "../../components/BlogHero.astro";
+import Layout from "../../layouts/Layout.astro"
+import BlogCard from "../../components/BlogCard.astro"
+import BlogHero from "../../components/BlogHero.astro"
+import { getBlogPosts } from "../../lib/payloadClient"
 
-import postsData from "../../content/blog/post.json";
-const posts = Array.isArray(postsData) ? postsData : [postsData];
+const { posts } = await getBlogPosts(12)
 ---
 
 <Layout title="Blog">
