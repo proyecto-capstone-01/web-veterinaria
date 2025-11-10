@@ -3,7 +3,6 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
 import { webcore } from 'webcoreui/integration';
-import node from '@astrojs/node';
 import react from '@astrojs/react';
 
 const isNode = process.env.ASTRO_ADAPTER === 'node';
@@ -24,9 +23,9 @@ export default defineConfig({
     },
     resolve: {
       // Use react-dom/server.edge instead of react-dom/server.browser for React 19.
-      alias: isNode ? {
+      alias:  {
         "react-dom/server": "react-dom/server.edge",
-      } : undefined,
+      } ,
     },
   },
 
