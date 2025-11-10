@@ -49,6 +49,7 @@
     "astro": "^5.13.4",
     "sass": "^1.90.0",
     "tailwindcss": "^4.1.12",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "wrangler": "^4.46.0"
   }
 }
