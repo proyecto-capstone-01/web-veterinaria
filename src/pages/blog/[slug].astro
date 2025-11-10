@@ -11,7 +11,7 @@ export async function getStaticPaths() {
   }))
 }
 
-export const prerender = false;
+export const prerender = true;
 
 const { slug } = Astro.params
 const detailPost = await getBlogPostBySlug(slug)
