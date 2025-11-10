@@ -9,11 +9,12 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "../../components/ui/breadcrumb"
+import data from '../../data/products.json' assert { type: 'json' };
 
-// ✅ Usamos import.meta.env.BASE_URL para acceder correctamente al archivo público
-export async function getStaticPaths() {
-  const data = await import("../../../../website/public/products.json");
-  const products = data.default.products;
+
+export function getStaticPaths() {
+  const products = data.products;
+
 
   return products.map((product) => ({
     params: { id: String(product.id) },
@@ -51,7 +52,7 @@ const images = product.images;
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbPage class="text-primary font-semibold">{product.title}</BreadcrumbPage>
+                        <BreadcrumbPage className="text-primary font-semibold">{product.title}</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>

@@ -6,11 +6,11 @@ import { webcore } from 'webcoreui/integration';
 import node from '@astrojs/node';
 import react from '@astrojs/react';
 
-const isNode = process.env.LOCAL_ENV === 'NODE';
+const isNode = process.env.ASTRO_ADAPTER === 'node';
 
 // https://astro.build/config
 export default defineConfig({
-  adapter: isNode ? cloudflare() : node({ mode: 'standalone' }),
+  adapter: !isNode ? node({ mode: 'standalone' }) : cloudflare(),
   prefetch: true,
   vite: {
       // @ts-ignore
