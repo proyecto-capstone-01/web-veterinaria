@@ -10,7 +10,7 @@ const isNode = process.env.ASTRO_ADAPTER === 'node';
 
 // https://astro.build/config
 export default defineConfig({
-  adapter: node({ mode: 'standalone' }),
+  adapter: cloudflare({}) ,
   prefetch: true,
   vite: {
       // @ts-ignore
