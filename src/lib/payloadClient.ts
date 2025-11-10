@@ -1,4 +1,8 @@
-const PAYLOAD_API_URL = process.env.PUBLIC_PAYLOAD_URL || 'http://localhost:3000'
+import {
+    getSecret,
+} from 'astro:env/server';
+
+const CMS_API_URL = getSecret('CMS_API_URL') || 'http://localhost:3000';
 
 export interface BlogPost {
   id: string
@@ -31,7 +35,7 @@ export interface BlogPost {
 export async function getBlogPosts(limit = 10, page = 1): Promise<{ posts: BlogPost[]; total: number }> {
   try {
     const response = await fetch(
-      `${PAYLOAD_API_URL}/api/blog?where[_status][equals]=published&sort=-publishedAt&limit=${limit}&page=${page}`,
+      `${CMS_API_URL}/api/blog?where[_status][equals]=published&sort=-publishedAt&limit=${limit}&page=${page}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +58,7 @@ export async function getBlogPosts(limit = 10, page = 1): Promise<{ posts: BlogP
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   try {
     const response = await fetch(
-      `${PAYLOAD_API_URL}/api/blog?where[slug][equals]=${slug}&where[_status][equals]=published`,
+      `${CMS_API_URL}/api/blog?where[slug][equals]=${slug}&where[_status][equals]=published`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +81,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 export async function getBlogPostsByCategory(categorySlug: string): Promise<BlogPost[]> {
   try {
     const response = await fetch(
-      `${PAYLOAD_API_URL}/api/blog?where[_status][equals]=published&where[categories][slug][equals]=${categorySlug}&sort=-publishedAt`,
+      `${CMS_API_URL}/api/blog?where[_status][equals]=published&where[categories][slug][equals]=${categorySlug}&sort=-publishedAt`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -100,5 +104,5 @@ export async function getBlogPostsByCategory(categorySlug: string): Promise<Blog
 export function getImageUrl(imagePath: string): string {
   if (!imagePath) return ''
   if (imagePath.startsWith('http')) return imagePath
-  return `${PAYLOAD_API_URL}${imagePath}`
+  return `${CMS_API_URL}${imagePath}`
 }
