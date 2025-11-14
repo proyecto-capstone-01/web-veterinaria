@@ -5,12 +5,13 @@ import BlogHero from "../../components/BlogHero.astro"
 import { getBlogPosts } from "../../lib/payloadClient"
 
 const { posts } = await getBlogPosts(12)
+const publishedPosts = posts.filter(post => post._status === 'published')
 ---
 
 <Layout title="Blog">
     <BlogHero />
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 app-container py-16">
-        {posts.map(post => (
+        {publishedPosts.map(post => (
             <BlogCard post={post} />
         ))}
     </div>
