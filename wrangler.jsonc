@@ -19,6 +19,7 @@
     }
   },
   "build": {
-    "command": "ASTRO_ADAPTER=cloudflare pnpm run build"
+    "command": "ASTRO_ADAPTER=cloudflare astro build",
+    "cwd": "/"
   }
 }
