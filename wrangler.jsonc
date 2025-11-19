@@ -9,5 +9,16 @@
   },
   "observability": {
     "enabled": true
+  },
+  "env": {
+    "production": {
+      "vars": {
+        "ASTRO_ADAPTER": "cloudflare",
+        "IMAGE_OPTIMIZATION": "false"
+      }
+    }
+  },
+  "build": {
+    "command": "ASTRO_ADAPTER=cloudflare pnpm run build"
   }
 }
