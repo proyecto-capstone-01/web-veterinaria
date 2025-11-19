@@ -17,9 +17,5 @@
         "IMAGE_OPTIMIZATION": "false"
       }
     }
-  },
-  "build": {
-    "command": "ASTRO_ADAPTER=cloudflare astro build",
-    "cwd": "/"
   }
 }
