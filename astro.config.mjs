@@ -19,7 +19,7 @@ export default defineConfig({
       schema: {
           CMS_API_URL: envField.string({ context: 'server', access: 'secret', default: 'http://localhost:3000' }),
           CMS_API_KEY: envField.string({ context: 'server', access: 'secret', default: '' }),
-          CONTACT_API_URL: envField.string({ context: 'client', access: 'public', default: 'http://localhost:3000' }),
+          PUBLIC_CONTACT_API_URL: envField.string({ context: 'client', access: 'public', default: 'http://localhost:3000' }),
           OVERWRITE_FAQ: envField.boolean({ context: 'server', access: 'public', default: false }),
           IMAGE_OPTIMIZATION: envField.boolean({ context: 'server', access: 'public', default: false }),
           ASTRO_ADAPTER: envField.string({ context: 'server', access: 'public', default: 'cloudflare' }),

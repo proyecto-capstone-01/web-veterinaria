@@ -1,16 +1,16 @@
 import axios from 'axios';
 import type { ContactFormType, ProductType } from "@/types.ts";
-import { CONTACT_API_URL } from "astro:env/client";
+import { PUBLIC_CONTACT_API_URL } from "astro:env/client";
 
 export const submitContactForm = async (data: ContactFormType) => {
 
-    console.log('with astro:', CONTACT_API_URL)
+    console.log('with astro:', PUBLIC_CONTACT_API_URL)
     console.log('with import:', import.meta.env.PUBLIC_CONTACT_API_URL)
 
     //const apiUrl = import.meta.env.PUBLIC_CONTACT_API_URL;
 
     try {
-        const response = await axios.post(`${CONTACT_API_URL}/contact-form`, data, {
+        const response = await axios.post(`${PUBLIC_CONTACT_API_URL}/contact-form`, data, {
             headers: {
                 'Content-Type': 'application/json',
             },
