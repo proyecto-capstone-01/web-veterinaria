@@ -40,7 +40,7 @@ export default defineConfig({
         },
         resolve: {
             // Use react-dom/server.edge instead of react-dom/server.browser for React 19.
-            alias: isNode ? {
+            alias: !isNode ? {
                 "react-dom/server": "react-dom/server.edge",
             } : undefined,
         },
