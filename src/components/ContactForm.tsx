@@ -132,21 +132,6 @@ export default function ContactForm() {
         return false;
     };
 
-    const getResponseText = (data: unknown) => {
-        if (data == null) return "Solicitud enviada.";
-        if (typeof data === "string") return data;
-        if (typeof data === "object") {
-            // @ts-ignore
-            if (typeof (data as any).message === "string") return (data as any).message;
-            try {
-                return JSON.stringify(data);
-            } catch {
-                return "Solicitud enviada.";
-            }
-        }
-        return String(data);
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -163,10 +148,9 @@ export default function ContactForm() {
                 contactPreference: form.contactPreference,
             };
 
-            const res = await submitContactForm(payload);
-            const msg = getResponseText(res);
+            await submitContactForm(payload);
 
-            setDialog({title: "Mensaje enviado", message: msg, variant: "success"});
+            setDialog({title: "Mensaje enviado", message: "Tu mensaje se envió con éxito.", variant: "success"});
             setOpen(true);
 
             // Limpia el formulario tras éxito
@@ -174,12 +158,8 @@ export default function ContactForm() {
             setErrors({});
             setAcceptedTerms(false);
         } catch (error) {
-            let msg = "Ocurrió un error al enviar el formulario.";
-            const anyErr = error as any;
-            if (anyErr?.response?.data) msg = getResponseText(anyErr.response.data);
-            else if (anyErr?.message) msg = anyErr.message;
-
-            setDialog({title: "Error", message: msg, variant: "error"});
+            console.error(error);
+            setDialog({title: "Error", message: "Ha habido un problema al enviar tu solicitud, inténtalo de nuevo.", variant: "error"});
             setOpen(true);
         } finally {
             setSubmitting(false);
@@ -367,7 +347,7 @@ export default function ContactForm() {
             </form>
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent>
+                <DialogContent className="bg-white">
                     <DialogHeader>
                         <DialogTitle>{dialog.title}</DialogTitle>
                         <DialogDescription>
@@ -375,7 +355,9 @@ export default function ContactForm() {
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button onClick={() => setOpen(false)}>Cerrar</Button>
+                        <Button onClick={() => setOpen(false)} className="bg-primary text-white hover:bg-primary-dark">
+                            Aceptar
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

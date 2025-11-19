@@ -2,7 +2,9 @@
   "name": "vetweb-cf",
   "main": "./dist/_worker.js/index.js",
   "compatibility_date": "2025-03-25",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist"
@@ -10,12 +12,11 @@
   "observability": {
     "enabled": true
   },
-  "env": {
-    "production": {
-      "vars": {
-        "ASTRO_ADAPTER": "cloudflare",
-        "IMAGE_OPTIMIZATION": "false"
-      }
-    }
+  "vars": {
+    "ASTRO_ADAPTER": "cloudflare",
+    "IMAGE_OPTIMIZATION": "false",
+    "PUBLIC_CONTACT_API_URL": "https://demo.veterinariapucara.cl",
+    "CMS_API_URL": "https://demo.veterinariapucara.cl",
+    "PUBLIC_CMS_API_URL": "https://demo.veterinariapucara.cl"
   }
 }
