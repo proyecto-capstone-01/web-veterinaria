@@ -26,7 +26,11 @@ export default defineConfig({
 
       }
     },
-    adapter: isNode ? node({mode: 'standalone'}) : cloudflare(),
+    adapter: cloudflare({
+        platformProxy: {
+            enabled: true
+        }
+    }),
     prefetch: true,
     vite: {
         // @ts-ignore
