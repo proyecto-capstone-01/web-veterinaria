@@ -3,7 +3,6 @@ import { defineConfig, envField } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
 import { webcore } from 'webcoreui/integration';
-import node from '@astrojs/node';
 import react from '@astrojs/react';
 import process from 'node:process';
 
@@ -23,7 +22,6 @@ export default defineConfig({
           OVERWRITE_FAQ: envField.boolean({ context: 'server', access: 'public', default: false }),
           IMAGE_OPTIMIZATION: envField.boolean({ context: 'server', access: 'public', default: false }),
           ASTRO_ADAPTER: envField.string({ context: 'server', access: 'public', default: 'cloudflare' }),
-
       }
     },
     adapter: cloudflare({
