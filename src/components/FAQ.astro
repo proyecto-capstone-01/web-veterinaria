@@ -43,8 +43,8 @@ const questions = [
     />
     <div class="max-w-4xl mx-auto px-3 py-6 space-y-4 lg:min-w-3xl md:min-w-2xl">
         <AccordionComponent 
-        items={questions.map(q => ({ name: q.question, description: q.answer }))} 
-        client:load 
+            items={questions.map(q => ({ name: q.question, description: q.answer }))}
+            client:load
         />
     </div>
 </div>

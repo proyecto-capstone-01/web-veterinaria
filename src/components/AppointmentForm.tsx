@@ -587,8 +587,8 @@ export default function AppointmentForm() {
 
                 <div className="md:w-full max-w-xl sm:w-sm text-center flex items-center justify-center">
                     <p className="mt-4 text-center">Al confirmar, estarás aceptando los 
-                        <a href="/Terms" className="text-primary font-semibold"> términos y condiciones</a> y 
-                        <a href="/Privacy" className="text-primary font-semibold"> Política de privacidad</a>
+                        <a href="/terminos-y-condiciones" className="text-primary font-semibold"> términos y condiciones</a> y
+                        <a href="/privacidad" className="text-primary font-semibold"> política de privacidad</a>
                     </p>
                 </div>
 

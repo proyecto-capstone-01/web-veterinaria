@@ -328,7 +328,7 @@ export default function ContactForm() {
                     />
                     <Label htmlFor="terms" className="ml-2">
                         Acepto los {" "}
-                        <a href="/terms" className="text-primary underline">
+                        <a href="/terminos-y-condiciones" className="text-primary underline">
                             términos y condiciones
                         </a>
                     </Label>

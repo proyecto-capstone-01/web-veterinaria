@@ -4,7 +4,6 @@ import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
 import { webcore } from 'webcoreui/integration';
 import react from '@astrojs/react';
-import process from 'node:process';
 
 const isNode = process.env.ASTRO_ADAPTER === 'node';
 
@@ -29,6 +28,7 @@ export default defineConfig({
             enabled: true
         }
     }),
+    trailingSlash: 'ignore',
     prefetch: true,
     vite: {
         // @ts-ignore

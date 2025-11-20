@@ -5,7 +5,7 @@ const navItems = [
   { name: "Inicio", url: "/" },
   { name: "Productos", url: "/products" },
   { name: "Blog Educativo", url: "/blog" },
-  { name: "Contacto", url: "/contact" },
+  { name: "Contacto", url: "/formulario-contacto" },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -59,7 +59,7 @@ const currentPath = Astro.url.pathname;
 
     <!-- CTA Button -->
     <div class="md:order-3">
-      <Button text="Agendar visita" url="/toSchedule" variant="primary" />
+      <Button text="Agendar visita" url="/agendar" variant="primary" />
     </div>
 
   </div>
