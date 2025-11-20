@@ -61,17 +61,52 @@ export const Navbar = ({ children, className, initialMaxWidth = 1280, shrunkMaxW
     typeof window !== "undefined" ? window.scrollY > shrinkThreshold : false,
   );
   const [initialized, setInitialized] = useState(false);
+  const lastScrollRef = useRef<number>(typeof window !== "undefined" ? window.scrollY : 0);
+  const stableReadsRef = useRef(0);
+
+  const readScrollAndSet = React.useCallback(() => {
+    if (typeof window === "undefined") return;
+    const current = window.scrollY;
+    setShrunk(current > shrinkThreshold);
+    if (current === lastScrollRef.current) {
+      stableReadsRef.current += 1;
+    } else {
+      stableReadsRef.current = 0;
+    }
+    lastScrollRef.current = current;
+  }, [shrinkThreshold]);
+
+  // Pre-paint read to avoid transparent flash when already scrolled.
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  React.useLayoutEffect(() => {
+    readScrollAndSet();
+  }, [readScrollAndSet]);
 
   useEffect(() => {
-    // Ensure any scroll restoration has completed before locking initial state
-    const id = requestAnimationFrame(() => {
-      if (typeof window !== "undefined") {
-        setShrunk(window.scrollY > shrinkThreshold);
+    if (initialized) return;
+    let attempts = 0;
+    const maxAttempts = 14; // ~14 * 30ms ~= 420ms max wait
+    const interval = setInterval(() => {
+      attempts += 1;
+      readScrollAndSet();
+      const stable = stableReadsRef.current >= 2; // two consecutive identical scroll positions
+      if (stable || attempts >= maxAttempts) {
+        clearInterval(interval);
+        setInitialized(true); // enable animations after scroll position stabilized or timeout
       }
-      setInitialized(true);
-    });
-    return () => cancelAnimationFrame(id);
-  }, [shrinkThreshold]);
+    }, 30);
+
+    const handleLoad = () => readScrollAndSet();
+    const handlePageShow = () => readScrollAndSet();
+    window.addEventListener("load", handleLoad);
+    window.addEventListener("pageshow", handlePageShow);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("load", handleLoad);
+      window.removeEventListener("pageshow", handlePageShow);
+    };
+  }, [initialized, readScrollAndSet]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (!initialized) return; // ignore scroll events until initialized
@@ -90,7 +125,7 @@ export const Navbar = ({ children, className, initialMaxWidth = 1280, shrunkMaxW
   return (
     <motion.div
       ref={ref}
-      className={cn("fixed inset-x-0 top-0 z-50 flex justify-center pointer-events-none px-2 md:px-4", className)}
+      className={cn("fixed inset-x-0 top-0 z-50 flex justify-center pointer-events-none px-2 md:px-4 transition-opacity duration-200", initialized ? "opacity-100" : "opacity-0", className)}
     >
       <motion.div
         style={{
