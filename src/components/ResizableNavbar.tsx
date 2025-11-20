@@ -92,8 +92,8 @@ export function ResizableNavbar({
                         <NavbarLogo
                             href={logo?.href ?? "/"}
                             src={logo?.src ?? "/favicon.svg"}
-                            alt={logo?.alt ?? "Pucará Vet"}
-                            label={logo?.label ?? "Pucará Vet"}
+                            alt={logo?.alt ?? "Veterinaria Pucará"}
+                            label={logo?.label ?? "Veterinaria Pucará"}
                         />
                         <MobileNavToggle
                             isOpen={isMobileMenuOpen}
@@ -110,7 +110,7 @@ export function ResizableNavbar({
                                 key={`mobile-link-${idx}`}
                                 href={item.href}
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                className="relative text-neutral-600 dark:text-neutral-300"
+                                className="relative text-neutral-700 dark:text-neutral-700"
                             >
                                 <span className="block">{item.name}</span>
                             </a>
