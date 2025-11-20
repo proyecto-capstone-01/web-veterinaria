@@ -11,6 +11,16 @@
   --color-tertiary-dark: #C7D2FE;
 }
 
+/* Utility themed background classes */
+.bg-primary { background-color: var(--color-primary); }
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-primary-dark { background-color: var(--color-primary-dark); }
+.bg-secondary-dark { background-color: var(--color-secondary-dark); }
+
+/* Text utilities for contrast */
+.text-on-primary { color: #fff; }
+.text-on-secondary { color: #fff; }
+
 /* Scrollbar styles */
 
 ::-webkit-scrollbar {
@@ -61,4 +71,48 @@
 
 #menu-toggle.open .bottom {
   transform: rotate(-45deg) translateY(-13px);
+}
+
+@theme inline {
+    --animate-first: moveVertical 30s ease infinite;
+    --animate-second: moveInCircle 20s reverse infinite;
+    --animate-third: moveInCircle 40s linear infinite;
+    --animate-fourth: moveHorizontal 40s ease infinite;
+    --animate-fifth: moveInCircle 20s ease infinite;
+}
+
+@keyframes moveHorizontal {
+    0% {
+        transform: translateX(-50%) translateY(-10%);
+    }
+    50% {
+        transform: translateX(50%) translateY(10%);
+    }
+    100% {
+        transform: translateX(-50%) translateY(-10%);
+    }
+}
+
+@keyframes moveInCircle {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes moveVertical {
+    0% {
+        transform: translateY(-50%);
+    }
+    50% {
+        transform: translateY(50%);
+    }
+    100% {
+        transform: translateY(-50%);
+    }
 }

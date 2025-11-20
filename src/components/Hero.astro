@@ -4,7 +4,7 @@ import { FlipWords } from "./ui/flip-words";
 import { Button } from "./ui/button";
 
 const words = ["mascota", "gato", "perro"];
-const duration = 4_000;
+const duration = 3_300;
 ---
 <section
 		class="relative bg-primary-dark text-white rounded-2xl shadow-lg overflow-hidden min-h-[70vh] h-full max-h-[646px]"
@@ -45,38 +45,43 @@ const duration = 4_000;
 		<div class="w-full xl:w-3/5 lg:w-4/5 text-center lg:text-left flex flex-col justify-center items-center lg:items-start lg:py-32 lg:space-y-5 space-y-10">
 			<!-- Contenedor de textos -->
 			<div class="flex flex-col justify-center items-center lg:items-start lg:pl-4">
-				<h1 class="text-4xl lg:text-6xl font-semibold leading-snug sm:leading-tight lg:pt-0 pt-12">
+				<h1 class="text-4xl lg:text-6xl leading-snug sm:leading-tight lg:pt-0 pt-12">
                     <span>
-                        Tu<FlipWords words={words} duration={duration} client:load/>
+                        Tu<FlipWords words={words} duration={duration} client:load className="font-medium" />
                     </span>
 					<br>
 					<span>merece lo mejor</span>, nosotros se lo damos
 				</h1>
 				<p class="mt-4 text-xl">
-					Reserva tu cita aquí de manera completamente on-line
+					Reserva tu cita aquí de manera online
 				</p>
 			</div>
 
 			<!-- Botones: siempre al final del hero en móviles -->
-			<div class="mt-auto flex flex-col sm:flex-row justify-center lg:justify-start gap-6 w-full md:w-auto lg:pl-4">
+			<div class="mt-auto flex flex-col sm:flex-row justify-center lg:justify-start gap-6 w-full md:w-auto lg:pl-4 items-center">
 
-				<Button variant="default" className="w-auto p-6">
-					<a href="/agendar">Agendar Cita</a>
-				</Button>
-				<Button variant="outline" className="w-auto p-6">
-					<div>
-						<Image
-								src="/WhatsApp.svg"
-								alt="WhatsApp Icon"
-								width={24}
-								height={24}
-								class="inline-block mr-2 -mt-1"
-						/>
-						<a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
-							Contáctanos
-						</a>
-					</div>
-				</Button>
+                <a href="/agendar" class="w-full md:w-auto">
+					<Button variant="default" className="w-auto p-5">
+						Agendar Cita
+					</Button>
+				</a>
+
+                <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto">
+					<Button variant="outline" className="w-auto p-5">
+						<div>
+							<Image
+									src="/WhatsApp.svg"
+									alt="WhatsApp Icon"
+									width={24}
+									height={24}
+									class="inline-block mr-2 -mt-1"
+							/>
+							<span>
+                                Contáctanos
+                            </span>
+						</div>
+					</Button>
+				</a>
 			</div>
 		</div>
 
