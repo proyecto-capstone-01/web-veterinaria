@@ -23,7 +23,14 @@ export interface BlogPost {
       url: string
     }
   }
-  authors?: any[]
+  authors?: Array<{
+    id?: string | number
+    firstName?: string
+    lastName?: string
+    fullName?: string
+    email?: string
+    [key: string]: any
+  }>
   categories?: any[]
   relatedPosts?: BlogPost[]
   publishedAt: string
