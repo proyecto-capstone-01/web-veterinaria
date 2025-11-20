@@ -52,7 +52,7 @@ export function ResizableNavbar({
 
     const actions: ResizableNavbarCTA[] =
         ctas ?? [
-            { label: "Agendar", href: "/agendar", variant: "primary" },
+            { label: "Agendar Cita", href: "/agendar", variant: "gradient" },
         ];
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

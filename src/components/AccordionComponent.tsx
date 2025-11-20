@@ -19,7 +19,7 @@ export default function AccordionComponent({items}: AccordionComponentProps) {
         <Accordion
             type="single"
             collapsible
-            className="w-full"
+            className="w-full max-w-[px-600]"
             defaultValue="item-0"
         >
             {items.map((item, index) => (
