@@ -2,60 +2,107 @@
 import details from '../data/details.json' assert { type: 'json' };
 ---
 
-<footer class="bg-primary-dark text-white">
+<footer class="bg-primary-dark text-white shadow-inner mt-12 rounded-t-lg overflow-hidden w-full pb-6 lg:pb-8">
     <div class="mx-auto w-full max-w-screen-xl p-6 lg:p-8">
         <div class="mb-6">
-            <div class="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-12">
-                <div>
-                    <h2 class="mb-4 font-bold uppercase">¿Necesitas ayuda?</h2>
-                    <p class="mb-1">
-                        <span class="font-semibold">WhatsApp: </span>
-                        <a href={"https://wa.me/"+details.whatsAppNumber.replace(/\D/g, '')} class="hover:underline" target="_blank" rel="noopener noreferrer">
-                            {details.whatsAppNumber}
-						</a>
-                    </p>
-                    <p class="mb-3">
-                        <span class="font-semibold">Correo: </span>
-                        <a href={"mailto:"+details.emailAddress} class="hover:underline">
-                            {details.emailAddress}
-						</a>
-                    </p>
-                    <h3 class="font-semibold uppercase mb-1">Dirección</h3>
-                    <p class="text-wrap mb-1">
-                        {details.address}
-                    </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 items-start">
+                {/* Branding + contacto */}
+                <div class="flex flex-col gap-5 max-w-md">
+                    <div class="flex items-center gap-3">
+                        <img
+                            src="/favicon.svg"
+                            alt={details.branding}
+                            class="h-10 w-10 rounded-lg bg-white p-1 shadow-md"
+                            loading="lazy"
+                        />
+                        <div class="flex flex-col">
+                            <span class="text-xl font-bold tracking-wide">
+                                {details.branding}
+                            </span>
+                            <p class="text-xs text-white/80">
+                                Cuidamos de tus mascotas con tecnología, cariño y los mejores productos del mercado.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="text-sm space-y-3">
+                        <div>
+                            <h2 class="mb-1 font-bold uppercase">Contacto</h2>
+                            <p>
+                                <span class="font-semibold">WhatsApp: </span>
+                                <a
+                                    href={"https://wa.me/" + details.whatsAppNumber.replace(/\D/g, '')}
+                                    class="hover:underline"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {details.whatsAppNumber}
+                                </a>
+                            </p>
+                            <p>
+                                <span class="font-semibold">Correo: </span>
+                                <a href={"mailto:" + details.emailAddress} class="hover:underline">
+                                    {details.emailAddress}
+                                </a>
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold uppercase mb-1">Dirección</h3>
+                            <p class="text-wrap">
+                                {details.address}
+                            </p>
+                        </div>
+                    </div>
                 </div>
+
+                {/* Navegación / Contenido */}
                 <div>
                     <h2 class="mb-4 font-bold uppercase">Contenido</h2>
-                    <ul class="space-y-2">
+                    <ul class="space-y-2 text-sm">
                         <li><a href="/" class="hover:font-bold">Inicio</a></li>
                         <li><a href="/products" class="hover:font-bold">Productos</a></li>
                         <li><a href="/blog" class="hover:font-bold">Blog Educativo</a></li>
                         <li><a href="/formulario-contacto" class="hover:font-bold">Contacto</a></li>
                     </ul>
                 </div>
+
+                {/* Redes sociales */}
                 <div>
-                    <h2 class="mb-4 font-bold uppercase">Redes sociales</h2>
-                    <ul class="space-y-2">
+                    <h2 class="mb-3 font-bold uppercase">Redes sociales</h2>
+                    <ul class="space-y-2 text-sm">
                         {details.socialMedia.map((social) => (
-                            <li><a href={social.url} class="hover:font-bold" target="_blank" rel="noopener noreferrer">{social.name}</a></li>
+                            <li>
+                                <a
+                                    href={social.url}
+                                    class="hover:font-bold"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {social.name}
+                                </a>
+                            </li>
                         ))}
-                    </ul>
-                </div>
-                <div>
-                    <h2 class="mb-4 font-bold uppercase">Información legal</h2>
-                    <ul class="space-y-2">
-                        <li><a href="/terminos-y-condiciones" class="hover:font-bold">Términos y condiciones</a></li>
-                        <li><a href="/privacidad" class="hover:font-bold">Política de privacidad</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        <hr class="my-6 border-white/50 sm:mx-auto lg:my-8" />
-        <div class="flex items-center justify-center">
-            <span class="text-center">
-                {details.branding} | Todos los derechos reservados © <span class="font-bold">{new Date().getFullYear()}</span>
+
+        <hr class="my-6 border-white/40 sm:mx-auto lg:my-8" />
+
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs sm:text-sm text-white/80">
+            <span class="order-2 sm:order-1">
+                © <span class="font-bold">{new Date().getFullYear()}</span> {details.branding}. Todos los derechos reservados.
             </span>
+            <div class="order-1 sm:order-2 flex flex-wrap gap-x-4 gap-y-1 items-center">
+                <a href="/terminos-y-condiciones" class="hover:font-bold">
+                    Términos y condiciones
+                </a>
+                <span class="hidden sm:inline text-white/40">|</span>
+                <a href="/privacidad" class="hover:font-bold">
+                    Política de privacidad
+                </a>
+            </div>
         </div>
     </div>
 </footer>
