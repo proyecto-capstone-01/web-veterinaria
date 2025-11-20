@@ -136,3 +136,28 @@ export function ResizableNavbar({
         </div>
     );
 }
+
+export function NoScriptNavbarFallback() {
+    return (
+        <noscript>
+            <div className="fixed inset-x-0 top-0 z-40 flex justify-center px-2 md:px-4">
+                <nav aria-label="Primary" className="pointer-events-auto w-full max-w-[1280px] rounded-md bg-white/90 backdrop-blur py-3 px-6 shadow-[0_0_24px_rgba(34,42,53,0.06),0_1px_1px_rgba(0,0,0,0.05),0_0_0_1px_rgba(34,42,53,0.04),0_0_4px_rgba(34,42,53,0.08)] flex items-center justify-between">
+                    <a href="/" className="flex items-center gap-2 font-medium text-neutral-700 hover:text-neutral-900">
+                        <img src="/favicon.svg" alt="Logo" width="30" height="30" />
+                        Veterinaria Pucará
+                    </a>
+                    <ul className="hidden md:flex items-center gap-1 text-sm font-medium text-neutral-600">
+                        <li><a className="px-3 py-2 rounded-full hover:bg-gray-100" href="/">Inicio</a></li>
+                        <li><a className="px-3 py-2 rounded-full hover:bg-gray-100" href="/products">Productos</a></li>
+                        <li><a className="px-3 py-2 rounded-full hover:bg-gray-100" href="/blog">Blog Educativo</a></li>
+                        <li><a className="px-3 py-2 rounded-full hover:bg-gray-100" href="/formulario-contacto">Contacto</a></li>
+                    </ul>
+                    <div className="flex items-center gap-3">
+                        <a href="/agendar" className="px-4 py-2 rounded-md bg-gradient-to-b from-[#6060F0FF] to-[#5A5AE0] text-white text-sm font-semibold shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]">Agendar Cita</a>
+                    </div>
+                </nav>
+            </div>
+            <style>{`/* Reserve space so content isn't hidden behind static noscript navbar */ body { padding-top: 72px; } @media (min-width: 1024px){ body { padding-top: 88px; } }`}</style>
+        </noscript>
+    )
+}
