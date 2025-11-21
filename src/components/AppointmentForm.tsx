@@ -3,14 +3,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle
-} from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useMemo, useState } from "react";
@@ -146,12 +138,6 @@ export default function AppointmentForm() {
         email: "",
     });
     const [errors, setErrors] = useState<FieldErrors>({});
-    const [open, setOpen] = useState(false);
-    const [dialog, setDialog] = useState<{ title: string; message: string; variant: "success" | "error" }>({
-        title: "",
-        message: "",
-        variant: "success"
-    });
     const [submitting, setSubmitting] = useState(false);
 
     const totalPrice = useMemo(() => {
@@ -279,8 +265,8 @@ export default function AppointmentForm() {
 
             const res = await submitAppointmentForm(payload);
             const msg = getResponseText(res);
-            setDialog({title: "Cita confirmada", message: msg, variant: "success"});
-            setOpen(true);
+            // Feedback podría integrarse con un toast en el futuro
+            console.info("Cita confirmada:", msg);
             // Reset
             setForm({
                 petType: "perro",
@@ -296,8 +282,7 @@ export default function AppointmentForm() {
             });
         } catch (error: any) {
             const msg = error?.response?.data ? getResponseText(error.response.data) : (error?.message || "Error al confirmar la cita.");
-            setDialog({title: "Error", message: msg, variant: "error"});
-            setOpen(true);
+            console.error("Error al confirmar la cita:", msg);
         } finally {
             setSubmitting(false);
         }
@@ -344,24 +329,28 @@ export default function AppointmentForm() {
                     </div>
                 </fieldset>
 
-                <div className="relative">
-                    <Label htmlFor="petName" className="mb-1 block">Nombre de tu mascota</Label>
-                    <Input
-                        id="petName"
-                        placeholder="Ingresa el nombre de tu mascota aquí"
-                        value={form.petName}
-                        onChange={(e) => setField("petName", e.target.value)}
-                        className={cn("w-full pr-12", errors.petName && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
-                        aria-invalid={!!errors.petName}
-                        aria-describedby={errors.petName ? "petName-error" : undefined}
-                    />
-                    {form.petName && (
-                        <button type="button" onClick={() => setField("petName", "")}
-                                aria-label="Limpiar nombre mascota"
-                                className="absolute right-2 bottom-2 text-muted-foreground hover:text-foreground">
-                            <X className="h-4 w-4"/>
-                        </button>
-                    )}
+                <div>
+                    <Label htmlFor="petName" className="block text-sm font-medium mb-1">Nombre de tu mascota</Label>
+                    <div className="relative">
+                        <Input
+                            id="petName"
+                            placeholder="Ingresa el nombre de tu mascota aquí"
+                            value={form.petName}
+                            onChange={(e) => setField("petName", e.target.value)}
+                            className={cn("w-full pr-12", errors.petName && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
+                            aria-invalid={!!errors.petName}
+                            aria-describedby={errors.petName ? "petName-error" : undefined}
+                        />
+                        {form.petName && (
+                            <button type="button" onClick={() => setField("petName", "")}
+                                    aria-label="Limpiar nombre mascota"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                    disabled={submitting}
+                            >
+                                <X className="h-4 w-4"/>
+                            </button>
+                        )}
+                    </div>
                     {errors.petName && <p id="petName-error" className="mt-1 text-sm text-red-600">{errors.petName}</p>}
                 </div>
             </section>
@@ -400,7 +389,7 @@ export default function AppointmentForm() {
                               <Info className="h-4 w-4"/>
                             </span>
                                                     </TooltipTrigger>
-                                                    <TooltipContent>
+                                                    <TooltipContent className="max-w-xs text-white">
                                                         {servicio.descripcion ? servicio.descripcion : "Sin descripción"}
                                                     </TooltipContent>
                                                 </Tooltip>
@@ -420,14 +409,14 @@ export default function AppointmentForm() {
                     <p id="servicios-error" className="mt-1 text-sm text-red-600">{errors.servicios}</p>}
 
                 <div className="mt-4">
-                    <p className="text-lg font-semibold">
-                        Precio total: $<span id="totalPrice">{totalPrice.toLocaleString("es-CL")}</span>
-                    </p>
+                    <blockquote className="border-l-4 border-primary pl-4 italic text-primary-dark">
+                        Precio total estimado: $<span id="totalPriceEstimate">{totalPrice.toLocaleString("es-CL")}</span>
+                    </blockquote>
                 </div>
 
                 <div className="mt-3">
                     <div className="flex items-end justify-between mb-1">
-                        <Label htmlFor="comentario" className="block">Comentarios adicionales</Label>
+                        <Label htmlFor="comentario" className="block text-sm font-medium mb-1">Comentarios adicionales</Label>
                         <span
                             className={cn("text-xs", comentarioLen > 1000 ? "text-red-600" : "text-muted-foreground")}>{comentarioLen}/1000</span>
                     </div>
@@ -483,65 +472,77 @@ export default function AppointmentForm() {
             <div className="w-full h-1 bg-primary my-2"></div>
 
             {/* Datos personales */}
-            <section>
+            <section
+                className="space-y-4 max-w-2xl mx-auto gap-4"
+            >
                 <h2 className="text-xl font-semibold my-2">Tus datos</h2>
                 <p className="text-md mb-2">Por favor, completa el formulario con tus datos personales para confirmar la
                     cita:</p>
 
-                <div className="relative">
-                    <Label htmlFor="rut" className="mb-1 block">RUT</Label>
-                    <Input
-                        id="rut"
-                        placeholder="RUT (ej: 12.345.678-9)"
-                        value={form.rut}
-                        onChange={(e) => setField("rut", e.target.value)}
-                        className={cn("w-full pr-12", errors.rut && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
-                        aria-invalid={!!errors.rut}
-                        aria-describedby={errors.rut ? "rut-error" : undefined}
-                        disabled={submitting}
-                    />
-                    {form.rut && (
-                        <button
-                            type="button"
-                            onClick={() => setField("rut", "")}
-                            aria-label="Limpiar RUT"
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:opacity-50"
+                <div>
+                    <Label htmlFor="rut" className="block text-sm font-medium mb-1">RUT</Label>
+                    <div className="relative">
+                        <Input
+                            id="rut"
+                            placeholder="RUT (ej: 12.345.678-9)"
+                            value={form.rut}
+                            onChange={(e) => setField("rut", e.target.value)}
+                            className={cn("w-full pr-12", errors.rut && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
+                            aria-invalid={!!errors.rut}
+                            aria-describedby={errors.rut ? "rut-error" : undefined}
                             disabled={submitting}
-                        >
-                            <X className="h-4 w-4"/>
-                        </button>
-                    )}
+                        />
+                        {form.rut && (
+                            <button
+                                type="button"
+                                onClick={() => setField("rut", "")}
+                                aria-label="Limpiar RUT"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                disabled={submitting}
+                            >
+                                <X className="h-4 w-4"/>
+                            </button>
+                        )}
+                    </div>
                     {errors.rut && <p id="rut-error" className="mt-1 text-sm text-red-600">{errors.rut}</p>}
                 </div>
 
                 <div className="flex gap-2">
-                    <div className="relative flex-1">
-                        <Label htmlFor="firstName" className="mb-1 block">Nombre</Label>
-                        <Input id="firstName" value={form.firstName}
-                               onChange={(e) => setField("firstName", e.target.value)} placeholder="Nombre"
-                               className={cn("pr-12", errors.firstName && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
-                               aria-invalid={!!errors.firstName}
-                               aria-describedby={errors.firstName ? "firstName-error" : undefined}/>
-                        {form.firstName && (
-                            <button type="button" onClick={() => setField("firstName", "")} aria-label="Limpiar nombre"
-                                    className="absolute right-2 bottom-2 text-muted-foreground hover:text-foreground"><X
-                                className="h-4 w-4"/></button>
-                        )}
+                    <div className="flex-1">
+                        <Label htmlFor="firstName" className="block text-sm font-medium mb-1">Nombre</Label>
+                        <div className="relative">
+                            <Input id="firstName" value={form.firstName}
+                                   onChange={(e) => setField("firstName", e.target.value)} placeholder="Nombre"
+                                   className={cn("pr-12", errors.firstName && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
+                                   aria-invalid={!!errors.firstName}
+                                   aria-describedby={errors.firstName ? "firstName-error" : undefined}/>
+                            {form.firstName && (
+                                <button type="button" onClick={() => setField("firstName", "")} aria-label="Limpiar nombre"
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                        disabled={submitting}
+                                ><X
+                                    className="h-4 w-4"/></button>
+                            )}
+                        </div>
                         {errors.firstName &&
                             <p id="firstName-error" className="mt-1 text-sm text-red-600">{errors.firstName}</p>}
                     </div>
-                    <div className="relative flex-1">
-                        <Label htmlFor="lastName" className="mb-1 block">Apellido</Label>
-                        <Input id="lastName" value={form.lastName}
-                               onChange={(e) => setField("lastName", e.target.value)} placeholder="Apellido"
-                               className={cn("pr-12", errors.lastName && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
-                               aria-invalid={!!errors.lastName}
-                               aria-describedby={errors.lastName ? "lastName-error" : undefined}/>
-                        {form.lastName && (
-                            <button type="button" onClick={() => setField("lastName", "")} aria-label="Limpiar apellido"
-                                    className="absolute right-2 bottom-2 text-muted-foreground hover:text-foreground"><X
-                                className="h-4 w-4"/></button>
-                        )}
+                    <div className="flex-1">
+                        <Label htmlFor="lastName" className="block text-sm font-medium mb-1">Apellido</Label>
+                        <div className="relative">
+                            <Input id="lastName" value={form.lastName}
+                                   onChange={(e) => setField("lastName", e.target.value)} placeholder="Apellido"
+                                   className={cn("pr-12", errors.lastName && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
+                                   aria-invalid={!!errors.lastName}
+                                   aria-describedby={errors.lastName ? "lastName-error" : undefined}/>
+                            {form.lastName && (
+                                <button type="button" onClick={() => setField("lastName", "")} aria-label="Limpiar apellido"
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                        disabled={submitting}
+                                ><X
+                                    className="h-4 w-4"/></button>
+                            )}
+                        </div>
                         {errors.lastName &&
                             <p id="lastName-error" className="mt-1 text-sm text-red-600">{errors.lastName}</p>}
                     </div>
@@ -564,35 +565,54 @@ export default function AppointmentForm() {
                         />
                         {form.phone && (
                             <button type="button" onClick={() => setField("phone", "")} aria-label="Limpiar teléfono"
-                                    className="absolute right-2 bottom-2 text-muted-foreground hover:text-foreground"><X
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                    disabled={submitting}
+                            ><X
                                 className="h-4 w-4"/></button>
                         )}
                     </div>
                 </div>
                 {errors.phone && <p id="phone-error" className="mt-1 text-sm text-red-600">{errors.phone}</p>}
 
-                <div className="relative mt-2">
-                    <Label htmlFor="email" className="mb-1 block">Email</Label>
-                    <Input id="email" type="email" value={form.email}
-                           onChange={(e) => setField("email", e.target.value)} placeholder="Email"
-                           className={cn("w-full pr-12", errors.email && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
-                           aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined}/>
-                    {form.email && (
-                        <button type="button" onClick={() => setField("email", "")} aria-label="Limpiar email"
-                                className="absolute right-2 bottom-2 text-muted-foreground hover:text-foreground"><X
-                            className="h-4 w-4"/></button>
+                <div>
+                    <Label htmlFor="email" className="block text-sm font-medium mb-1">Correo electrónico</Label>
+                    <div className="relative">
+                        <Input
+                            id="email"
+                            type="email"
+                            value={form.email}
+                            placeholder="Tu correo"
+                            onChange={(e) => setField("email", e.target.value)}
+                            className={cn("pr-12", errors.email && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
+                            aria-invalid={!!errors.email}
+                            aria-describedby={errors.email ? "email-error" : undefined}
+                            disabled={submitting}
+                        />
+                        {form.email && (
+                            <button
+                                type="button"
+                                onClick={() => setField("email", "")}
+                                aria-label="Limpiar correo"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                disabled={submitting}
+                            >
+                                <X className="h-4 w-4"/>
+                            </button>
+                        )}
+                    </div>
+                    {errors.email && (
+                        <p id="email-error" className="mt-1 text-sm text-red-600">{errors.email}</p>
                     )}
-                    {errors.email && <p id="email-error" className="mt-1 text-sm text-red-600">{errors.email}</p>}
                 </div>
 
                 <div className="md:w-full max-w-xl sm:w-sm text-center flex items-center justify-center">
-                    <p className="mt-4 text-center">Al confirmar, estarás aceptando los 
+                    <p className="mt-2 text-center">Al confirmar, estarás aceptando los
                         <a href="/terminos-y-condiciones" className="text-primary font-semibold"> términos y condiciones</a> y
                         <a href="/privacidad" className="text-primary font-semibold"> política de privacidad</a>
                     </p>
                 </div>
 
-                <Button type="submit" disabled={submitting} className="w-full mt-4 text-white">
+                <Button type="submit" disabled={submitting} className="w-full mt-2 text-white">
                     {submitting ? "Confirmando..." : "Confirmar cita"}
                 </Button>
             </section>
