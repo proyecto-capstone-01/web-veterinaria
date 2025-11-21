@@ -1,5 +1,6 @@
 ---
 import details from '../data/details.json' assert { type: 'json' };
+import { Image } from 'astro:assets';
 ---
 
 <footer class="bg-primary-dark text-white shadow-inner mt-12 rounded-t-lg overflow-hidden w-full pb-6 lg:pb-8">
@@ -9,18 +10,20 @@ import details from '../data/details.json' assert { type: 'json' };
                 {/* Branding + contacto */}
                 <div class="flex flex-col gap-5 max-w-md">
                     <div class="flex items-center gap-3">
-                        <img
+                        <Image
                             src="/favicon.svg"
                             alt={details.branding}
-                            class="h-10 w-10 rounded-lg bg-white p-1 shadow-md"
+                            class="h-12 w-12 rounded-lg bg-white p-1 shadow-md"
                             loading="lazy"
+                            width={40}
+                            height={40}
                         />
                         <div class="flex flex-col">
                             <span class="text-xl font-bold tracking-wide">
                                 {details.branding}
                             </span>
                             <p class="text-xs text-white/80">
-                                Cuidamos de tus mascotas con tecnología, cariño y los mejores productos del mercado.
+                                {details.brandMessage}
                             </p>
                         </div>
                     </div>
