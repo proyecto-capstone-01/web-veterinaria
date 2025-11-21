@@ -10,18 +10,25 @@ interface FloatingButtonProps {
 }
 
 const FloatingButton: React.FC<FloatingButtonProps> = ({
-                                                           onClick,
-                                                           url,
-                                                           position = 'right',
-                                                           longPressDuration = 500,
-                                                       }) => {
+    onClick,
+    url,
+    position = 'right',
+    longPressDuration = 500,
+}) => {
     const [isDismissed, setIsDismissed] = useState(false);
     const [showDismissButton, setShowDismissButton] = useState(false);
 
     const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+    // Track whether the current interaction was a long press so we can suppress the automatic click.
+    const longPressActivatedRef = useRef(false);
 
     // Default click handler - opens URL in new tab
     const handleDefaultClick = useCallback(() => {
+        // If the long press was activated, suppress this click (triggered by pointer release)
+        if (longPressActivatedRef.current) {
+            longPressActivatedRef.current = false; // reset for future normal clicks
+            return; // Do not navigate or invoke onClick when dismiss overlay just appeared
+        }
         if (onClick) {
             onClick();
         } else if (url) {
@@ -33,6 +40,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
     const handlePressStart = useCallback(() => {
         longPressTimerRef.current = setTimeout(() => {
             setShowDismissButton(true);
+            longPressActivatedRef.current = true; // mark that long press was triggered
         }, longPressDuration);
     }, [longPressDuration]);
 
@@ -98,6 +106,8 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
 
     return (
         <div className={`fixed ${positionClasses} z-[1000]`}>
+            {/* No-JS fallback: simple link */}
+
             <div className="relative">
                 {/* Main Button */}
                 <button
@@ -117,11 +127,12 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
                     onTouchEnd={handleTouchEnd}
                     onClick={handleDefaultClick}
                     type="button"
+                    aria-label="Open WhatsApp chat"
                 >
                     <span className="flex items-center justify-center">
                         <img
                             src="/WhatsApp.svg"
-                            alt="icon"
+                            alt="WhatsApp icon"
                             className="w-7 h-7"
                         />
                     </span>
@@ -144,7 +155,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
             "
                         onClick={handleDismiss}
                         type="button"
-                        aria-label="Dismiss button"
+                        aria-label="Dismiss floating button"
                     >
                         ✕
                     </button>
@@ -155,3 +166,4 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
 };
 
 export default FloatingButton;
+

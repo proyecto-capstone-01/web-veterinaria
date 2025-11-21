@@ -3,14 +3,44 @@ import { whatsappRedirect } from "../lib/utils";
 import FloatingButton from './FloatingButton';
 
 import details from '../data/details.json' assert { type: 'json' };
+import React from "react";
 
 const redirectUrl = whatsappRedirect(
     details.whatsAppNumber,
-    'Hello, I would like to get in touch with you!'
+    details.whatsAppMessage
 );
+const url = details.whatsAppNumber
+    ? `https://wa.me/${details.whatsAppNumber.replace(/\D/g, '')}`
+    : null;
 ---
 
-<FloatingButton
-        client:idle
-        url={redirectUrl}
-/>
+<FloatingButton client:idle url={redirectUrl}/>
+<noscript>
+	    {url && (
+        <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+                position: fixed;
+                bottom: 19px;
+                right: 19px;
+                width: 61px;
+                height: 61px;
+                background-color: #25D366;
+                border-radius: 50%;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            "
+        >
+            <img
+                src="/WhatsApp.svg"
+                alt="WhatsApp"
+                style="width: 36px; height: 36px;"
+            />
+        </a>
+    )}
+</noscript>
