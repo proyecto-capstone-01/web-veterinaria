@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { ContactFormType } from "@/types.ts";
 // @ts-ignore
-import { PUBLIC_CONTACT_API_URL } from "astro:env/client";
+import { PUBLIC_CONTACT_API_URL, PUBLIC_CMS_API_URL } from "astro:env/client";
 
 export const submitContactForm = async (data: ContactFormType) => {
     try {
@@ -18,11 +18,8 @@ export const submitContactForm = async (data: ContactFormType) => {
 };
 
 export const submitAppointmentForm = async (data: any) => {
-
-    const apiUrl = import.meta.env.PUBLIC_CMS_API_URL;
-
     try {
-        const response = await axios.post(`${apiUrl}/appointment-form`, data, {
+        const response = await axios.post(`${PUBLIC_CMS_API_URL}/appointments`, data, {
             headers: {
                 'Content-Type': 'application/json',
             },
