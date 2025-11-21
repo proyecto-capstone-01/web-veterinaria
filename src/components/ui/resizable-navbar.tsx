@@ -271,8 +271,8 @@ export const NavbarLogo = ({
         className,
       )}
     >
-      <img src={src} alt={alt} width={30} height={30} {...imgProps} />
-      <span className="font-medium">{label}</span>
+      <img src={src} alt={alt} width={40} height={40} {...imgProps} />
+      <span className="">{label}</span>
     </a>
   );
 };
