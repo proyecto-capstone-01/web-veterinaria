@@ -2,34 +2,43 @@
 import { Image } from 'astro:assets';
 import { FlipWords } from "./ui/flip-words";
 import { Button } from "./ui/button";
+import { FlipImages } from "./FlipImages";
 
 const words = ["mascota", "gato", "perro"];
-const duration = 3_300;
+const duration = 2_500;
+const heroImages = [
+    { src: "/dogs-800-smaller.png", alt: "Gato y Perro", scale: 1.0, objectPosition: "center" },
+    { src: "/cat-800-smaller.png", alt: "Gato", scale: 1.0, objectPosition: "center" },
+    { src: "/dog-800-s.png", alt: "Perro", scale: 1.0, objectPosition: "center" }
+];
 ---
-<section
-		class="relative bg-primary-dark text-white rounded-2xl shadow-lg overflow-hidden min-h-[70vh] h-full max-h-[646px]"
->
-
-	<!-- Imagen de fondo para móvil y tablet -->
-	<Image
-			src="/portrait-dog.webp"
-			alt="Perro"
-			class="absolute inset-0 w-full h-full object-cover lg:hidden z-0"
-			width={800}
-			height={600}
-			loading='eager'
-	/>
-
-	<!-- Imagen lateral para desktop (independiente) -->
-	<div class="hidden lg:block absolute top-0 right-0 h-full z-0">
+<section class="relative bg-primary-dark text-white rounded-2xl shadow-lg overflow-hidden min-h-[70vh] h-full max-h-[646px]">
+	<!-- Imagen de fondo animada para móvil y tablet -->
+	<FlipImages client:load images={heroImages} duration={duration} className="absolute inset-0 w-full h-full lg:hidden z-0" imgClassName="object-cover" edgeFadeLeft={true} edgeFadeWidth={96} />
+	<noscript>
 		<Image
 				src="/portrait-dog.webp"
 				alt="Perro"
+				class="absolute inset-0 w-full h-full object-cover lg:hidden z-0"
 				width={800}
-				height={800}
+				height={600}
 				loading='eager'
-				class="h-full object-cover"
 		/>
+	</noscript>
+
+	<!-- Imagen lateral animada para desktop -->
+	<div class="hidden lg:block absolute top-0 right-0 h-full z-0 w-[55%] max-w-[900px]">
+		<FlipImages client:load images={heroImages} duration={duration} className="absolute inset-0 h-full w-full" imgClassName="object-cover" edgeFadeLeft={true} edgeFadeWidth={128} />
+		<noscript>
+			<Image
+					src="/portrait-dog.webp"
+					alt="Perro"
+					width={800}
+					height={800}
+					loading='eager'
+					class="h-full object-cover"
+			/>
+		</noscript>
 	</div>
 
 	<!-- Degradado encima de la imagen -->
@@ -79,12 +88,12 @@ const duration = 3_300;
 									width={24}
 									height={24}
 									class="inline-block -mt-[2px]"
-							/>
+								/>
 							<span>Contáctanos</span>
 						</div>
 					</Button>
 				</a>
 			</div>
-
+        </div>
 	</div>
 </section>
