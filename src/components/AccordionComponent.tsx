@@ -24,12 +24,12 @@ export default function AccordionComponent({items}: AccordionComponentProps) {
         >
             {items.map((item, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
-                    <AccordionTrigger className="text-lg font-medium">
+                    <AccordionTrigger className="text-lg font-semibold">
                         {item.name}
                     </AccordionTrigger>
 
                     <AccordionContent
-                        className="flex flex-col gap-4 text-balance"
+                        className="flex flex-col text-lg gap-4 text-balance"
                     >
                         {item.description}
                     </AccordionContent>
