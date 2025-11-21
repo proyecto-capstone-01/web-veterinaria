@@ -16,6 +16,7 @@ export default defineConfig({
     env: {
       schema: {
           CMS_API_URL: envField.string({ context: 'server', access: 'secret', default: 'http://localhost:3000' }),
+          PUBLIC_CMS_API_URL: envField.string({ context: 'client', access: 'public', default: 'http://localhost:3000' }),
           CMS_API_KEY: envField.string({ context: 'server', access: 'secret', default: '' }),
           PUBLIC_CONTACT_API_URL: envField.string({ context: 'client', access: 'public', default: 'http://localhost:3000' }),
           OVERWRITE_FAQ: envField.boolean({ context: 'server', access: 'public', default: false }),
