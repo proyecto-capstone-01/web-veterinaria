@@ -336,7 +336,7 @@ export default function AppointmentForm() {
                     },
                     theme: 'light',
                     retry: 'auto',
-                    size: 'normal',
+                    size: 'flexible',
                 });
             }
         }).catch(() => {
@@ -662,7 +662,7 @@ export default function AppointmentForm() {
                 <div id="turnstile-wrapper" className="mt-4 w-full flex flex-col items-center">
                     <div
                         id="turnstile-widget"
-
+                        className={cn("w-full lg:max-w-sm")}
                         aria-describedby={errors.captchaToken ? 'captchaToken-error' : undefined}
                         aria-invalid={!!errors.captchaToken}
                     />

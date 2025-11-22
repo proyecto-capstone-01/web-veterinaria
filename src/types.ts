@@ -4,6 +4,7 @@ export type ContactFormType = {
   phone: string;
   message: string;
   contactPreference: 'phone' | 'email';
+  captchaToken?: string; // added
 }
 
 export type ProductType = {
