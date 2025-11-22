@@ -5,11 +5,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react"; // replaced useMemo/useState import to include React
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { X, Info } from "lucide-react";
 import { submitAppointmentForm } from "@/lib/cms";
+import { loadTurnstile } from "@/lib/turnstile"; // added
+// @ts-ignore
+import { PUBLIC_TURNSTILE_KEY } from "astro:env/client"
 
 
 // Tipos de datos locales
@@ -112,12 +115,13 @@ const schema = z.object({
     petName: z.string().min(1, {message: "Ingresa el nombre de tu mascota."}).trim(),
     servicios: z.array(z.string()).min(1, {message: "Selecciona al menos un servicio."}),
     comentario: z.string().max(1000, {message: "Máximo 1000 caracteres."}).optional().transform(v => v ?? ""),
-    slot: z.string().min(1, {message: "Selecciona un horario."}), // formato: fecha::hora
+    slot: z.string().min(1, {message: "Selecciona un horario."}),
     rut: z.string().regex(/^\d{1,2}\.[0-9]{3}\.[0-9]{3}-[0-9Kk]$/, {message: "RUT inválido (formato 12.345.678-9)."}),
     firstName: z.string().min(2, {message: "Nombre debe tener al menos 2 caracteres."}).trim(),
     lastName: z.string().min(2, {message: "Apellido debe tener al menos 2 caracteres."}).trim(),
     phone: z.string().refine(v => (v.match(/\d/g) || []).length >= 7 && (v.match(/\d/g) || []).length <= 15, {message: "Ingresa un teléfono válido."}).trim(),
     email: z.string().email({message: "Correo electrónico inválido."}).trim(),
+    captchaToken: z.string().min(1, {message: "Resuelve el captcha."}), // added
 });
 
 type FormData = z.infer<typeof schema>;
@@ -136,6 +140,7 @@ export default function AppointmentForm() {
         lastName: "",
         phone: "",
         email: "",
+        captchaToken: "", // added
     });
     const [errors, setErrors] = useState<FieldErrors>({});
     const [submitting, setSubmitting] = useState(false);
@@ -186,6 +191,9 @@ export default function AppointmentForm() {
                 case "email":
                     schema.shape.email.parse(value);
                     break;
+                case "captchaToken":
+                    schema.shape.captchaToken.parse(value);
+                    break;
                 default:
                     break;
             }
@@ -197,10 +205,8 @@ export default function AppointmentForm() {
     };
 
     const validateAll = (): boolean => {
-        // Validación de disponibilidad además del esquema
         const parsed = schema.safeParse(form);
         const next: FieldErrors = {};
-
         if (!parsed.success) {
             for (const issue of parsed.error.issues) {
                 const k = issue.path[0] as keyof FormData;
@@ -244,7 +250,10 @@ export default function AppointmentForm() {
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateAll()) return;
-
+        if (!form.captchaToken) { // ensure captcha solved
+            setErrors(prev => ({...prev, captchaToken: "Resuelve el captcha."}));
+            return;
+        }
         setSubmitting(true);
         try {
             const [fecha, hora] = form.slot.split("::");
@@ -261,6 +270,7 @@ export default function AppointmentForm() {
                 phone: form.phone,
                 email: form.email,
                 totalPrice,
+                captchaToken: form.captchaToken, // added
             };
 
             const res = await submitAppointmentForm(payload);
@@ -278,8 +288,12 @@ export default function AppointmentForm() {
                 firstName: "",
                 lastName: "",
                 phone: "",
-                email: ""
+                email: "",
+                captchaToken: "", // reset
             });
+            if (typeof window !== 'undefined' && (window as any).turnstile) {
+                try { (window as any).turnstile.reset(); } catch {}
+            }
         } catch (error: any) {
             const msg = error?.response?.data ? getResponseText(error.response.data) : (error?.message || "Error al confirmar la cita.");
             console.error("Error al confirmar la cita:", msg);
@@ -298,6 +312,38 @@ export default function AppointmentForm() {
             : [...form.servicios, id]
         );
     };
+
+    // Turnstile setup
+    React.useEffect(() => {
+        let mounted = true;
+        if (typeof window === 'undefined') return;
+        loadTurnstile().then(() => {
+            if (!mounted) return;
+            if ((window as any).turnstile) {
+                (window as any).turnstile.render('#turnstile-widget', {
+                    sitekey: PUBLIC_TURNSTILE_KEY,
+                    callback: (token: string) => {
+                        setField('captchaToken', token);
+                        setErrors(prev => ({...prev, captchaToken: undefined}));
+                    },
+                    'error-callback': () => {
+                        setField('captchaToken', '' as any);
+                        setErrors(prev => ({...prev, captchaToken: 'Error al cargar el captcha.'}));
+                    },
+                    'expired-callback': () => {
+                        setField('captchaToken', '' as any);
+                        setErrors(prev => ({...prev, captchaToken: 'Captcha expirado. Vuelve a intentarlo.'}));
+                    },
+                    theme: 'auto',
+                    retry: 'auto',
+                });
+            }
+        }).catch(() => {
+            setErrors(prev => ({...prev, captchaToken: 'No se pudo cargar el captcha.'}));
+        });
+        return () => { mounted = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <form onSubmit={onSubmit} className="space-y-8 p-6 sm:p-8 lg:p-10">
@@ -612,6 +658,17 @@ export default function AppointmentForm() {
                     </p>
                 </div>
 
+                <div id="turnstile-wrapper" className="mt-4">
+                    <div
+                        id="turnstile-widget"
+                        className={cn(errors.captchaToken && 'block')}
+                        aria-describedby={errors.captchaToken ? 'captchaToken-error' : undefined}
+                        aria-invalid={!!errors.captchaToken}
+                    />
+                    {errors.captchaToken && (
+                        <p id="captchaToken-error" className="mt-1 text-sm text-red-600">{errors.captchaToken}</p>
+                    )}
+                </div>
                 <Button type="submit" disabled={submitting} className="w-full mt-2 text-white">
                     {submitting ? "Confirmando..." : "Confirmar cita"}
                 </Button>
