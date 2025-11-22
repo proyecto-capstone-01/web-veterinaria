@@ -334,8 +334,9 @@ export default function AppointmentForm() {
                         setField('captchaToken', '' as any);
                         setErrors(prev => ({...prev, captchaToken: 'Captcha expirado. Vuelve a intentarlo.'}));
                     },
-                    theme: 'auto',
+                    theme: 'light',
                     retry: 'auto',
+                    size: 'normal',
                 });
             }
         }).catch(() => {
@@ -658,10 +659,10 @@ export default function AppointmentForm() {
                     </p>
                 </div>
 
-                <div id="turnstile-wrapper" className="mt-4">
+                <div id="turnstile-wrapper" className="mt-4 w-full flex flex-col items-center">
                     <div
                         id="turnstile-widget"
-                        className={cn(errors.captchaToken && 'block')}
+
                         aria-describedby={errors.captchaToken ? 'captchaToken-error' : undefined}
                         aria-invalid={!!errors.captchaToken}
                     />
