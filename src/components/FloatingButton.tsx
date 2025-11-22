@@ -126,6 +126,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
                     onClick={handleDefaultClick}
+
                     type="button"
                     aria-label="Open WhatsApp chat"
                 >
@@ -134,6 +135,8 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
                             src="/WhatsApp.svg"
                             alt="WhatsApp icon"
                             className="w-7 h-7"
+                            draggable="false"
+                            onContextMenu={(e) => e.preventDefault()}
                         />
                     </span>
                 </button>
