@@ -19,6 +19,7 @@ export default defineConfig({
     env: {
       schema: {
           PUBLIC_SITE_URL: envField.string({ context: 'client', access: 'public', default: 'http://localhost:3000/' }),
+          PUBLIC_TURNSTILE_KEY: envField.string({ context: 'client', access: 'public', default: '1x00000000000000000000AA' }),
           CMS_API_URL: envField.string({ context: 'server', access: 'secret', default: 'http://localhost:3000' }),
           PUBLIC_CMS_API_URL: envField.string({ context: 'client', access: 'public', default: 'http://localhost:3000' }),
           CMS_API_KEY: envField.string({ context: 'server', access: 'secret', default: '' }),
