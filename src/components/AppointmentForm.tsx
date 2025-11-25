@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import React, { useMemo, useState } from "react"; // replaced useMemo/useState import to include React
+import React, { useMemo, useState, useRef } from "react"; // replaced useMemo/useState import to include React, useRef
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { X, Info } from "lucide-react";
@@ -111,7 +111,8 @@ const HOURS: DaySlots[] = [
 
 // Esquema de validación con Zod
 const schema = z.object({
-    petType: z.enum(["perro", "gato"], {message: "Selecciona un tipo de mascota."}),
+    petType: z.enum(["dog", "cat"], {message: "Selecciona un tipo de mascota."}),
+    petSex: z.enum(["male", "female"], {message: "Selecciona el sexo de tu mascota."}),
     petName: z.string().min(1, {message: "Ingresa el nombre de tu mascota."}).trim(),
     servicios: z.array(z.string()).min(1, {message: "Selecciona al menos un servicio."}),
     comentario: z.string().max(1000, {message: "Máximo 1000 caracteres."}).optional().transform(v => v ?? ""),
@@ -121,6 +122,8 @@ const schema = z.object({
     lastName: z.string().min(2, {message: "Apellido debe tener al menos 2 caracteres."}).trim(),
     phone: z.string().refine(v => (v.match(/\d/g) || []).length >= 7 && (v.match(/\d/g) || []).length <= 15, {message: "Ingresa un teléfono válido."}).trim(),
     email: z.string().email({message: "Correo electrónico inválido."}).trim(),
+    weight: z.preprocess(v => (v === '' || v == null ? undefined : Number(v)), z.number().positive('Peso inválido').max(100, 'Peso máximo 100 kg').optional()),
+    age: z.preprocess(v => (v === '' || v == null ? undefined : Number(v)), z.number().int('Edad debe ser un número entero').min(0, 'Edad inválida').max(40, 'Edad máxima 40').optional()),
     captchaToken: z.string().min(1, {message: "Resuelve el captcha."}), // added
 });
 
@@ -130,7 +133,8 @@ type FieldErrors = Partial<Record<keyof FormData, string>>;
 export default function AppointmentForm() {
     // Estado del formulario controlado
     const [form, setForm] = useState<FormData>({
-        petType: "perro",
+        petType: "dog",
+        petSex: "male",
         petName: "",
         servicios: [],
         comentario: "",
@@ -140,10 +144,15 @@ export default function AppointmentForm() {
         lastName: "",
         phone: "",
         email: "",
+        weight: undefined,
+        age: undefined,
         captchaToken: "", // added
     });
     const [errors, setErrors] = useState<FieldErrors>({});
     const [submitting, setSubmitting] = useState(false);
+
+    // Confetti near pet type radio group
+    const petTypeWrapRef = useRef<HTMLDivElement | null>(null);
 
     const totalPrice = useMemo(() => {
         return form.servicios.reduce((sum, id) => {
@@ -163,6 +172,9 @@ export default function AppointmentForm() {
             switch (key) {
                 case "petType":
                     schema.shape.petType.parse(value);
+                    break;
+                case "petSex":
+                    schema.shape.petSex.parse(value);
                     break;
                 case "petName":
                     schema.shape.petName.parse(value);
@@ -190,6 +202,12 @@ export default function AppointmentForm() {
                     break;
                 case "email":
                     schema.shape.email.parse(value);
+                    break;
+                case "weight":
+                    schema.shape.weight.parse(value as any);
+                    break;
+                case "age":
+                    schema.shape.age.parse(value as any);
                     break;
                 case "captchaToken":
                     schema.shape.captchaToken.parse(value);
@@ -259,6 +277,7 @@ export default function AppointmentForm() {
             const [fecha, hora] = form.slot.split("::");
             const payload = {
                 petType: form.petType,
+                petSex: form.petSex,
                 petName: form.petName,
                 servicios: form.servicios,
                 comentario: form.comentario,
@@ -269,17 +288,19 @@ export default function AppointmentForm() {
                 lastName: form.lastName,
                 phone: form.phone,
                 email: form.email,
+                weight: form.weight,
+                age: form.age,
                 totalPrice,
                 captchaToken: form.captchaToken, // added
             };
 
             const res = await submitAppointmentForm(payload);
             const msg = getResponseText(res);
-            // Feedback podría integrarse con un toast en el futuro
             console.info("Cita confirmada:", msg);
             // Reset
             setForm({
-                petType: "perro",
+                petType: "dog",
+                petSex: "male",
                 petName: "",
                 servicios: [],
                 comentario: "",
@@ -289,6 +310,8 @@ export default function AppointmentForm() {
                 lastName: "",
                 phone: "",
                 email: "",
+                weight: undefined,
+                age: undefined,
                 captchaToken: "", // reset
             });
             if (typeof window !== 'undefined' && (window as any).turnstile) {
@@ -351,33 +374,32 @@ export default function AppointmentForm() {
             {/* Mascota */}
             <section>
                 <h2 className="text-xl font-semibold mb-2">Tu mascota</h2>
-                <p className="text-md mb-3 text-gray-500">Selecciona el tipo de mascota que tienes:</p>
+                <p className="text-md mb-3 text-gray-500">Ingresa los datos de tu mascota:</p>
+
                 <fieldset>
                     <legend className="sr-only">Tipo de mascota</legend>
-                    <div className="flex gap-3 mb-3">
-                        {(["perro", "gato"] as const).map((tipo) => (
-                            <label key={tipo} className="flex-1">
-                                <input
-                                    type="radio"
-                                    name="mascota"
-                                    value={tipo}
-                                    checked={form.petType === tipo}
-                                    onChange={() => setField("petType", tipo)}
-                                    className="hidden peer"
-                                />
-                                <div className={cn(
-                                    "select-none border-2 rounded-md px-4 text-center cursor-pointer border-primary py-3 font-medium transition transform hover:scale-[1.01] hover:shadow-md",
-                                    form.petType === tipo && "bg-primary-dark text-white"
-                                )}>
-                                    {tipo === "perro" ? "Perro 🐶" : "Gato 🐱"}
-                                </div>
-                            </label>
-                        ))}
+                    <div ref={petTypeWrapRef} className="relative">
+                        <Label className="block text-sm font-medium mb-2">Especie <span className="text-red-600" aria-hidden>*</span></Label>
+                        <RadioGroup
+                            value={form.petType}
+                            onValueChange={(value) => { setField('petType', value as any); }}
+                            className="grid grid-cols-2 gap-3 mb-3"
+                        >
+                            <div className="flex items-center">
+                                <RadioGroupItem id="petType-dog" value="dog" />
+                                <Label htmlFor="petType-dog" className="ml-2 cursor-pointer select-none border-2 rounded-md px-3 py-2 text-center w-full border-primary hover:scale-[1.01] transition">Perro 🐶</Label>
+                            </div>
+                            <div className="flex items-center">
+                                <RadioGroupItem id="petType-cat" value="cat" />
+                                <Label htmlFor="petType-cat" className="ml-2 cursor-pointer select-none border-2 rounded-md px-3 py-2 text-center w-full border-primary hover:scale-[1.01] transition">Gato 🐱</Label>
+                            </div>
+                        </RadioGroup>
                     </div>
+                    {errors.petType && <p className="mt-1 text-sm text-red-600">{errors.petType}</p>}
                 </fieldset>
 
                 <div>
-                    <Label htmlFor="petName" className="block text-sm font-medium mb-1">Nombre de tu mascota</Label>
+                    <Label htmlFor="petName" className="block text-sm font-medium mb-1">Nombre de tu mascota <span className="text-red-600" aria-hidden>*</span></Label>
                     <div className="relative">
                         <Input
                             id="petName"
@@ -400,11 +422,45 @@ export default function AppointmentForm() {
                     </div>
                     {errors.petName && <p id="petName-error" className="mt-1 text-sm text-red-600">{errors.petName}</p>}
                 </div>
+
+                {/* Sexo de la mascota */}
+                <div className="mt-4">
+                    <Label className="block text-sm font-medium mb-2">Sexo <span className="text-red-600" aria-hidden>*</span></Label>
+                    <RadioGroup value={form.petSex} onValueChange={(value) => setField('petSex', value as any)} className="grid grid-cols-2 gap-3">
+                        <div className="flex items-center">
+                            <RadioGroupItem id="petSex-male" value="male" />
+                            <Label htmlFor="petSex-male" className="ml-2 cursor-pointer select-none border-2 rounded-md px-3 py-2 text-center w-full border-primary hover:scale-[1.01] transition">Macho</Label>
+                        </div>
+                        <div className="flex items-center">
+                            <RadioGroupItem id="petSex-female" value="female" />
+                            <Label htmlFor="petSex-female" className="ml-2 cursor-pointer select-none border-2 rounded-md px-3 py-2 text-center w-full border-primary hover:scale-[1.01] transition">Hembra</Label>
+                        </div>
+                    </RadioGroup>
+                    {errors.petSex && <p className="mt-1 text-sm text-red-600">{errors.petSex}</p>}
+                </div>
+
+                {/* Peso y edad (opcionales) */}
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <Label htmlFor="weight" className="block text-sm font-medium mb-1">Peso (kg)</Label>
+                        <Input id="weight" type="number" inputMode="decimal" placeholder="Ej: 8.5" max={100} step="0.1" value={form.weight ?? ''}
+                               onChange={(e) => setField('weight', e.target.value === '' ? undefined as any : Number(e.target.value) as any)}
+                               className={cn(errors.weight && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")} aria-invalid={!!errors.weight} aria-describedby={errors.weight ? 'weight-error' : undefined} />
+                        {errors.weight && <p id="weight-error" className="mt-1 text-sm text-red-600">{errors.weight}</p>}
+                    </div>
+                    <div>
+                        <Label htmlFor="age" className="block text-sm font-medium mb-1">Edad (años)</Label>
+                        <Input id="age" type="number" inputMode="numeric" placeholder="Ej: 5" max={40} step="1" value={form.age ?? ''}
+                               onChange={(e) => setField('age', e.target.value === '' ? undefined as any : Number(e.target.value) as any)}
+                               className={cn(errors.age && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")} aria-invalid={!!errors.age} aria-describedby={errors.age ? 'age-error' : undefined} />
+                        {errors.age && <p id="age-error" className="mt-1 text-sm text-red-600">{errors.age}</p>}
+                    </div>
+                </div>
             </section>
 
             {/* Servicios */}
             <section>
-                <h2 className="text-xl font-semibold my-2">Servicio</h2>
+                <h2 className="text-xl font-semibold my-2">Servicio <span className="text-red-600" aria-hidden>*</span></h2>
                 <p className="text-md mb-3 text-gray-500">Selecciona los servicios que deseas para tu mascota:</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {SERVICES.map((servicio) => {
@@ -485,7 +541,7 @@ export default function AppointmentForm() {
 
             {/* Horarios */}
             <section>
-                <h2 className="text-xl font-semibold my-2">Elige un horario para la consulta</h2>
+                <h2 className="text-xl font-semibold my-2">Elige un horario para la consulta <span className="text-red-600" aria-hidden>*</span></h2>
                 <p className="text-md mb-3 text-gray-500">Selecciona el horario que mejor te acomode:</p>
                 <fieldset className="space-y-4" aria-describedby={errors.slot ? "slot-error" : undefined}>
                     <legend className="sr-only">Horario</legend>
@@ -519,15 +575,12 @@ export default function AppointmentForm() {
             <div className="w-full h-1 bg-primary my-2"></div>
 
             {/* Datos personales */}
-            <section
-                className="space-y-4 max-w-2xl mx-auto gap-4"
-            >
+            <section className="space-y-4 max-w-2xl mx-auto gap-4">
                 <h2 className="text-xl font-semibold my-2">Tus datos</h2>
-                <p className="text-md mb-2">Por favor, completa el formulario con tus datos personales para confirmar la
-                    cita:</p>
+                <p className="text-md mb-2">Por favor, completa el formulario con tus datos personales para confirmar la cita:</p>
 
                 <div>
-                    <Label htmlFor="rut" className="block text-sm font-medium mb-1">RUT</Label>
+                    <Label htmlFor="rut" className="block text-sm font-medium mb-1">RUT <span className="text-red-600" aria-hidden>*</span></Label>
                     <div className="relative">
                         <Input
                             id="rut"
@@ -556,7 +609,7 @@ export default function AppointmentForm() {
 
                 <div className="flex gap-2">
                     <div className="flex-1">
-                        <Label htmlFor="firstName" className="block text-sm font-medium mb-1">Nombre</Label>
+                        <Label htmlFor="firstName" className="block text-sm font-medium mb-1">Nombre <span className="text-red-600" aria-hidden>*</span></Label>
                         <div className="relative">
                             <Input id="firstName" value={form.firstName}
                                    onChange={(e) => setField("firstName", e.target.value)} placeholder="Nombre"
@@ -575,7 +628,7 @@ export default function AppointmentForm() {
                             <p id="firstName-error" className="mt-1 text-sm text-red-600">{errors.firstName}</p>}
                     </div>
                     <div className="flex-1">
-                        <Label htmlFor="lastName" className="block text-sm font-medium mb-1">Apellido</Label>
+                        <Label htmlFor="lastName" className="block text-sm font-medium mb-1">Apellido <span className="text-red-600" aria-hidden>*</span></Label>
                         <div className="relative">
                             <Input id="lastName" value={form.lastName}
                                    onChange={(e) => setField("lastName", e.target.value)} placeholder="Apellido"
@@ -595,34 +648,34 @@ export default function AppointmentForm() {
                     </div>
                 </div>
 
-                <div
-                    className="relative flex w-full border border-primary rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-primary mt-2">
-                    <span
-                        className="bg-primary text-white px-3 py-2 flex items-center font-semibold select-none">+56 9</span>
-                    <div className="relative flex-1">
-                        <Input
-                            id="phone"
-                            type="tel"
-                            placeholder="Teléfono"
-                            value={form.phone}
-                            onChange={(e) => setField("phone", e.target.value)}
-                            className={cn("flex-1 border-0 rounded-none focus:ring-0 pr-12", errors.phone && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
-                            aria-invalid={!!errors.phone}
-                            aria-describedby={errors.phone ? "phone-error" : undefined}
-                        />
-                        {form.phone && (
-                            <button type="button" onClick={() => setField("phone", "")} aria-label="Limpiar teléfono"
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:opacity-50"
-                                    disabled={submitting}
-                            ><X
-                                className="h-4 w-4"/></button>
-                        )}
+                <div className="mt-2">
+                    <Label htmlFor="phone" className="block text-sm font-medium mb-1">Teléfono <span className="text-red-600" aria-hidden>*</span></Label>
+                    <div className="relative flex w-full border border-primary rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-primary">
+                        <span className="bg-primary text-white px-3 py-2 flex items-center font-semibold select-none">+56 9</span>
+                        <div className="relative flex-1">
+                            <Input
+                                id="phone"
+                                type="tel"
+                                placeholder="Teléfono"
+                                value={form.phone}
+                                onChange={(e) => setField("phone", e.target.value)}
+                                className={cn("flex-1 border-0 rounded-none focus:ring-0 pr-12", errors.phone && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
+                                aria-invalid={!!errors.phone}
+                                aria-describedby={errors.phone ? "phone-error" : undefined}
+                            />
+                            {form.phone && (
+                                <button type="button" onClick={() => setField("phone", "")} aria-label="Limpiar teléfono"
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:opacity-50"
+                                        disabled={submitting}
+                                ><X className="h-4 w-4"/></button>
+                            )}
+                        </div>
                     </div>
                 </div>
                 {errors.phone && <p id="phone-error" className="mt-1 text-sm text-red-600">{errors.phone}</p>}
 
                 <div>
-                    <Label htmlFor="email" className="block text-sm font-medium mb-1">Correo electrónico</Label>
+                    <Label htmlFor="email" className="block text-sm font-medium mb-1">Correo electrónico <span className="text-red-600" aria-hidden>*</span></Label>
                     <div className="relative">
                         <Input
                             id="email"
@@ -652,14 +705,8 @@ export default function AppointmentForm() {
                     )}
                 </div>
 
-                <div className="md:w-full max-w-xl sm:w-sm text-center flex items-center justify-center">
-                    <p className="mt-2 text-center">Al confirmar, estarás aceptando los
-                        <a href="/terminos-y-condiciones" className="text-primary font-semibold"> términos y condiciones</a> y
-                        <a href="/privacidad" className="text-primary font-semibold"> política de privacidad</a>
-                    </p>
-                </div>
-
                 <div id="turnstile-wrapper" className="mt-4 w-full flex flex-col items-center">
+                    <Label className="block text-sm font-medium mb-2">Verificación <span className="text-red-600" aria-hidden>*</span></Label>
                     <div
                         id="turnstile-widget"
                         className={cn("w-full lg:max-w-sm")}
