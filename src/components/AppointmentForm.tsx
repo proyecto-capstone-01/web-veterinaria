@@ -443,15 +443,31 @@ export default function AppointmentForm() {
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <Label htmlFor="weight" className="block text-sm font-medium mb-1">Peso (kg)</Label>
-                        <Input id="weight" type="number" inputMode="decimal" placeholder="Ej: 8.5" max={100} step="0.1" value={form.weight ?? ''}
-                               onChange={(e) => setField('weight', e.target.value === '' ? undefined as any : Number(e.target.value) as any)}
+                        <Input id="weight" type="number" inputMode="decimal" placeholder="Opcional" max={100} min={0.1} step="0.1" value={form.weight ?? ''}
+                               onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                               onPaste={(e) => { const t = e.clipboardData.getData('text'); if (t.trim().startsWith('-')) e.preventDefault(); }}
+                               onChange={(e) => {
+                                   const val = e.target.value;
+                                   if (val === '') { setField('weight', undefined as any); return; }
+                                   const n = Number(val);
+                                   if (Number.isNaN(n) || n < 0) return; // block negatives
+                                   setField('weight', n as any);
+                               }}
                                className={cn(errors.weight && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")} aria-invalid={!!errors.weight} aria-describedby={errors.weight ? 'weight-error' : undefined} />
                         {errors.weight && <p id="weight-error" className="mt-1 text-sm text-red-600">{errors.weight}</p>}
                     </div>
                     <div>
                         <Label htmlFor="age" className="block text-sm font-medium mb-1">Edad (años)</Label>
-                        <Input id="age" type="number" inputMode="numeric" placeholder="Ej: 5" max={40} step="1" value={form.age ?? ''}
-                               onChange={(e) => setField('age', e.target.value === '' ? undefined as any : Number(e.target.value) as any)}
+                        <Input id="age" type="number" inputMode="numeric" placeholder="Opcional" max={40} min={0} step="1" value={form.age ?? ''}
+                               onKeyDown={(e) => { if (e.key === '-') e.preventDefault(); }}
+                               onPaste={(e) => { const t = e.clipboardData.getData('text'); if (t.trim().startsWith('-')) e.preventDefault(); }}
+                               onChange={(e) => {
+                                   const val = e.target.value;
+                                   if (val === '') { setField('age', undefined as any); return; }
+                                   const n = Number(val);
+                                   if (Number.isNaN(n) || n < 0) return; // block negatives
+                                   setField('age', n as any);
+                               }}
                                className={cn(errors.age && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")} aria-invalid={!!errors.age} aria-describedby={errors.age ? 'age-error' : undefined} />
                         {errors.age && <p id="age-error" className="mt-1 text-sm text-red-600">{errors.age}</p>}
                     </div>
