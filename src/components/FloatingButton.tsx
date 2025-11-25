@@ -7,18 +7,27 @@ interface FloatingButtonProps {
     url?: string;
     position?: ButtonPosition;
     longPressDuration?: number;
+    initialAppearDelay?: number; // added
 }
 
 const FloatingButton: React.FC<FloatingButtonProps> = ({
-    onClick,
-    url,
-    position = 'right',
-    longPressDuration = 500,
-}) => {
-    const [isDismissed, setIsDismissed] = useState(false);
+                                                           onClick,
+                                                           url,
+                                                           position = 'right',
+                                                           longPressDuration = 500,
+                                                           initialAppearDelay = 200, // added
+                                                       }) => {
+    // Initialize dismissal state synchronously to avoid flash on first paint
+    const [isDismissed, setIsDismissed] = useState<boolean>(() => {
+        if (typeof window !== 'undefined') {
+            return sessionStorage.getItem('floatingButtonDismissed') === 'true';
+        }
+        return false;
+    });
     const [showDismissButton, setShowDismissButton] = useState(false);
+    const [isVisible, setIsVisible] = useState(false); // controls fade-in after delay
 
-    const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null); // adjusted type
     // Track whether the current interaction was a long press so we can suppress the automatic click.
     const longPressActivatedRef = useRef(false);
 
@@ -81,13 +90,12 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
         handlePressEnd();
     };
 
-    // Check session storage on mount
+    // Remove separate mount effect for dismissal (handled in initializer). Add visibility effect.
     useEffect(() => {
-        const dismissed = sessionStorage.getItem('floatingButtonDismissed');
-        if (dismissed === 'true') {
-            setIsDismissed(true);
-        }
-    }, []);
+        if (isDismissed) return; // do not show if dismissed
+        const t = setTimeout(() => setIsVisible(true), initialAppearDelay);
+        return () => clearTimeout(t);
+    }, [isDismissed, initialAppearDelay]);
 
     // Cleanup timer on unmount
     useEffect(() => {
@@ -105,9 +113,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
     const positionClasses = position === 'left' ? 'bottom-5 left-5' : 'bottom-5 right-5';
 
     return (
-        <div className={`fixed ${positionClasses} z-[1000]`}>
-            {/* No-JS fallback: simple link */}
-
+        <div className={`fixed ${positionClasses} z-[1000] ${isVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}> {/* added fade-in */}
             <div className="relative">
                 {/* Main Button */}
                 <button
@@ -126,7 +132,6 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
                     onClick={handleDefaultClick}
-
                     type="button"
                     aria-label="Open WhatsApp chat"
                 >
