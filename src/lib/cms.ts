@@ -49,3 +49,27 @@ export const fetchProducts = async () => {
     }
 
 };
+
+export const fetchServices = async () => {
+    try {
+        const response = await axios.get(`${PUBLIC_CMS_API_URL}/api/services`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return response.data; // expects shape with docs[]
+    } catch (error) {
+        console.error('Error fetching services:', error);
+        throw error;
+    }
+};
+
+export const fetchWeekAvailability = async () => {
+    try {
+        const response = await axios.get(`${PUBLIC_CMS_API_URL}/availability/week`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return response.data; // expects shape of date keys mapping to array of {hour, availability}
+    } catch (error) {
+        console.error('Error fetching week availability:', error);
+        throw error;
+    }
+};
