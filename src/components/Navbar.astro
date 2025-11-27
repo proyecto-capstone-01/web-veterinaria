@@ -1,5 +1,6 @@
 ---
-import { ResizableNavbar } from "./ResizableNavbar";
+import { ResizableNavbar, NoScriptNavbarFallback } from "./ResizableNavbar";
 ---
 
-<ResizableNavbar client:load />
+<ResizableNavbar client:only="react"/>
+<NoScriptNavbarFallback/>

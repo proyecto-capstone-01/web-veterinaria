@@ -4,18 +4,24 @@ import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
 import { webcore } from 'webcoreui/integration';
 import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
+
 
 const isNode = process.env.ASTRO_ADAPTER === 'node';
+const siteUrl = process.env.SITE_URL || 'http://localhost:3000/';
 
 console.log(`Using Astro adapter: ${process.env.ASTRO_ADAPTER}`);
 
-console.log(isNode ? 'Running with Node adapter' : 'Running with Cloudflare adapter');
 
 // https://astro.build/config
 export default defineConfig({
+    site: siteUrl,
     env: {
       schema: {
+          PUBLIC_SITE_URL: envField.string({ context: 'client', access: 'public', default: 'http://localhost:3000/' }),
+          PUBLIC_TURNSTILE_KEY: envField.string({ context: 'client', access: 'public', default: '1x00000000000000000000AA' }),
           CMS_API_URL: envField.string({ context: 'server', access: 'secret', default: 'http://localhost:3000' }),
+          PUBLIC_CMS_API_URL: envField.string({ context: 'client', access: 'public', default: 'http://localhost:3000' }),
           CMS_API_KEY: envField.string({ context: 'server', access: 'secret', default: '' }),
           PUBLIC_CONTACT_API_URL: envField.string({ context: 'client', access: 'public', default: 'http://localhost:3000' }),
           OVERWRITE_FAQ: envField.boolean({ context: 'server', access: 'public', default: false }),
@@ -48,5 +54,11 @@ export default defineConfig({
         },
     },
 
-    integrations: [react({experimentalDisableStreaming: true}), webcore()],
+    integrations: [
+        react({
+            experimentalDisableStreaming: true
+        }),
+        webcore(),
+        sitemap()
+    ],
 });

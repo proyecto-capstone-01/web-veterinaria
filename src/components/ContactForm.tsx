@@ -18,6 +18,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { submitContactForm } from "@/lib/cms";
 import type { ContactFormType } from "@/types";
 import { X } from "lucide-react";
+import { loadTurnstile } from "@/lib/turnstile"; // added
+// @ts-ignore
+import { PUBLIC_TURNSTILE_KEY } from "astro:env/client"; // added
 
 
 const contactSchema = z.object({
@@ -48,6 +51,7 @@ const contactSchema = z.object({
         .optional()
         .transform((v) => v ?? ""),
     contactPreference: z.enum(["phone", "email"]),
+    captchaToken: z.string().min(1, {message: "Resuelve el captcha."}), // added
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -63,6 +67,7 @@ export default function ContactForm() {
         phone: "",
         message: "",
         contactPreference: "phone", // phone | email
+        captchaToken: "", // added
     });
     const [errors, setErrors] = useState<FieldErrors>({});
     const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -76,54 +81,39 @@ export default function ContactForm() {
 
     const setField = <K extends keyof ContactFormData>(key: K, value: ContactFormData[K]) => {
         setForm((prev) => ({...prev, [key]: value}));
-        // Validación inmediata por campo
-        validateField(key, value as string);
+        if (key !== 'captchaToken') { // manual captcha updates via callback
+            validateField(key, value as any);
+        }
     };
 
-    const validateField = (key: keyof ContactFormData, value: string) => {
-        // Usa la definición del esquema por campo
+    const validateField = (key: keyof ContactFormData, value: any) => {
         let result: { success: boolean; error?: string } = {success: true};
-
         try {
             switch (key) {
-                case "name":
-                    contactSchema.shape.name.parse(value);
-                    break;
-                case "email":
-                    contactSchema.shape.email.parse(value);
-                    break;
-                case "phone":
-                    contactSchema.shape.phone.parse(value);
-                    break;
-                case "message":
-                    contactSchema.shape.message.parse(value);
-                    break;
-                case "contactPreference":
-                    contactSchema.shape.contactPreference.parse(value);
-                    break;
-                default:
-                    break;
+                case "name": contactSchema.shape.name.parse(value); break;
+                case "email": contactSchema.shape.email.parse(value); break;
+                case "phone": contactSchema.shape.phone.parse(value); break;
+                case "message": contactSchema.shape.message.parse(value); break;
+                case "contactPreference": contactSchema.shape.contactPreference.parse(value); break;
+                case "captchaToken": contactSchema.shape.captchaToken.parse(value); break; // added
+                default: break;
             }
         } catch (e) {
             const err = e as z.ZodError;
             result = {success: false, error: err.issues?.[0]?.message ?? "Valor inválido"};
         }
-
         setErrors((prev) => ({...prev, [key]: result.success ? undefined : result.error}));
     };
 
     const validateAll = (): boolean => {
         const parsed = contactSchema.safeParse(form);
         const nextErrors: FieldErrors = {};
-        if (!acceptedTerms) {
-            nextErrors.terms = "Debes aceptar los términos y condiciones.";
-        }
-
+        if (!acceptedTerms) nextErrors.terms = "Debes aceptar los términos y condiciones.";
+        if (!form.captchaToken) nextErrors.captchaToken = "Resuelve el captcha."; // added
         if (parsed.success) {
             setErrors(nextErrors);
             return Object.keys(nextErrors).length === 0;
         }
-
         for (const issue of parsed.error.issues) {
             const path = issue.path[0] as keyof ContactFormData;
             if (!nextErrors[path]) nextErrors[path] = issue.message;
@@ -132,12 +122,41 @@ export default function ContactForm() {
         return false;
     };
 
+    React.useEffect(() => {
+        let mounted = true;
+        if (typeof window === 'undefined') return;
+        loadTurnstile().then(() => {
+            if (!mounted) return;
+            if ((window as any).turnstile) {
+                (window as any).turnstile.render('#contact-turnstile', {
+                    sitekey: PUBLIC_TURNSTILE_KEY,
+                    theme: 'light',
+                    retry: 'auto',
+                    size: 'flexible',
+                    callback: (token: string) => {
+                        setForm(prev => ({...prev, captchaToken: token}));
+                        setErrors(prev => ({...prev, captchaToken: undefined}));
+                    },
+                    'expired-callback': () => {
+                        setForm(prev => ({...prev, captchaToken: ''}));
+                        setErrors(prev => ({...prev, captchaToken: 'Captcha expirado. Vuelve a intentarlo.'}));
+                    },
+                    'error-callback': () => {
+                        setForm(prev => ({...prev, captchaToken: ''}));
+                        setErrors(prev => ({...prev, captchaToken: 'Error al cargar el captcha.'}));
+                    }
+                });
+            }
+        }).catch(() => {
+            setErrors(prev => ({...prev, captchaToken: 'No se pudo cargar el captcha.'}));
+        });
+        return () => { mounted = false; };
+    }, []);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         const ok = validateAll();
         if (!ok) return;
-
         setSubmitting(true);
         try {
             const payload: ContactFormType = {
@@ -146,17 +165,17 @@ export default function ContactForm() {
                 phone: form.phone,
                 message: form.message,
                 contactPreference: form.contactPreference,
+                captchaToken: form.captchaToken, // added
             };
-
             await submitContactForm(payload);
-
             setDialog({title: "Mensaje enviado", message: "Tu mensaje se envió con éxito.", variant: "success"});
             setOpen(true);
-
-            // Limpia el formulario tras éxito
-            setForm({name: "", email: "", phone: "", message: "", contactPreference: "phone"});
+            setForm({name: "", email: "", phone: "", message: "", contactPreference: "phone", captchaToken: ""}); // reset
             setErrors({});
             setAcceptedTerms(false);
+            if (typeof window !== 'undefined' && (window as any).turnstile) {
+                try { (window as any).turnstile.reset('#contact-turnstile'); } catch {}
+            }
         } catch (error) {
             console.error(error);
             setDialog({title: "Error", message: "Ha habido un problema al enviar tu solicitud, inténtalo de nuevo.", variant: "error"});
@@ -336,6 +355,9 @@ export default function ContactForm() {
                 {errors.terms && (
                     <p id="terms-error" className="mt-1 text-sm text-red-600">{errors.terms}</p>
                 )}
+
+                <div id="contact-turnstile" className={cn("mt-4 max-w-sm")} aria-describedby={errors.captchaToken ? 'captchaToken-error' : undefined} aria-invalid={!!errors.captchaToken} />
+                {errors.captchaToken && <p id="captchaToken-error" className="mt-1 text-sm text-red-600">{errors.captchaToken}</p>}
 
                 <Button
                     type="submit"

@@ -7,6 +7,7 @@ interface FloatingButtonProps {
     url?: string;
     position?: ButtonPosition;
     longPressDuration?: number;
+    initialAppearDelay?: number; // added
 }
 
 const FloatingButton: React.FC<FloatingButtonProps> = ({
@@ -14,14 +15,29 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
                                                            url,
                                                            position = 'right',
                                                            longPressDuration = 500,
+                                                           initialAppearDelay = 200, // added
                                                        }) => {
-    const [isDismissed, setIsDismissed] = useState(false);
+    // Initialize dismissal state synchronously to avoid flash on first paint
+    const [isDismissed, setIsDismissed] = useState<boolean>(() => {
+        if (typeof window !== 'undefined') {
+            return sessionStorage.getItem('floatingButtonDismissed') === 'true';
+        }
+        return false;
+    });
     const [showDismissButton, setShowDismissButton] = useState(false);
+    const [isVisible, setIsVisible] = useState(false); // controls fade-in after delay
 
-    const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null); // adjusted type
+    // Track whether the current interaction was a long press so we can suppress the automatic click.
+    const longPressActivatedRef = useRef(false);
 
     // Default click handler - opens URL in new tab
     const handleDefaultClick = useCallback(() => {
+        // If the long press was activated, suppress this click (triggered by pointer release)
+        if (longPressActivatedRef.current) {
+            longPressActivatedRef.current = false; // reset for future normal clicks
+            return; // Do not navigate or invoke onClick when dismiss overlay just appeared
+        }
         if (onClick) {
             onClick();
         } else if (url) {
@@ -33,6 +49,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
     const handlePressStart = useCallback(() => {
         longPressTimerRef.current = setTimeout(() => {
             setShowDismissButton(true);
+            longPressActivatedRef.current = true; // mark that long press was triggered
         }, longPressDuration);
     }, [longPressDuration]);
 
@@ -73,13 +90,12 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
         handlePressEnd();
     };
 
-    // Check session storage on mount
+    // Remove separate mount effect for dismissal (handled in initializer). Add visibility effect.
     useEffect(() => {
-        const dismissed = sessionStorage.getItem('floatingButtonDismissed');
-        if (dismissed === 'true') {
-            setIsDismissed(true);
-        }
-    }, []);
+        if (isDismissed) return; // do not show if dismissed
+        const t = setTimeout(() => setIsVisible(true), initialAppearDelay);
+        return () => clearTimeout(t);
+    }, [isDismissed, initialAppearDelay]);
 
     // Cleanup timer on unmount
     useEffect(() => {
@@ -97,7 +113,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
     const positionClasses = position === 'left' ? 'bottom-5 left-5' : 'bottom-5 right-5';
 
     return (
-        <div className={`fixed ${positionClasses} z-[1000]`}>
+        <div className={`fixed ${positionClasses} z-[1000] ${isVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}> {/* added fade-in */}
             <div className="relative">
                 {/* Main Button */}
                 <button
@@ -117,12 +133,15 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
                     onTouchEnd={handleTouchEnd}
                     onClick={handleDefaultClick}
                     type="button"
+                    aria-label="Open WhatsApp chat"
                 >
                     <span className="flex items-center justify-center">
                         <img
                             src="/WhatsApp.svg"
-                            alt="icon"
+                            alt="WhatsApp icon"
                             className="w-7 h-7"
+                            draggable="false"
+                            onContextMenu={(e) => e.preventDefault()}
                         />
                     </span>
                 </button>
@@ -144,7 +163,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
             "
                         onClick={handleDismiss}
                         type="button"
-                        aria-label="Dismiss button"
+                        aria-label="Dismiss floating button"
                     >
                         ✕
                     </button>
@@ -155,3 +174,4 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
 };
 
 export default FloatingButton;
+

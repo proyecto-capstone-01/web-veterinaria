@@ -1,20 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
 import Hero from '../components/Hero.astro';
-import Help from '../components/Help.astro';
-import Information from '../components/Information.astro';
-import Staff from '../components/Staff.astro';
 import FAQ from '../components/FAQ.astro';
 import LocationTime from '../components/LocationTime.astro';
 import Services from '../components/Services.astro';
+import RecentPosts from '../components/RecentPosts.astro';
 ---
 
-<Layout Title="Home">
+<Layout>
     <Hero />
     <Services />
-    {/*<Information /> */}
-    {/*<Help />*/}
     <FAQ />
+    <RecentPosts />
     <LocationTime />
 </Layout>

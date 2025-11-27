@@ -60,7 +60,6 @@
   margin-bottom: 6px;
 }
 
-/* Estado animado (X) */
 #menu-toggle.open .top {
   transform: rotate(45deg) translateY(13px);
 }
