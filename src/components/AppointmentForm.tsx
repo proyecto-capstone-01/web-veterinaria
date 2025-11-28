@@ -226,10 +226,10 @@ export default function AppointmentForm() {
                 petType: form.petType,
                 petSex: form.petSex,
                 petName: form.petName,
-                services: form.servicios.map(id => id), // send ids
-                comentario: form.comentario,
-                date, // changed key from fecha
-                time, // changed key from hora
+                services: [...form.servicios.map(id => Number(id))],
+                comment: form.comentario,
+                date,
+                time,
                 rut: form.rut,
                 firstName: form.firstName,
                 lastName: form.lastName,
@@ -237,7 +237,6 @@ export default function AppointmentForm() {
                 email: form.email,
                 weight: form.weight,
                 age: form.age,
-                totalPrice,
                 captchaToken: form.captchaToken,
             };
             const res = await submitAppointmentForm(payload);
