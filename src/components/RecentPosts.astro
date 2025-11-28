@@ -25,7 +25,7 @@ const SITE_BASE = import.meta.env.SITE || '/';
 			.map((post: unknown) => <BlogCard post={post} />)}
 		</div>
 		<div class="flex justify-center mt-10">
-			<a class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition" href={`${SITE_BASE}blog`}>
+			<a class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition" href="/blog">
 				Ver todos los posts
 				<ArrowRight size={20} />
 			</a>

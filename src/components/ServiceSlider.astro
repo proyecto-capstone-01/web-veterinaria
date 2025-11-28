@@ -1,0 +1,30 @@
+---
+interface Service {
+    icon: string
+    title: string
+    price: string
+}
+
+const { services } = Astro.props as { services: Service[] }
+
+const loopItems = [...services, ...services]
+---
+<div class="relative md:max-w-full max-w-sm overflow-hidden py-10 pointer: cursor-pointer">
+    <div class="w-full sm:max-w-sm">
+        <div class="pointer-events-none absolute left-0 top-0 h-full w-20 bg-linear-to-r from-white to-transparent z-10"></div>
+        <div class="pointer-events-none absolute right-0 top-0 h-full w-20 bg-linear-to-l from-white to-transparent z-10"></div>
+    
+        <div class="slider-track flex gap-4"> 
+            {loopItems.map((service, index) => (
+                <div 
+                    class="min-w-[200px] md:min-w-[250px] lg:min-w-[250px] bg-white border border-primary-dark rounded-xl p-2 shadow-md transition
+                        flex flex-col justify-center items-center text-center text-black hover:scale-105 hover:border-secondary-dark hover:shadow-lg hover:bg-primary-dark hover:text-white"
+                >
+                    <h3 class="font-semibold text-lg">{service.title}</h3>
+                    <p class="text-sm">{service.price}</p>
+                </div>
+            ))}
+        </div>
+    </div>
+
+</div>
