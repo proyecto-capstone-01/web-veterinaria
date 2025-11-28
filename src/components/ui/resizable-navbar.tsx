@@ -140,7 +140,7 @@ export const Navbar = ({ children, className, initialMaxWidth = 1280, shrunkMaxW
         className={cn(
           "pointer-events-auto flex items-center justify-between gap-4 transition-colors",
           shrunk
-            ? "py-2 bg-white/80 backdrop-blur shadow-[0_0_24px_rgba(34,42,53,0.06),0_1px_1px_rgba(0,0,0,0.05),0_0_0_1px_rgba(34,42,53,0.04),0_0_4px_rgba(34,42,53,0.08)]"
+            ? "py-2 bg-white/90 backdrop-blur shadow-[0_0_24px_rgba(34,42,53,0.06),0_1px_1px_rgba(0,0,0,0.05),0_0_0_1px_rgba(34,42,53,0.04),0_0_4px_rgba(34,42,53,0.08)]"
             : "py-4 bg-transparent",
         )}
       >
@@ -258,7 +258,7 @@ export const MobileNavMenu = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           className={cn(
-            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white/95 px-4 py-6 shadow-lg backdrop-blur",
+            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-b-3xl bg-white/90 px-4 py-6 shadow-lg backdrop-blur",
             className,
           )}
         >
@@ -330,7 +330,7 @@ export const NavbarButton = ({
   | React.ComponentPropsWithoutRef<"button">
 )) => {
   const baseStyles =
-    "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
+    "px-6 py-3 rounded-full bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
 
   const variantStyles = {
     primary:

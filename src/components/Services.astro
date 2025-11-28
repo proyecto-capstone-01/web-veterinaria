@@ -1,5 +1,5 @@
 ---
-import ServicesCard from "./ServicesCard.astro"
+import ServiceSlider from "./ServiceSlider.astro";
 import Separator from "./Separator.astro";
 
 const services = [
@@ -18,6 +18,5 @@ const services = [
         title="Nuestros Servicios"
         description="Ofrecemos una amplia gama de servicios para el cuidado de tus mascotas."
     />
-    <ServicesCard services={services} />
-
+    <ServiceSlider services={services} />
 </div>

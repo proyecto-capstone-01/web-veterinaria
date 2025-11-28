@@ -115,3 +115,17 @@
         transform: translateY(-50%);
     }
 }
+
+.slider-track {
+  display: flex;
+  animation: scroll 15s linear infinite;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
