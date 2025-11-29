@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import ProductCard from "./ProductCard.jsx";
+import ProductCard from "./ProductCard.js";
 import ProductCardSkeleton from "./ProductCardSkeleton.jsx";
+
 
 export default function RelatedProducts({ currentProductId, category }) {
   const [related, setRelated] = useState([]);
