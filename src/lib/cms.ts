@@ -32,7 +32,7 @@ export const submitAppointmentForm = async (data: any) => {
 }
 
 
-export const fetchProducts = async (id?: number) => {
+export const fetchProducts = async (id?: number, limit: number = 150) => {
     try {
         if (id) {
             const response = await axios.get(`${PUBLIC_CMS_API_URL}/api/products/${id}`, {
@@ -42,7 +42,7 @@ export const fetchProducts = async (id?: number) => {
             });
             return response.data;
         }
-        const response = await axios.get(`${PUBLIC_CMS_API_URL}/api/products`, {
+        const response = await axios.get(`${PUBLIC_CMS_API_URL}/api/products?limit=${limit}`, {
             headers: {
                 'Content-Type': 'application/json',
             },

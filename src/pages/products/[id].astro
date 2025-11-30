@@ -12,99 +12,80 @@ import {
 import type { Product } from "../../components/ProductList";
 import { fetchProducts } from "../../lib/cms";
 import { Image } from 'astro:assets';
+import ProductImages from '../../components/ProductImages'
 
 // @ts-ignore
 import { PUBLIC_CMS_API_URL } from "astro:env/client";
 
-const { id } = Astro.params;
+const {id} = Astro.params;
 const numberId = parseInt(id, 10);
 const product: Product = await fetchProducts(numberId);
 
 export const getStaticPaths = async () => {
     const products = await fetchProducts();
     return products.map((product: Product) => ({
-        params: { id: product.id.toString() },
+        params: {id: product.id.toString()},
     }));
 };
+
 
 ---
 
 <Layout title={product.name}>
-    <div class="lg:min-w-6xl mx-auto">
+	<div class="lg:min-w-6xl mx-auto">
 
-        <!-- Breadcrumbs -->
-        <div class="mb-6">
-            <Breadcrumb>
-                <BreadcrumbList>
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                        <BreadcrumbLink href="/products">Productos</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                        <BreadcrumbPage className="text-primary font-semibold">{product.title}</BreadcrumbPage>
-                    </BreadcrumbItem>
-                </BreadcrumbList>
-            </Breadcrumb>
-        </div>
+		<!-- Breadcrumbs -->
+		<div class="mb-6">
+			<Breadcrumb>
+				<BreadcrumbList>
+					<BreadcrumbItem>
+						<BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator/>
+					<BreadcrumbItem>
+						<BreadcrumbLink href="/products">Productos</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator/>
+					<BreadcrumbItem>
+						<BreadcrumbPage className="text-primary font-semibold">{product.name}</BreadcrumbPage>
+					</BreadcrumbItem>
+				</BreadcrumbList>
+			</Breadcrumb>
+		</div>
 
-        <!-- Detalle del producto -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-            <!-- Galería de imágenes -->
-            <div class="flex gap-4">
-                <div class="flex flex-col gap-3 w-20">
-                    {
-                        product.images.map((image, index) => (
-                            <Image
-                                src={PUBLIC_CMS_API_URL+image.sizes["thumbnail"].url}
-                                alt={image.alt}
-								inferSize={true}
-                                class="w-full h-20 object-contain bg-gray-100 rounded-lg shadow cursor-pointer hover:ring-2 hover:ring-indigo-500"
-                                onClick={() => {
-                                    const mainImage = document.getElementById("mainImage") as HTMLImageElement;
-                                    mainImage.src = PUBLIC_CMS_API_URL+image.sizes["large"].url;
-                                }}
-                            />
-                        ))
-                    }
-                </div>
+		<!-- Detalle del producto -->
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+			<!-- Galería de imágenes -->
 
-                <div class="flex-1">
-                    <Image
-                        id="mainImage"
-                        src={PUBLIC_CMS_API_URL+product.images[0].sizes["large"].url+"xd"}
-                        alt={product.images[0].alt}
-						inferSize={true}
-                        class="w-full h-96 object-contain bg-gray-100 rounded-lg shadow"
-                    />
-                </div>
-            </div>
+            <ProductImages product={product} client:idle />
 
-            <!-- Info del producto -->
-            <div class="flex flex-col justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold mt-4 mb-4">{product.name}</h1>
-                    <p class="text-gray-700 leading-relaxed mb-6">{product.description}</p>
+
+			<!-- Info del producto -->
+			<div class="flex flex-col justify-between">
+				<div>
+					<h1 class="text-3xl font-bold mt-4 mb-4">{product.name}</h1>
+					<p class="text-gray-700 leading-relaxed mb-6">{product.description}</p>
 
                     {product.price && (
-                        <div class="text-4xl font-extrabold text-indigo-600 mb-4">
-                            {product.price.toLocaleString("es-CL", { style: "currency", currency: "CLP", minimumFractionDigits: 0  })}
-                        </div>
+							<div class="text-4xl font-extrabold text-indigo-600 mb-4">
+                                {product.price.toLocaleString("es-CL", {
+                                    style: "currency",
+                                    currency: "CLP",
+                                    minimumFractionDigits: 0
+                                })}
+							</div>
                     )}
 
                     {product.outOfStock && (
-                        <div class="text-red-600 font-semibold mb-4">
-                            Agotado
-                        </div>
+							<div class="text-red-600 font-semibold mb-4">
+								Agotado
+							</div>
                     )}
-                </div>
-            </div>
-        </div>
+				</div>
+			</div>
+		</div>
 
-        <!-- Productos relacionados -->
-        <!--<RelatedProducts currentProductId={product.id} category={product.category} client:load />-->
-    </div>
+		<!-- Productos relacionados -->
+		<!--<RelatedProducts currentProductId={product.id} category={product.category} client:load />-->
+	</div>
 </Layout>

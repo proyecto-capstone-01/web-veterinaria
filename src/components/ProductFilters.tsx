@@ -29,7 +29,6 @@ export default function ProductFilters({
     setSort,
     products,
 }: FilterProps) {
-    const categories = ["all", ...new Set(products.map((p) => p.category))];
 
     return (
         <div className="space-y-4 rounded-lg bg-white">
