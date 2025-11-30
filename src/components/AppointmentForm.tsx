@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import React, { useMemo, useState, useEffect } from "react"; // removed useRef
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { X, Info } from "lucide-react";
+import { X, Info, ChevronDown, ChevronUp } from "lucide-react";
 import { submitAppointmentForm, fetchServices, fetchWeekAvailability } from "@/lib/cms"; // updated import
 import { loadTurnstile } from "@/lib/turnstile"; // added
 // @ts-ignore
@@ -49,12 +49,65 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 type FieldErrors = Partial<Record<keyof FormData, string>>;
 
+// Helper to get current Date in America/Santiago timezone
+function getNowInSantiago(): Date {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat("es-CL", {
+        timeZone: "America/Santiago",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+    });
+    const parts = formatter.formatToParts(now);
+    const get = (type: string) => Number(parts.find(p => p.type === type)?.value || "0");
+    const year = get("year");
+    const month = get("month");
+    const day = get("day");
+    const hour = get("hour");
+    const minute = get("minute");
+    return new Date(year, month - 1, day, hour, minute, 0, 0);
+}
+
+function parseAvailabilityDate(dateStr: string): Date {
+    const [y, m, d] = dateStr.split("-").map(Number);
+    return new Date(y, (m || 1) - 1, d || 1);
+}
+
+function parseAvailabilitySlotToDateTime(dateStr: string, timeStr: string): Date {
+    const base = parseAvailabilityDate(dateStr);
+    const [hh, mm] = timeStr.split(":").map(Number);
+    base.setHours(hh || 0, mm || 0, 0, 0);
+    return base;
+}
+
+function formatAvailabilityDayLabel(dateStr: string): string {
+    const date = parseAvailabilityDate(dateStr);
+    const formatter = new Intl.DateTimeFormat("es-CL", {
+        timeZone: "America/Santiago",
+        weekday: "long",
+        day: "2-digit",
+        month: "2-digit",
+    });
+    const parts = formatter.formatToParts(date);
+    const weekday = parts.find(p => p.type === "weekday")?.value || "";
+    const day = parts.find(p => p.type === "day")?.value || "";
+    const month = parts.find(p => p.type === "month")?.value || "";
+    const weekdayTitle = weekday
+        ? weekday.charAt(0).toUpperCase() + weekday.slice(1).toLowerCase()
+        : "";
+    return `${weekdayTitle} ${day}-${month}`;
+}
+
 export default function AppointmentForm() {
     // dynamic data state
     const [services, setServices] = useState<ServiceItem[]>([]);
     const [availability, setAvailability] = useState<Record<string, AvailabilityHour[]>>({});
     const [loadingData, setLoadingData] = useState(true);
     const [dataError, setDataError] = useState<string | null>(null);
+    const [expandedDays, setExpandedDays] = useState<Record<string, boolean>>({});
 
     // Estado del formulario controlado
     const [form, setForm] = useState<FormData>({
@@ -274,20 +327,48 @@ export default function AppointmentForm() {
         setField('servicios', exists ? form.servicios.filter(s => s !== id) : [...form.servicios, id] as any);
     };
 
+    const toggleDayExpanded = (fecha: string) => {
+        setExpandedDays(prev => ({
+            ...prev,
+            [fecha]: !prev[fecha],
+        }));
+    };
+
     // derive list of availability days into structure similar to previous HOURS for UI
     const availabilityDays = useMemo(() => {
+        const now = getNowInSantiago();
+        const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+
         const entries = Object.entries(availability)
-            .filter(([, arr]) => Array.isArray(arr) && arr.length > 0);
-        const formatter = new Intl.DateTimeFormat('es-CL', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
-        return entries.map(([date, arr]) => {
-            const dt = new Date(date + 'T00:00:00');
-            const label = formatter.format(dt).replace(',', ' •');
-            return {
-                fecha: date,
-                label,
-                slots: arr.map(h => ({ time: h.hour, disponible: h.availability }))
-            };
-        }).sort((a,b) => a.fecha.localeCompare(b.fecha));
+            .map(([date, arr]) => {
+                const dayDate = parseAvailabilityDate(date);
+
+                // Skip whole day if strictly before today in Santiago
+                if (dayDate < todayMidnight) {
+                    return null;
+                }
+
+                const isToday = dayDate.getFullYear() === now.getFullYear() &&
+                    dayDate.getMonth() === now.getMonth() &&
+                    dayDate.getDate() === now.getDate();
+
+                const filteredHours = (arr || []).filter(h => {
+                    if (!isToday) return true; // future days keep all hours
+                    const slotDate = parseAvailabilitySlotToDateTime(date, h.hour);
+                    return slotDate >= now; // only keep current/future times today
+                });
+
+                if (!filteredHours.length) return null; // no hours left for this day
+
+                return {
+                    fecha: date,
+                    label: formatAvailabilityDayLabel(date),
+                    slots: filteredHours.map(h => ({ time: h.hour, disponible: h.availability })),
+                };
+            })
+            .filter((v): v is { fecha: string; label: string; slots: { time: string; disponible: boolean }[] } => v !== null);
+
+        return entries.sort((a, b) => a.fecha.localeCompare(b.fecha));
     }, [availability]);
 
     // add back Turnstile setup effect
@@ -519,22 +600,65 @@ export default function AppointmentForm() {
                 {!loadingData && availabilityDays.length > 0 && (
                     <fieldset className="space-y-4" aria-describedby={errors.slot ? "slot-error" : undefined}>
                         <legend className="sr-only">Horario</legend>
-                        {availabilityDays.map((dia) => (
-                            <div key={dia.fecha} className="border-1 border-primary/40 p-3 rounded-md">
-                                <p className="font-medium">{dia.label}</p>
-                                <RadioGroup value={form.slot} onValueChange={(value) => setField("slot", value)} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2">
-                                    {dia.slots.map((s) => {
-                                        const value = `${dia.fecha}::${s.time}`;
-                                        return (
-                                            <div key={value} className="flex items-center">
-                                                <RadioGroupItem id={value} value={value} disabled={!s.disponible} />
-                                                <Label htmlFor={value} className={cn("ml-2 cursor-pointer select-none border-2 rounded-md px-3 py-2 text-center w-full", !s.disponible ? "opacity-50 cursor-not-allowed" : "border-primary hover:scale-[1.01] transition")}>{s.time}{!s.disponible && <span className="block text-xs text-red-600">No disponible</span>}</Label>
-                                            </div>
-                                        );
-                                    })}
-                                </RadioGroup>
-                            </div>
-                        ))}
+                        {availabilityDays.map((dia) => {
+                            const isExpanded = !!expandedDays[dia.fecha];
+                            const maxRowsCollapsed = 3;
+                            const maxVisibleSlots = maxRowsCollapsed * 4; // assuming up to 4 per row on md
+                            const hasMore = dia.slots.length > maxVisibleSlots;
+                            const visibleSlots = isExpanded ? dia.slots : dia.slots.slice(0, maxVisibleSlots);
+
+                            return (
+                                <div key={dia.fecha} className="border-1 border-primary/40 p-3 rounded-md">
+                                    <p className="font-medium">{dia.label}</p>
+                                    <RadioGroup
+                                        value={form.slot}
+                                        onValueChange={(value) => setField("slot", value)}
+                                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2"
+                                    >
+                                        {visibleSlots.map((s) => {
+                                            const value = `${dia.fecha}::${s.time}`;
+                                            return (
+                                                <div key={value} className="flex items-center">
+                                                    <RadioGroupItem id={value} value={value} disabled={!s.disponible} />
+                                                    <Label
+                                                        htmlFor={value}
+                                                        className={cn(
+                                                            "ml-2 cursor-pointer select-none border-2 rounded-md px-3 py-2 text-center w-full",
+                                                            !s.disponible
+                                                                ? "opacity-50 cursor-not-allowed"
+                                                                : "border-primary hover:scale-[1.01] transition"
+                                                        )}
+                                                    >
+                                                        {s.time}
+                                                        {!s.disponible && (
+                                                            <span className="block text-xs text-red-600">No disponible</span>
+                                                        )}
+                                                    </Label>
+                                                </div>
+                                            );
+                                        })}
+                                    </RadioGroup>
+                                    {hasMore && (
+                                        <div className="mt-2 flex justify-end">
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => toggleDayExpanded(dia.fecha)}
+                                                className="flex items-center gap-1"
+                                            >
+                                                {isExpanded ? "Mostrar menos horas" : "Mostrar más horas"}
+                                                {isExpanded ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                )}
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </fieldset>
                 )}
                 {errors.slot && <p id="slot-error" className="mt-1 text-sm text-red-600">{errors.slot}</p>}
