@@ -1,91 +1,16 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-//import RelatedProducts from '../../components/RelatedProducts.js';
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from "../../components/ui/breadcrumb"
-import type { Product } from "../../components/ProductList";
-import { fetchProducts } from "../../lib/cms";
-import { Image } from 'astro:assets';
-import ProductImages from '../../components/ProductImages'
+import ProductDetailClient from '../../components/ProductDetailClient';
+import LatestProducts from '../../components/LatestProducts';
 
-// @ts-ignore
-import { PUBLIC_CMS_API_URL } from "astro:env/client";
+export const prerender = false; // dynamic route served at runtime
 
-const {id} = Astro.params;
-const numberId = parseInt(id, 10);
-const product: Product = await fetchProducts(numberId);
-
-export const getStaticPaths = async () => {
-    const products = await fetchProducts();
-    return products.map((product: Product) => ({
-        params: {id: product.id.toString()},
-    }));
-};
-
-
+const { id } = Astro.params;
 ---
 
-<Layout title={product.name}>
-	<div class="lg:min-w-6xl mx-auto">
-
-		<!-- Breadcrumbs -->
-		<div class="mb-6">
-			<Breadcrumb>
-				<BreadcrumbList>
-					<BreadcrumbItem>
-						<BreadcrumbLink href="/">Inicio</BreadcrumbLink>
-					</BreadcrumbItem>
-					<BreadcrumbSeparator/>
-					<BreadcrumbItem>
-						<BreadcrumbLink href="/products">Productos</BreadcrumbLink>
-					</BreadcrumbItem>
-					<BreadcrumbSeparator/>
-					<BreadcrumbItem>
-						<BreadcrumbPage className="text-primary font-semibold">{product.name}</BreadcrumbPage>
-					</BreadcrumbItem>
-				</BreadcrumbList>
-			</Breadcrumb>
-		</div>
-
-		<!-- Detalle del producto -->
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-			<!-- Galería de imágenes -->
-
-            <ProductImages product={product} client:idle />
-
-
-			<!-- Info del producto -->
-			<div class="flex flex-col justify-between">
-				<div>
-					<h1 class="text-3xl font-bold mt-4 mb-4">{product.name}</h1>
-					<p class="text-gray-700 leading-relaxed mb-6">{product.description}</p>
-
-                    {product.price && (
-							<div class="text-4xl font-extrabold text-indigo-600 mb-4">
-                                {product.price.toLocaleString("es-CL", {
-                                    style: "currency",
-                                    currency: "CLP",
-                                    minimumFractionDigits: 0
-                                })}
-							</div>
-                    )}
-
-                    {product.outOfStock && (
-							<div class="text-red-600 font-semibold mb-4">
-								Agotado
-							</div>
-                    )}
-				</div>
-			</div>
-		</div>
-
-		<!-- Productos relacionados -->
-		<!--<RelatedProducts currentProductId={product.id} category={product.category} client:load />-->
-	</div>
+<Layout title={`Producto ${id}`}>
+  <div class="lg:min-w-6xl mx-auto">
+    <ProductDetailClient id={id} client:load />
+    <LatestProducts client:load />
+  </div>
 </Layout>
