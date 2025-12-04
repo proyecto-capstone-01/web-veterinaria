@@ -91,10 +91,6 @@ const headings = extractHeadings(contentNodes)
         {detailPost.publishedAt
           ? `Publicado el ${new Date(detailPost.publishedAt).toLocaleDateString("es-CL")}`
           : "Fecha no disponible"}
-        {(detailPost.authors ?? []).length > 0 && (
-            <span class="text-gray-400">•</span>
-            <span>Por {detailPost.authors?.[0]?.fullName || "Autor desconocido"}</span>
-        )}
       </p>
 
       <article class="prose prose-lg prose-headings:font-semibold prose-headings:text-gray-900 prose-h2:mt-12 prose-h2:mb-4 prose-h3:mt-8 prose-h3:mb-3 prose-p:leading-relaxed prose-p:mb-6 prose-img:rounded-lg prose-img:shadow-sm prose-strong:text-primary-dark">

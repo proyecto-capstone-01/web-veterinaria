@@ -14,6 +14,8 @@ import { submitAppointmentForm, fetchServices, fetchWeekAvailability } from "@/l
 import { loadTurnstile } from "@/lib/turnstile"; // added
 // @ts-ignore
 import { PUBLIC_TURNSTILE_KEY } from "astro:env/client"
+// Add dialog imports
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 
 
 // Tipos de datos locales
@@ -104,7 +106,7 @@ function formatAvailabilityDayLabel(dateStr: string): string {
 export default function AppointmentForm() {
     // dynamic data state
     const [services, setServices] = useState<ServiceItem[]>([]);
-    const [availability, setAvailability] = useState<Record<string, AvailabilityHour[]>>({});
+    const [availability, setAvailability] = useState<Record<string, AvailabilityHour>>({});
     const [loadingData, setLoadingData] = useState(true);
     const [dataError, setDataError] = useState<string | null>(null);
     const [expandedDays, setExpandedDays] = useState<Record<string, boolean>>({});
@@ -128,6 +130,11 @@ export default function AppointmentForm() {
     });
     const [errors, setErrors] = useState<FieldErrors>({});
     const [submitting, setSubmitting] = useState(false);
+
+    // Dialog state
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
     // dynamic fetch effect
     useEffect(() => {
@@ -267,12 +274,24 @@ export default function AppointmentForm() {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!validateAll()) return;
-        if (!form.captchaToken) {
-            setErrors(prev => ({ ...prev, captchaToken: 'Resuelve el captcha.' }));
+        // Validate all fields. Do not open dialog if invalid
+        const ok = validateAll();
+        if (!ok) {
+            setIsDialogOpen(false);
             return;
         }
+        // Clear previous submission status and open dialog for confirmation
+        setSubmitMessage(null);
+        setSubmitError(null);
+        setIsDialogOpen(true);
+    };
+
+    // Confirm submit action executed from Dialog
+    const confirmSubmit = async () => {
+        if (submitting) return;
         setSubmitting(true);
+        setSubmitMessage(null);
+        setSubmitError(null);
         try {
             const [date, time] = form.slot.split('::');
             const payload = {
@@ -294,7 +313,9 @@ export default function AppointmentForm() {
             };
             const res = await submitAppointmentForm(payload);
             const msg = getResponseText(res);
-            console.info('Cita confirmada:', msg);
+            setSubmitMessage(msg || 'Solicitud enviada.');
+            setSubmitError(null);
+            // Reset form
             setForm({
                 petType: 'dog',
                 petSex: 'male',
@@ -316,7 +337,8 @@ export default function AppointmentForm() {
             }
         } catch (error: any) {
             const msg = error?.response?.data ? getResponseText(error.response.data) : (error?.message || 'Error al confirmar la cita.');
-            console.error('Error al confirmar la cita:', msg);
+            setSubmitError(msg);
+            setSubmitMessage(null);
         } finally {
             setSubmitting(false);
         }
@@ -812,6 +834,46 @@ export default function AppointmentForm() {
                 <Button type="submit" disabled={submitting} className="w-full mt-2 text-white">
                     {submitting ? "Confirmando..." : "Confirmar cita"}
                 </Button>
+
+                {/* Dialog resumen de la cita */}
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogContent className="max-w-lg bg-white">
+                        <DialogHeader>
+                            <DialogTitle>Resumen de la cita</DialogTitle>
+                            <DialogDescription>Revisa los datos antes de enviar.</DialogDescription>
+                        </DialogHeader>
+
+                        {/* Summary content */}
+                        <div className="space-y-2 text-sm">
+                            <p><span className="font-semibold">Mascota:</span> {form.petType === 'dog' ? 'Perro' : 'Gato'} ({form.petSex === 'male' ? 'Macho' : 'Hembra'})</p>
+                            <p><span className="font-semibold">Nombre:</span> {form.petName}</p>
+                            <p><span className="font-semibold">Servicios:</span> {form.servicios.map(id => services.find(s => String(s.id) === String(id))?.title || id).join(', ')}</p>
+                            <p><span className="font-semibold">Fecha y hora:</span> {form.slot.replace('::', ' ')}</p>
+                            <p><span className="font-semibold">RUT:</span> {form.rut}</p>
+                            <p><span className="font-semibold">Nombre completo:</span> {form.firstName} {form.lastName}</p>
+                            <p><span className="font-semibold">Teléfono:</span> +56 9 {form.phone}</p>
+                            <p><span className="font-semibold">Correo:</span> {form.email}</p>
+                            {form.weight != null && <p><span className="font-semibold">Peso:</span> {form.weight} kg</p>}
+                            {form.age != null && <p><span className="font-semibold">Edad:</span> {form.age} años</p>}
+                            {form.comentario && <p><span className="font-semibold">Comentarios:</span> {form.comentario}</p>}
+                        </div>
+
+                        {/* Submission status */}
+                        {submitMessage && (
+                            <div className="mt-3 p-2 rounded bg-green-100 text-green-800 text-sm" role="status">{submitMessage}</div>
+                        )}
+                        {submitError && (
+                            <div className="mt-3 p-2 rounded bg-red-100 text-red-800 text-sm" role="alert">{submitError}</div>
+                        )}
+
+                        <DialogFooter className="gap-2">
+                            <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} disabled={submitting}>Cerrar</Button>
+                            <Button type="button" onClick={confirmSubmit} disabled={submitting} className="text-white">
+                                {submitting ? 'Enviando...' : 'Enviar solicitud'}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </section>
         </form>
     );
