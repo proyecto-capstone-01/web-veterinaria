@@ -14,10 +14,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     };
 
     return (
-        <a
-            href={`/products/${product.id}`}
-            className="bg-white rounded-xl shadow hover:shadow-lg hover:scale-[1.01] transition overflow-hidden block"
-        >
+        <div className="bg-white rounded-xl shadow hover:shadow-lg hover:scale-[1.01] transition overflow-hidden block">
             <img
                 src={PUBLIC_CMS_API_URL + product.images[0].thumbnailURL}
                 alt={product.images[0].alt || product.name}
@@ -38,6 +35,6 @@ export default function ProductCard({ product }: ProductCardProps) {
                     <p className="mt-2 font-bold text-indigo-600 pt-2">{formatPrice(product.price)}</p>
                 ) }
             </div>
-        </a>
+        </div>
     );
 }
