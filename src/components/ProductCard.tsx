@@ -19,7 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="bg-white rounded-xl shadow hover:shadow-lg hover:scale-[1.01] transition overflow-hidden block"
         >
             <img
-                src={PUBLIC_CMS_API_URL + product.images[0].sizes["small"].url}
+                src={PUBLIC_CMS_API_URL + product.images[0].thumbnailURL}
                 alt={product.images[0].alt || product.name}
                 className="w-full h-48 object-contain bg-gray-100"
             />
