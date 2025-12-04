@@ -5,109 +5,29 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import React, { useMemo, useState, useRef } from "react"; // replaced useMemo/useState import to include React, useRef
+import { Skeleton } from "@/components/ui/skeleton";
+import React, { useMemo, useState, useEffect } from "react";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { X, Info } from "lucide-react";
-import { submitAppointmentForm } from "@/lib/cms";
-import { loadTurnstile } from "@/lib/turnstile"; // added
+import { X, Info, ChevronDown, ChevronUp } from "lucide-react";
+import { submitAppointmentForm, fetchServices, fetchWeekAvailability } from "@/lib/cms";
+import { loadTurnstile } from "@/lib/turnstile";
 // @ts-ignore
 import { PUBLIC_TURNSTILE_KEY } from "astro:env/client"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 
 
 // Tipos de datos locales
 type ServiceItem = {
-    id: string;
-    nombre: string;
-    precio: number;
-    descripcion?: string | null;
-    disponible?: boolean;
+    id: number | string;
+    title: string; // from CMS
+    description?: string | null;
+    price: number;
+    icon?: string | null;
+    availability?: boolean; // not provided, keep for compatibility
 };
 
-type DaySlots = {
-    fecha: string; // etiqueta visible
-    slots: { time: string; disponible: boolean }[];
-};
-
-// Datos de ejemplo enriquecidos
-const SERVICES: ServiceItem[] = [
-    {
-        id: "consulta",
-        nombre: "Consulta veterinaria",
-        precio: 10000,
-        descripcion: "Evaluación general y diagnóstico",
-        disponible: true
-    },
-    {id: "bano", nombre: "Baño y peluquería", precio: 15000, descripcion: "Higiene y corte de pelo", disponible: true},
-    {id: "rx", nombre: "Radiografías", precio: 30000, descripcion: "Imágenes para diagnóstico", disponible: false},
-    {id: "sangre", nombre: "Exámenes de sangre", precio: 20000, descripcion: null, disponible: true},
-    {id: "vacunas", nombre: "Vacunas anuales", precio: 15000, descripcion: "Calendario al día", disponible: true},
-    {id: "unas", nombre: "Corte de uñas", precio: 5000, descripcion: "Corte seguro", disponible: true},
-    {id: "desparasitacion", nombre: "Desparasitación", precio: 8000, descripcion: "Interna/externa", disponible: true},
-    {
-        id: "cirugia",
-        nombre: "Cirugía menor",
-        precio: 60000,
-        descripcion: "Procedimientos ambulatorios",
-        disponible: false
-    },
-    {id: "odontologia", nombre: "Limpieza dental", precio: 25000, descripcion: "Profilaxis dental", disponible: true},
-    {
-        id: "hospitalizacion",
-        nombre: "Hospitalización",
-        precio: 35000,
-        descripcion: "Observación y cuidados",
-        disponible: true
-    },
-    {id: "nutricion", nombre: "Asesoría nutricional", precio: 12000, descripcion: "Plan alimenticio", disponible: true},
-    {
-        id: "entrenamiento",
-        nombre: "Entrenamiento básico",
-        precio: 18000,
-        descripcion: "Órdenes básicas",
-        disponible: true
-    },
-    {
-        id: "microchip",
-        nombre: "Implantación de microchip",
-        precio: 22000,
-        descripcion: "Identificación permanente",
-        disponible: true
-    },
-];
-
-const HOURS: DaySlots[] = [
-    {
-        fecha: "Viernes • 07/11/2025", slots: [
-            {time: "09:00", disponible: true},
-            {time: "11:00", disponible: true},
-            {time: "13:00", disponible: false},
-            {time: "15:00", disponible: true},
-        ]
-    },
-    {
-        fecha: "Sábado • 08/11/2025", slots: [
-            {time: "08:30", disponible: true},
-            {time: "10:00", disponible: false},
-            {time: "12:00", disponible: true},
-            {time: "14:00", disponible: true},
-        ]
-    },
-    {
-        fecha: "Domingo • 09/11/2025", slots: [
-            {time: "09:00", disponible: true},
-            {time: "11:00", disponible: true},
-            {time: "13:00", disponible: true},
-            {time: "15:00", disponible: true},
-            {time: "17:00", disponible: false},
-            {time: "19:00", disponible: true},
-            {time: "21:00", disponible: true},
-            {time: "23:00", disponible: true},
-            {time: "23:30", disponible: true},
-            {time: "23:59", disponible: true},
-        ]
-    },
-];
+interface AvailabilityHour { hour: string; availability: boolean; }
 
 // Esquema de validación con Zod
 const schema = z.object({
@@ -124,13 +44,74 @@ const schema = z.object({
     email: z.string().email({message: "Correo electrónico inválido."}).trim(),
     weight: z.preprocess(v => (v === '' || v == null ? undefined : Number(v)), z.number().positive('Peso inválido').max(100, 'Peso máximo 100 kg').optional()),
     age: z.preprocess(v => (v === '' || v == null ? undefined : Number(v)), z.number().int('Edad debe ser un número entero').min(0, 'Edad inválida').max(40, 'Edad máxima 40').optional()),
-    captchaToken: z.string().min(1, {message: "Resuelve el captcha."}), // added
+    captchaToken: z.string().min(1, {message: "Resuelve el captcha."}),
 });
 
+// Tipos derivados del esquema
 type FormData = z.infer<typeof schema>;
 type FieldErrors = Partial<Record<keyof FormData, string>>;
 
+// Helpers de fecha y hora (America/Santiago)
+function getNowInSantiago(): Date {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat("es-CL", {
+        timeZone: "America/Santiago",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+    });
+    const parts = formatter.formatToParts(now);
+    const get = (type: string) => Number(parts.find(p => p.type === type)?.value || "0");
+    const year = get("year");
+    const month = get("month");
+    const day = get("day");
+    const hour = get("hour");
+    const minute = get("minute");
+    return new Date(year, month - 1, day, hour, minute, 0, 0);
+}
+
+function parseAvailabilityDate(dateStr: string): Date {
+    const [y, m, d] = dateStr.split("-").map(Number);
+    return new Date(y, (m || 1) - 1, d || 1);
+}
+
+function parseAvailabilitySlotToDateTime(dateStr: string, timeStr: string): Date {
+    const base = parseAvailabilityDate(dateStr);
+    const [hh, mm] = timeStr.split(":").map(Number);
+    base.setHours(hh || 0, mm || 0, 0, 0);
+    return base;
+}
+
+function formatAvailabilityDayLabel(dateStr: string): string {
+    const date = parseAvailabilityDate(dateStr);
+    const formatter = new Intl.DateTimeFormat("es-CL", {
+        timeZone: "America/Santiago",
+        weekday: "long",
+        day: "2-digit",
+        month: "2-digit",
+    });
+    const parts = formatter.formatToParts(date);
+    const weekday = parts.find(p => p.type === "weekday")?.value || "";
+    const day = parts.find(p => p.type === "day")?.value || "";
+    const month = parts.find(p => p.type === "month")?.value || "";
+    const weekdayTitle = weekday
+        ? weekday.charAt(0).toUpperCase() + weekday.slice(1).toLowerCase()
+        : "";
+    return `${weekdayTitle} ${day}-${month}`;
+}
+
 export default function AppointmentForm() {
+    // dynamic data state
+    const [services, setServices] = useState<ServiceItem[]>([]);
+    // Fix: availability is an array per day
+    const [availability, setAvailability] = useState<Record<string, AvailabilityHour[]>>({});
+    const [loadingData, setLoadingData] = useState(true);
+    const [dataError, setDataError] = useState<string | null>(null);
+    const [expandedDays, setExpandedDays] = useState<Record<string, boolean>>({});
+
     // Estado del formulario controlado
     const [form, setForm] = useState<FormData>({
         petType: "dog",
@@ -146,20 +127,63 @@ export default function AppointmentForm() {
         email: "",
         weight: undefined,
         age: undefined,
-        captchaToken: "", // added
+        captchaToken: "",
     });
     const [errors, setErrors] = useState<FieldErrors>({});
     const [submitting, setSubmitting] = useState(false);
 
-    // Confetti near pet type radio group
-    const petTypeWrapRef = useRef<HTMLDivElement | null>(null);
+    // Dialog state
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
+    // dynamic fetch effect
+    useEffect(() => {
+        let mounted = true;
+        (async () => {
+            try {
+                setLoadingData(true);
+                const [svcRes, availRes] = await Promise.all([
+                    fetchServices(),
+                    fetchWeekAvailability(),
+                ]);
+                if (!mounted) return;
+                const svcDocs: any[] = svcRes?.docs || [];
+                setServices(svcDocs.map(d => ({
+                    id: d.id,
+                    title: d.title,
+                    description: d.description,
+                    price: d.price,
+                    icon: d.icon,
+                })));
+                // Normalize availability to Record<string, AvailabilityHour[]>
+                const normalized: Record<string, AvailabilityHour[]> = {};
+                if (availRes && typeof availRes === 'object') {
+                    for (const [date, hours] of Object.entries(availRes as Record<string, any>)) {
+                        normalized[date] = Array.isArray(hours)
+                            ? hours.map((h: any) => ({ hour: String(h.hour), availability: !!h.availability }))
+                            : [];
+                    }
+                }
+                setAvailability(normalized);
+                setDataError(null);
+            } catch (e: any) {
+                if (!mounted) return;
+                setDataError(e?.message || 'Error cargando datos.');
+            } finally {
+                if (mounted) setLoadingData(false);
+            }
+        })();
+        return () => { mounted = false; };
+    }, []);
+
+    // compute totalPrice from selected services
     const totalPrice = useMemo(() => {
         return form.servicios.reduce((sum, id) => {
-            const s = SERVICES.find(sv => sv.id === id);
-            return sum + (s?.precio || 0);
+            const s = services.find(sv => String(sv.id) === String(id));
+            return sum + (s?.price || 0);
         }, 0);
-    }, [form.servicios]);
+    }, [form.servicios, services]);
 
     const setField = <K extends keyof FormData>(key: K, value: FormData[K]) => {
         setForm(prev => ({...prev, [key]: value}));
@@ -231,58 +255,47 @@ export default function AppointmentForm() {
                 if (!next[k]) next[k] = issue.message;
             }
         }
-
-        // Servicios disponibles
-        const unavailableSelected = form.servicios.filter(id => SERVICES.find(s => s.id === id && s.disponible === false));
-        if (unavailableSelected.length > 0) {
-            next.servicios = "Hay servicios no disponibles seleccionados.";
-        }
-
-        // Slot disponible
         if (form.slot) {
-            const [fecha, hora] = form.slot.split("::");
-            const day = HOURS.find(d => d.fecha === fecha);
-            const ok = !!day?.slots.find(s => s.time === hora && s.disponible);
-            if (!ok) next.slot = "El horario seleccionado no está disponible.";
+            const [date, time] = form.slot.split('::');
+            const dayArr = availability[date] || [];
+            const ok = !!dayArr.find((h) => h.hour === time && h.availability);
+            if (!ok) next.slot = 'El horario seleccionado no está disponible.';
         }
-
         setErrors(next);
         return Object.keys(next).length === 0;
     };
 
-    const getResponseText = (data: unknown) => {
-        if (data == null) return "Solicitud enviada.";
-        if (typeof data === "string") return data;
-        if (typeof data === "object") {
-            // @ts-ignore
-            if (typeof (data as any).message === "string") return (data as any).message;
-            try {
-                return JSON.stringify(data);
-            } catch {
-                return "Solicitud enviada.";
-            }
-        }
-        return String(data);
-    };
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!validateAll()) return;
-        if (!form.captchaToken) { // ensure captcha solved
-            setErrors(prev => ({...prev, captchaToken: "Resuelve el captcha."}));
+        // Validate all fields. Do not open dialog if invalid
+        const ok = validateAll();
+        if (!ok) {
+            setIsDialogOpen(false);
             return;
         }
+        // Clear previous submission status and open dialog for confirmation
+        setSubmitMessage(null);
+        setSubmitError(null);
+        setIsDialogOpen(true);
+    };
+
+    // Confirm submit action executed from Dialog
+    const confirmSubmit = async () => {
+        if (submitting) return;
         setSubmitting(true);
+        setSubmitMessage(null);
+        setSubmitError(null);
         try {
-            const [fecha, hora] = form.slot.split("::");
+            const [date, time] = form.slot.split('::');
             const payload = {
                 petType: form.petType,
                 petSex: form.petSex,
                 petName: form.petName,
-                servicios: form.servicios,
-                comentario: form.comentario,
-                fecha,
-                hora,
+                services: [...form.servicios.map(id => Number(id))],
+                comment: form.comentario,
+                date,
+                time,
                 rut: form.rut,
                 firstName: form.firstName,
                 lastName: form.lastName,
@@ -290,54 +303,91 @@ export default function AppointmentForm() {
                 email: form.email,
                 weight: form.weight,
                 age: form.age,
-                totalPrice,
-                captchaToken: form.captchaToken, // added
+                captchaToken: form.captchaToken,
             };
-
-            const res = await submitAppointmentForm(payload);
-            const msg = getResponseText(res);
-            console.info("Cita confirmada:", msg);
+            await submitAppointmentForm(payload);
+            // Show generic success, do not echo raw response
+            setSubmitMessage('Se envió tu solicitud');
+            setSubmitError(null);
             // Reset
             setForm({
-                petType: "dog",
-                petSex: "male",
-                petName: "",
+                petType: 'dog',
+                petSex: 'male',
+                petName: '',
                 servicios: [],
-                comentario: "",
-                slot: "",
-                rut: "",
-                firstName: "",
-                lastName: "",
-                phone: "",
-                email: "",
+                comentario: '',
+                slot: '',
+                rut: '',
+                firstName: '',
+                lastName: '',
+                phone: '',
+                email: '',
                 weight: undefined,
                 age: undefined,
-                captchaToken: "", // reset
+                captchaToken: '',
             });
             if (typeof window !== 'undefined' && (window as any).turnstile) {
                 try { (window as any).turnstile.reset(); } catch {}
             }
-        } catch (error: any) {
-            const msg = error?.response?.data ? getResponseText(error.response.data) : (error?.message || "Error al confirmar la cita.");
-            console.error("Error al confirmar la cita:", msg);
+        } catch {
+            setSubmitError('Hubo un error al enviar tu solicitud');
+            setSubmitMessage(null);
         } finally {
             setSubmitting(false);
         }
     };
 
-    const comentarioLen = form.comentario?.length ?? 0;
-
     const toggleService = (id: string) => {
-        const svc = SERVICES.find(s => s.id === id);
-        if (!svc || svc.disponible === false) return; // ignorar si no disponible
-        setField("servicios", form.servicios.includes(id)
-            ? form.servicios.filter(s => s !== id)
-            : [...form.servicios, id]
-        );
+        const exists = form.servicios.includes(id);
+        setField('servicios', exists ? form.servicios.filter(s => s !== id) : [...form.servicios, id] as any);
     };
 
-    // Turnstile setup
-    React.useEffect(() => {
+    const toggleDayExpanded = (fecha: string) => {
+        setExpandedDays(prev => ({
+            ...prev,
+            [fecha]: !prev[fecha],
+        }));
+    };
+
+    // derive list of availability days into structure similar to previous HOURS for UI
+    const availabilityDays = useMemo(() => {
+        const now = getNowInSantiago();
+        const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+
+        const entries = Object.entries(availability)
+            .map(([date, arr]) => {
+                const dayDate = parseAvailabilityDate(date);
+
+                // Skip whole day if strictly before today in Santiago
+                if (dayDate < todayMidnight) {
+                    return null;
+                }
+
+                const isToday = dayDate.getFullYear() === now.getFullYear() &&
+                    dayDate.getMonth() === now.getMonth() &&
+                    dayDate.getDate() === now.getDate();
+
+                const filteredHours = (arr || []).filter(h => {
+                    if (!isToday) return true; // future days keep all hours
+                    const slotDate = parseAvailabilitySlotToDateTime(date, h.hour);
+                    return slotDate >= now; // only keep current/future times today
+                });
+
+                if (!filteredHours.length) return null; // no hours left for this day
+
+                return {
+                    fecha: date,
+                    label: formatAvailabilityDayLabel(date),
+                    slots: filteredHours.map(h => ({ time: h.hour, disponible: h.availability })),
+                };
+            })
+            .filter((v): v is { fecha: string; label: string; slots: { time: string; disponible: boolean }[] } => v !== null);
+
+        return entries.sort((a, b) => a.fecha.localeCompare(b.fecha));
+    }, [availability]);
+
+    // add back Turnstile setup effect
+    useEffect(() => {
         let mounted = true;
         if (typeof window === 'undefined') return;
         loadTurnstile().then(() => {
@@ -346,7 +396,7 @@ export default function AppointmentForm() {
                 (window as any).turnstile.render('#turnstile-widget', {
                     sitekey: PUBLIC_TURNSTILE_KEY,
                     callback: (token: string) => {
-                        setField('captchaToken', token);
+                        setField('captchaToken', token as any);
                         setErrors(prev => ({...prev, captchaToken: undefined}));
                     },
                     'error-callback': () => {
@@ -366,7 +416,6 @@ export default function AppointmentForm() {
             setErrors(prev => ({...prev, captchaToken: 'No se pudo cargar el captcha.'}));
         });
         return () => { mounted = false; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -378,7 +427,7 @@ export default function AppointmentForm() {
 
                 <fieldset>
                     <legend className="sr-only">Tipo de mascota</legend>
-                    <div ref={petTypeWrapRef} className="relative">
+                    <div className="relative"> {/* removed ref */}
                         <Label className="block text-sm font-medium mb-2">Especie <span className="text-red-600" aria-hidden>*</span></Label>
                         <RadioGroup
                             value={form.petType}
@@ -477,114 +526,156 @@ export default function AppointmentForm() {
             {/* Servicios */}
             <section>
                 <h2 className="text-xl font-semibold my-2">Servicio <span className="text-red-600" aria-hidden>*</span></h2>
-                <p className="text-md mb-3 text-gray-500">Selecciona los servicios que deseas para tu mascota:</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {SERVICES.map((servicio) => {
-                        const checked = form.servicios.includes(servicio.id);
-                        const disabled = servicio.disponible === false;
-                        return (
-                            <div key={servicio.id}
-                                 className={cn("relative border-2 rounded-lg px-4 py-2 transition", checked ? "bg-primary-dark text-white border-primary-dark" : "border-primary", disabled && "opacity-60 cursor-not-allowed")}
-                                 aria-disabled={disabled}
-                            >
-                                <div className="flex items-start gap-3">
-                                    <Checkbox
-                                        id={`svc-${servicio.id}`}
-                                        checked={checked}
-                                        disabled={disabled}
-                                        onCheckedChange={() => toggleService(servicio.id)}
-                                        className={cn("mt-1", errors.servicios && !form.servicios.length ? "border-red-500 focus-visible:ring-red-500" : undefined)}
-                                        aria-describedby={errors.servicios ? "servicios-error" : undefined}
-                                    />
-                                    <div className="flex-1">
-                                        <Label htmlFor={`svc-${servicio.id}`}
-                                               className={cn("cursor-pointer flex items-center gap-2 font-semibold")}
-                                        >
-                                            {servicio.nombre}
-                                            <TooltipProvider>
-                                                <Tooltip>
-                                                    <TooltipTrigger asChild>
-                            <span tabIndex={0} className="inline-flex items-center">
-                              <Info className="h-4 w-4"/>
-                            </span>
-                                                    </TooltipTrigger>
-                                                    <TooltipContent className="max-w-xs text-white">
-                                                        {servicio.descripcion ? servicio.descripcion : "Sin descripción"}
-                                                    </TooltipContent>
-                                                </Tooltip>
-                                            </TooltipProvider>
-                                        </Label>
-                                        <div className="text-sm mt-0.5">${servicio.precio.toLocaleString("es-CL")}</div>
-                                        {!servicio.disponible && (
-                                            <div className="text-xs text-red-600 mt-1">No disponible</div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div>
-                {errors.servicios &&
-                    <p id="servicios-error" className="mt-1 text-sm text-red-600">{errors.servicios}</p>}
-
-                <div className="mt-4">
-                    <blockquote className="border-l-4 border-primary pl-4 italic text-primary-dark">
-                        Precio total estimado: $<span id="totalPriceEstimate">{totalPrice.toLocaleString("es-CL")}</span>
-                    </blockquote>
-                </div>
-
-                <div className="mt-3">
-                    <div className="flex items-end justify-between mb-1">
-                        <Label htmlFor="comentario" className="block text-sm font-medium mb-1">Comentarios adicionales</Label>
-                        <span
-                            className={cn("text-xs", comentarioLen > 1000 ? "text-red-600" : "text-muted-foreground")}>{comentarioLen}/1000</span>
+                {loadingData && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <Skeleton className="h-20" />
+                        <Skeleton className="h-20" />
+                        <Skeleton className="h-20" />
+                        <Skeleton className="h-20" />
                     </div>
-                    <Textarea
-                        id="comentario"
-                        placeholder="¿Tienes comentarios adicionales? Escríbelos aquí. Ya sean síntomas, cuidados específicos u otros."
-                        className={cn("w-full resize-none overflow-hidden", errors.comentario && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")}
-                        rows={5}
-                        value={form.comentario}
-                        onChange={(e) => setField("comentario", e.target.value)}
-                        maxLength={1000}
-                        aria-invalid={!!errors.comentario}
-                        aria-describedby={errors.comentario ? "comentario-error" : undefined}
-                    />
-                    {errors.comentario &&
-                        <p id="comentario-error" className="mt-1 text-sm text-red-600">{errors.comentario}</p>}
-                </div>
+                )}
+                {dataError && <p className="text-sm text-red-600">{dataError}</p>}
+                {!loadingData && !dataError && (
+                    <>
+                        {services.length === 0 && <p className="text-sm">No hay servicios disponibles.</p>}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {services.map((servicio) => {
+                                const idStr = String(servicio.id);
+                                const checked = form.servicios.includes(idStr);
+                                return (
+                                    <div key={idStr}
+                                         className={cn("relative border-2 rounded-lg px-4 py-2 transition", checked ? "bg-primary-dark text-white border-primary-dark" : "border-primary")}
+                                    >
+                                        <div className="flex items-start gap-3">
+                                            <Checkbox
+                                                id={`svc-${idStr}`}
+                                                checked={checked}
+                                                onCheckedChange={() => toggleService(idStr)}
+                                                className={cn("mt-1", errors.servicios && !form.servicios.length ? "border-red-500 focus-visible:ring-red-500" : undefined)}
+                                                aria-describedby={errors.servicios ? "servicios-error" : undefined}
+                                            />
+                                            <div className="flex-1">
+                                                <Label htmlFor={`svc-${idStr}`} className={cn("cursor-pointer flex items-center gap-2 font-semibold")}>{servicio.title}
+                                                    {servicio.description && (
+                                                        <TooltipProvider>
+                                                            <Tooltip>
+                                                                <TooltipTrigger asChild>
+                                                                    <span tabIndex={0} className="inline-flex items-center"><Info className="h-4 w-4"/></span>
+                                                                </TooltipTrigger>
+                                                                <TooltipContent className="max-w-xs text-white">{servicio.description}</TooltipContent>
+                                                            </Tooltip>
+                                                        </TooltipProvider>
+                                                    )}
+                                                </Label>
+                                                <div className="text-sm mt-0.5">${servicio.price.toLocaleString("es-CL")}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        {errors.servicios && <p id="servicios-error" className="mt-1 text-sm text-red-600">{errors.servicios}</p>}
+                        <div className="mt-4">
+                            <blockquote className="border-l-4 border-primary pl-4 italic text-primary-dark">Precio total estimado: $<span id="totalPriceEstimate">{totalPrice.toLocaleString("es-CL")}</span></blockquote>
+                        </div>
+                        <div className="mt-3">
+                            <div className="flex items-end justify-between mb-1">
+                                <Label htmlFor="comentario" className="block text-sm font-medium mb-1">Comentarios adicionales</Label>
+                                <span className={cn("text-xs", (form.comentario?.length ?? 0) > 1000 ? "text-red-600" : "text-muted-foreground")}>{form.comentario?.length ?? 0}/1000</span>
+                            </div>
+                            <Textarea id="comentario" placeholder="¿Tienes comentarios adicionales? Escríbelos aquí." className={cn("w-full resize-none overflow-hidden", errors.comentario && "border-red-500 focus-visible:ring-red-500 placeholder:text-red-400")} rows={5} value={form.comentario} onChange={(e) => setField("comentario", e.target.value)} maxLength={1000} aria-invalid={!!errors.comentario} aria-describedby={errors.comentario ? "comentario-error" : undefined} />
+                            {errors.comentario && <p id="comentario-error" className="mt-1 text-sm text-red-600">{errors.comentario}</p>}
+                        </div>
+                    </>
+                )}
             </section>
 
-            {/* Horarios */}
+            {/* Horarios dinámicos */}
             <section>
                 <h2 className="text-xl font-semibold my-2">Elige un horario para la consulta <span className="text-red-600" aria-hidden>*</span></h2>
-                <p className="text-md mb-3 text-gray-500">Selecciona el horario que mejor te acomode:</p>
-                <fieldset className="space-y-4" aria-describedby={errors.slot ? "slot-error" : undefined}>
-                    <legend className="sr-only">Horario</legend>
-                    {HOURS.map((dia) => (
-                        <div key={dia.fecha} className="border-1 border-primary/40 p-3 rounded-md">
-                            <p className="font-medium">{dia.fecha}</p>
-                            <RadioGroup value={form.slot} onValueChange={(value) => setField("slot", value)}
-                                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2">
-                                {dia.slots.map((s) => {
-                                    const value = `${dia.fecha}::${s.time}`;
-                                    return (
-                                        <div key={value} className="flex items-center">
-                                            <RadioGroupItem id={value} value={value} disabled={!s.disponible}/>
-                                            <Label htmlFor={value}
-                                                   className={cn("ml-2 cursor-pointer select-none border-2 rounded-md px-3 py-2 text-center w-full", !s.disponible ? "opacity-50 cursor-not-allowed" : "border-primary hover:scale-[1.01] transition")}
-                                            >
-                                                {s.time}
-                                                {!s.disponible &&
-                                                    <span className="block text-xs text-red-600">No disponible</span>}
-                                            </Label>
-                                        </div>
-                                    );
-                                })}
-                            </RadioGroup>
+                {loadingData && (
+                    <div className="space-y-4">
+                        <Skeleton className="h-6 w-64" />
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                            <Skeleton className="h-10" />
+                            <Skeleton className="h-10" />
+                            <Skeleton className="h-10" />
+                            <Skeleton className="h-10" />
                         </div>
-                    ))}
-                </fieldset>
+                        <Skeleton className="h-6 w-64" />
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                            <Skeleton className="h-10" />
+                            <Skeleton className="h-10" />
+                            <Skeleton className="h-10" />
+                            <Skeleton className="h-10" />
+                        </div>
+                    </div>
+                )}
+                {!loadingData && availabilityDays.length === 0 && <p className="text-sm">No hay disponibilidad esta semana.</p>}
+                {!loadingData && availabilityDays.length > 0 && (
+                    <fieldset className="space-y-4" aria-describedby={errors.slot ? "slot-error" : undefined}>
+                        <legend className="sr-only">Horario</legend>
+                        {availabilityDays.map((dia) => {
+                            const isExpanded = !!expandedDays[dia.fecha];
+                            const maxRowsCollapsed = 3;
+                            const maxVisibleSlots = maxRowsCollapsed * 4; // assuming up to 4 per row on md
+                            const hasMore = dia.slots.length > maxVisibleSlots;
+                            const visibleSlots = isExpanded ? dia.slots : dia.slots.slice(0, maxVisibleSlots);
+
+                            return (
+                                <div key={dia.fecha} className="border-1 border-primary/40 p-3 rounded-md">
+                                    <p className="font-medium">{dia.label}</p>
+                                    <RadioGroup
+                                        value={form.slot}
+                                        onValueChange={(value) => setField("slot", value)}
+                                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2"
+                                    >
+                                        {visibleSlots.map((s) => {
+                                            const value = `${dia.fecha}::${s.time}`;
+                                            return (
+                                                <div key={value} className="flex items-center">
+                                                    <RadioGroupItem id={value} value={value} disabled={!s.disponible} />
+                                                    <Label
+                                                        htmlFor={value}
+                                                        className={cn(
+                                                            "ml-2 cursor-pointer select-none border-2 rounded-md px-3 py-2 text-center w-full",
+                                                            !s.disponible
+                                                                ? "opacity-50 cursor-not-allowed"
+                                                                : "border-primary hover:scale-[1.01] transition"
+                                                        )}
+                                                    >
+                                                        {s.time}
+                                                        {!s.disponible && (
+                                                            <span className="block text-xs text-red-600">No disponible</span>
+                                                        )}
+                                                    </Label>
+                                                </div>
+                                            );
+                                        })}
+                                    </RadioGroup>
+                                    {hasMore && (
+                                        <div className="mt-2 flex justify-end">
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => toggleDayExpanded(dia.fecha)}
+                                                className="flex items-center gap-1"
+                                            >
+                                                {isExpanded ? "Mostrar menos horas" : "Mostrar más horas"}
+                                                {isExpanded ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                )}
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </fieldset>
+                )}
                 {errors.slot && <p id="slot-error" className="mt-1 text-sm text-red-600">{errors.slot}</p>}
             </section>
 
@@ -736,6 +827,50 @@ export default function AppointmentForm() {
                 <Button type="submit" disabled={submitting} className="w-full mt-2 text-white">
                     {submitting ? "Confirmando..." : "Confirmar cita"}
                 </Button>
+
+                {/* Dialog resumen de la cita */}
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogContent className="max-w-lg bg-white">
+                        <DialogHeader>
+                            <DialogTitle>Resumen de la cita</DialogTitle>
+                            <DialogDescription>Revisa los datos antes de enviar.</DialogDescription>
+                        </DialogHeader>
+
+                        {/* Hide summary once we show submission status */}
+                        {!submitMessage && !submitError && (
+                            <div className="space-y-2 text-sm">
+                                <p><span className="font-semibold">Mascota:</span> {form.petType === 'dog' ? 'Perro' : 'Gato'} ({form.petSex === 'male' ? 'Macho' : 'Hembra'})</p>
+                                <p><span className="font-semibold">Nombre:</span> {form.petName}</p>
+                                <p><span className="font-semibold">Servicios:</span> {form.servicios.map(id => services.find(s => String(s.id) === String(id))?.title || id).join(', ')}</p>
+                                <p><span className="font-semibold">Fecha y hora:</span> {form.slot.replace('::', ' ')}</p>
+                                <p><span className="font-semibold">RUT:</span> {form.rut}</p>
+                                <p><span className="font-semibold">Nombre completo:</span> {form.firstName} {form.lastName}</p>
+                                <p><span className="font-semibold">Teléfono:</span> +56 9 {form.phone}</p>
+                                <p><span className="font-semibold">Correo:</span> {form.email}</p>
+                                {form.weight != null && <p><span className="font-semibold">Peso:</span> {form.weight} kg</p>}
+                                {form.age != null && <p><span className="font-semibold">Edad:</span> {form.age} años</p>}
+                                {form.comentario && <p><span className="font-semibold">Comentarios:</span> {form.comentario}</p>}
+                            </div>
+                        )}
+
+                        {/* Generic submission status messages */}
+                        {submitMessage && (
+                            <div className="mt-3 p-2 rounded bg-green-100 text-green-800 text-sm" role="status">Se envió tu solicitud</div>
+                        )}
+                        {submitError && (
+                            <div className="mt-3 p-2 rounded bg-red-100 text-red-800 text-sm" role="alert">Hubo un error al enviar tu solicitud</div>
+                        )}
+
+                        <DialogFooter className="gap-2">
+                            <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} disabled={submitting}>Cerrar</Button>
+                            {!submitMessage && !submitError && (
+                                <Button type="button" onClick={confirmSubmit} disabled={submitting} className="text-white">
+                                    {submitting ? 'Enviando...' : 'Enviar solicitud'}
+                                </Button>
+                            )}
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </section>
         </form>
     );

@@ -7,7 +7,18 @@ import {
     SelectContent,
     SelectItem,
 } from "@/components/ui/select";
-import { InfoIcon } from "lucide-react"; // ejemplo de icono de información
+import { InfoIcon } from "lucide-react";
+import type { Product } from "./ProductList";
+
+interface FilterProps {
+    search: string;
+    setSearch: (value: string) => void;
+    category: string;
+    setCategory: (value: string) => void;
+    sort: string;
+    setSort: (value: string) => void;
+    products: Product[];
+}
 
 export default function ProductFilters({
     search,
@@ -17,15 +28,14 @@ export default function ProductFilters({
     sort,
     setSort,
     products,
-}) {
-    const categories = ["all", ...new Set(products.map((p) => p.category))];
+}: FilterProps) {
 
     return (
         <div className="space-y-4 rounded-lg bg-white">
             <div>
                 <label className="text-sm font-medium mb-1 flex items-center gap-1">
                     Buscar producto
-                    <InfoIcon className="w-4 h-4 text-gray-400" title="Escribe palabras clave para encontrar productos rápidamente" />
+                    <InfoIcon className="w-4 h-4 text-gray-400"/>
                 </label>
                 <Input
                     type="text"
@@ -39,32 +49,11 @@ export default function ProductFilters({
                 </p>
             </div>
 
-            <div>
-                <label className="text-sm font-medium mb-1 flex items-center gap-1">
-                    Categoría
-                    <InfoIcon className="w-4 h-4 text-gray-400" title="Filtra productos según su categoría" />
-                </label>
-                <Select value={category} onValueChange={setCategory}>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecciona una categoría" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {categories.map((cat) => (
-                        <SelectItem key={cat} value={cat}>
-                            {cat === "all" ? "Todas las categorías" : cat.toUpperCase()}
-                        </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-                <p className="text-xs text-gray-500 mt-1">
-                    Elige una categoría para ver solo los productos relacionados
-                </p>
-            </div>
 
             <div>
                 <label className="text-sm font-medium mb-1 flex items-center gap-1">
                     Ordenar por
-                    <InfoIcon className="w-4 h-4 text-gray-400" title="Ordena los productos por precio" />
+                    <InfoIcon className="w-4 h-4 text-gray-400"/>
                 </label>
                 <Select value={sort} onValueChange={setSort}>
                     <SelectTrigger className="w-full">

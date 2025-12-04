@@ -32,20 +32,49 @@ export const submitAppointmentForm = async (data: any) => {
 }
 
 
-export const fetchProducts = async () => {
-
-    const apiUrl = import.meta.env.PUBLIC_CMS_API_URL;
-
+export const fetchProducts = async (id?: number, limit: number = 150) => {
     try {
-        const response = await axios.get(`${apiUrl}/products`, {
+        if (id) {
+            const response = await axios.get(`${PUBLIC_CMS_API_URL}/api/products/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            return response.data;
+        }
+        const response = await axios.get(`${PUBLIC_CMS_API_URL}/api/products?limit=${limit}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-        return response.data;
+        return response.data.docs;
     } catch (error) {
         console.error('Error fetching products:', error);
         throw error;
     }
 
+};
+
+export const fetchServices = async () => {
+    try {
+        const response = await axios.get(`${PUBLIC_CMS_API_URL}/api/services`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return response.data; // expects shape with docs[]
+    } catch (error) {
+        console.error('Error fetching services:', error);
+        throw error;
+    }
+};
+
+export const fetchWeekAvailability = async () => {
+    try {
+        const response = await axios.get(`${PUBLIC_CMS_API_URL}/availability/week`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return response.data; // expects shape of date keys mapping to array of {hour, availability}
+    } catch (error) {
+        console.error('Error fetching week availability:', error);
+        throw error;
+    }
 };
