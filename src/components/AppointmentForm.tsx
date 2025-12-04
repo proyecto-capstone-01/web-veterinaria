@@ -6,15 +6,14 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
-import React, { useMemo, useState, useEffect } from "react"; // removed useRef
+import React, { useMemo, useState, useEffect } from "react";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { X, Info, ChevronDown, ChevronUp } from "lucide-react";
-import { submitAppointmentForm, fetchServices, fetchWeekAvailability } from "@/lib/cms"; // updated import
-import { loadTurnstile } from "@/lib/turnstile"; // added
+import { submitAppointmentForm, fetchServices, fetchWeekAvailability } from "@/lib/cms";
+import { loadTurnstile } from "@/lib/turnstile";
 // @ts-ignore
 import { PUBLIC_TURNSTILE_KEY } from "astro:env/client"
-// Add dialog imports
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 
 
@@ -45,13 +44,14 @@ const schema = z.object({
     email: z.string().email({message: "Correo electrónico inválido."}).trim(),
     weight: z.preprocess(v => (v === '' || v == null ? undefined : Number(v)), z.number().positive('Peso inválido').max(100, 'Peso máximo 100 kg').optional()),
     age: z.preprocess(v => (v === '' || v == null ? undefined : Number(v)), z.number().int('Edad debe ser un número entero').min(0, 'Edad inválida').max(40, 'Edad máxima 40').optional()),
-    captchaToken: z.string().min(1, {message: "Resuelve el captcha."}), // added
+    captchaToken: z.string().min(1, {message: "Resuelve el captcha."}),
 });
 
+// Tipos derivados del esquema
 type FormData = z.infer<typeof schema>;
 type FieldErrors = Partial<Record<keyof FormData, string>>;
 
-// Helper to get current Date in America/Santiago timezone
+// Helpers de fecha y hora (America/Santiago)
 function getNowInSantiago(): Date {
     const now = new Date();
     const formatter = new Intl.DateTimeFormat("es-CL", {
@@ -106,7 +106,8 @@ function formatAvailabilityDayLabel(dateStr: string): string {
 export default function AppointmentForm() {
     // dynamic data state
     const [services, setServices] = useState<ServiceItem[]>([]);
-    const [availability, setAvailability] = useState<Record<string, AvailabilityHour>>({});
+    // Fix: availability is an array per day
+    const [availability, setAvailability] = useState<Record<string, AvailabilityHour[]>>({});
     const [loadingData, setLoadingData] = useState(true);
     const [dataError, setDataError] = useState<string | null>(null);
     const [expandedDays, setExpandedDays] = useState<Record<string, boolean>>({});
@@ -155,7 +156,16 @@ export default function AppointmentForm() {
                     price: d.price,
                     icon: d.icon,
                 })));
-                setAvailability(availRes || {});
+                // Normalize availability to Record<string, AvailabilityHour[]>
+                const normalized: Record<string, AvailabilityHour[]> = {};
+                if (availRes && typeof availRes === 'object') {
+                    for (const [date, hours] of Object.entries(availRes as Record<string, any>)) {
+                        normalized[date] = Array.isArray(hours)
+                            ? hours.map((h: any) => ({ hour: String(h.hour), availability: !!h.availability }))
+                            : [];
+                    }
+                }
+                setAvailability(normalized);
                 setDataError(null);
             } catch (e: any) {
                 if (!mounted) return;
@@ -245,32 +255,16 @@ export default function AppointmentForm() {
                 if (!next[k]) next[k] = issue.message;
             }
         }
-        // remove static unavailable check (CMS does not provide availability per service currently)
-        // dynamic slot availability validation
         if (form.slot) {
             const [date, time] = form.slot.split('::');
-            const dayArr = availability[date];
-            const ok = !!dayArr?.find(h => h.hour === time && h.availability);
+            const dayArr = availability[date] || [];
+            const ok = !!dayArr.find((h) => h.hour === time && h.availability);
             if (!ok) next.slot = 'El horario seleccionado no está disponible.';
         }
         setErrors(next);
         return Object.keys(next).length === 0;
     };
 
-    const getResponseText = (data: unknown) => {
-        if (data == null) return "Solicitud enviada.";
-        if (typeof data === "string") return data;
-        if (typeof data === "object") {
-            // @ts-ignore
-            if (typeof (data as any).message === "string") return (data as any).message;
-            try {
-                return JSON.stringify(data);
-            } catch {
-                return "Solicitud enviada.";
-            }
-        }
-        return String(data);
-    };
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -311,11 +305,11 @@ export default function AppointmentForm() {
                 age: form.age,
                 captchaToken: form.captchaToken,
             };
-            const res = await submitAppointmentForm(payload);
-            const msg = getResponseText(res);
-            setSubmitMessage(msg || 'Solicitud enviada.');
+            await submitAppointmentForm(payload);
+            // Show generic success, do not echo raw response
+            setSubmitMessage('Se envió tu solicitud');
             setSubmitError(null);
-            // Reset form
+            // Reset
             setForm({
                 petType: 'dog',
                 petSex: 'male',
@@ -335,9 +329,8 @@ export default function AppointmentForm() {
             if (typeof window !== 'undefined' && (window as any).turnstile) {
                 try { (window as any).turnstile.reset(); } catch {}
             }
-        } catch (error: any) {
-            const msg = error?.response?.data ? getResponseText(error.response.data) : (error?.message || 'Error al confirmar la cita.');
-            setSubmitError(msg);
+        } catch {
+            setSubmitError('Hubo un error al enviar tu solicitud');
             setSubmitMessage(null);
         } finally {
             setSubmitting(false);
@@ -843,34 +836,38 @@ export default function AppointmentForm() {
                             <DialogDescription>Revisa los datos antes de enviar.</DialogDescription>
                         </DialogHeader>
 
-                        {/* Summary content */}
-                        <div className="space-y-2 text-sm">
-                            <p><span className="font-semibold">Mascota:</span> {form.petType === 'dog' ? 'Perro' : 'Gato'} ({form.petSex === 'male' ? 'Macho' : 'Hembra'})</p>
-                            <p><span className="font-semibold">Nombre:</span> {form.petName}</p>
-                            <p><span className="font-semibold">Servicios:</span> {form.servicios.map(id => services.find(s => String(s.id) === String(id))?.title || id).join(', ')}</p>
-                            <p><span className="font-semibold">Fecha y hora:</span> {form.slot.replace('::', ' ')}</p>
-                            <p><span className="font-semibold">RUT:</span> {form.rut}</p>
-                            <p><span className="font-semibold">Nombre completo:</span> {form.firstName} {form.lastName}</p>
-                            <p><span className="font-semibold">Teléfono:</span> +56 9 {form.phone}</p>
-                            <p><span className="font-semibold">Correo:</span> {form.email}</p>
-                            {form.weight != null && <p><span className="font-semibold">Peso:</span> {form.weight} kg</p>}
-                            {form.age != null && <p><span className="font-semibold">Edad:</span> {form.age} años</p>}
-                            {form.comentario && <p><span className="font-semibold">Comentarios:</span> {form.comentario}</p>}
-                        </div>
+                        {/* Hide summary once we show submission status */}
+                        {!submitMessage && !submitError && (
+                            <div className="space-y-2 text-sm">
+                                <p><span className="font-semibold">Mascota:</span> {form.petType === 'dog' ? 'Perro' : 'Gato'} ({form.petSex === 'male' ? 'Macho' : 'Hembra'})</p>
+                                <p><span className="font-semibold">Nombre:</span> {form.petName}</p>
+                                <p><span className="font-semibold">Servicios:</span> {form.servicios.map(id => services.find(s => String(s.id) === String(id))?.title || id).join(', ')}</p>
+                                <p><span className="font-semibold">Fecha y hora:</span> {form.slot.replace('::', ' ')}</p>
+                                <p><span className="font-semibold">RUT:</span> {form.rut}</p>
+                                <p><span className="font-semibold">Nombre completo:</span> {form.firstName} {form.lastName}</p>
+                                <p><span className="font-semibold">Teléfono:</span> +56 9 {form.phone}</p>
+                                <p><span className="font-semibold">Correo:</span> {form.email}</p>
+                                {form.weight != null && <p><span className="font-semibold">Peso:</span> {form.weight} kg</p>}
+                                {form.age != null && <p><span className="font-semibold">Edad:</span> {form.age} años</p>}
+                                {form.comentario && <p><span className="font-semibold">Comentarios:</span> {form.comentario}</p>}
+                            </div>
+                        )}
 
-                        {/* Submission status */}
+                        {/* Generic submission status messages */}
                         {submitMessage && (
-                            <div className="mt-3 p-2 rounded bg-green-100 text-green-800 text-sm" role="status">{submitMessage}</div>
+                            <div className="mt-3 p-2 rounded bg-green-100 text-green-800 text-sm" role="status">Se envió tu solicitud</div>
                         )}
                         {submitError && (
-                            <div className="mt-3 p-2 rounded bg-red-100 text-red-800 text-sm" role="alert">{submitError}</div>
+                            <div className="mt-3 p-2 rounded bg-red-100 text-red-800 text-sm" role="alert">Hubo un error al enviar tu solicitud</div>
                         )}
 
                         <DialogFooter className="gap-2">
                             <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} disabled={submitting}>Cerrar</Button>
-                            <Button type="button" onClick={confirmSubmit} disabled={submitting} className="text-white">
-                                {submitting ? 'Enviando...' : 'Enviar solicitud'}
-                            </Button>
+                            {!submitMessage && !submitError && (
+                                <Button type="button" onClick={confirmSubmit} disabled={submitting} className="text-white">
+                                    {submitting ? 'Enviando...' : 'Enviar solicitud'}
+                                </Button>
+                            )}
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
